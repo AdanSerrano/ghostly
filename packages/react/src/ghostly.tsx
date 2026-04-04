@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react'
 import { useContext, useMemo } from 'react'
-import { RADIUS_MAP, SPEED_MAP, type GhostlyAnimation, type GhostlyConfig } from 'ghostly'
+import { RADIUS_MAP, SPEED_MAP, type GhostlyConfig } from 'ghostly'
 import { GhostlyContext } from './context'
 
 interface GhostlyProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
