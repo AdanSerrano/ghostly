@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { RADIUS_MAP, SPEED_MAP, CSS_VARS } from './types'
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { RADIUS_MAP, SPEED_MAP, CSS_VARS, validateGhostlyProps } from './types'
 import type { GhostlyAnimation, GhostlyRadius, GhostlySpeed, GhostlyConfig } from './types'
 
 describe('RADIUS_MAP', () => {
@@ -100,5 +100,63 @@ describe('type safety', () => {
     expect(empty).toBeDefined()
     expect(partial).toBeDefined()
     expect(full).toBeDefined()
+  })
+})
+
+describe('validateGhostlyProps', () => {
+  const originalEnv = process.env.NODE_ENV
+
+  afterEach(() => {
+    process.env.NODE_ENV = originalEnv
+    vi.restoreAllMocks()
+  })
+
+  it('warns on invalid animation in development', () => {
+    process.env.NODE_ENV = 'development'
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validateGhostlyProps('Ghostly', { animation: 'invalid' as GhostlyAnimation })
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining('invalid animation'))
+  })
+
+  it('warns on invalid radius in development', () => {
+    process.env.NODE_ENV = 'development'
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validateGhostlyProps('Ghostly', { radius: 'huge' as GhostlyRadius })
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining('invalid radius'))
+  })
+
+  it('warns on invalid speed in development', () => {
+    process.env.NODE_ENV = 'development'
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validateGhostlyProps('Ghostly', { speed: 'turbo' as GhostlySpeed })
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining('invalid speed'))
+  })
+
+  it('does not warn for valid props', () => {
+    process.env.NODE_ENV = 'development'
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validateGhostlyProps('Ghostly', { animation: 'shimmer', radius: 'md', speed: 'fast' })
+    expect(spy).not.toHaveBeenCalled()
+  })
+
+  it('does not warn when props are undefined', () => {
+    process.env.NODE_ENV = 'development'
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validateGhostlyProps('Ghostly', {})
+    expect(spy).not.toHaveBeenCalled()
+  })
+
+  it('does not warn in production', () => {
+    process.env.NODE_ENV = 'production'
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validateGhostlyProps('Ghostly', { animation: 'invalid' as GhostlyAnimation })
+    expect(spy).not.toHaveBeenCalled()
+  })
+
+  it('includes component name in warning', () => {
+    process.env.NODE_ENV = 'development'
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validateGhostlyProps('GhostlyList', { animation: 'bad' as GhostlyAnimation })
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining('<GhostlyList>'))
   })
 })

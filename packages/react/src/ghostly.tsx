@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react'
 import { forwardRef, useContext, useMemo } from 'react'
-import { RADIUS_MAP, SPEED_MAP, type GhostlyConfig } from 'ghostly'
+import { RADIUS_MAP, SPEED_MAP, validateGhostlyProps, type GhostlyConfig } from 'ghostly'
 import { GhostlyContext } from './context'
 
 type WrapperTag = 'div' | 'section' | 'article' | 'main' | 'aside' | 'span' | 'ul' | 'ol'
@@ -29,6 +29,8 @@ export const Ghostly = forwardRef<HTMLElement, GhostlyProps>(function Ghostly(
   { loading, children, animation, radius, speed, color, shine, as: Tag = 'div', smooth, className, style, ...rest },
   ref: Ref<HTMLElement>,
 ) {
+  validateGhostlyProps('Ghostly', { animation, radius, speed })
+
   const parent = useContext(GhostlyContext)
 
   const resolvedAnimation = animation ?? parent.animation

@@ -41,3 +41,38 @@ export const SPEED_MAP: Record<GhostlySpeed, string> = {
   normal: '1.5s',
   fast: '0.8s',
 }
+
+/** Valid values for each prop (used for dev validation) */
+export const VALID_ANIMATIONS: readonly string[] = ['shimmer', 'pulse', 'wave', 'none']
+export const VALID_RADII: readonly string[] = ['none', 'xs', 'sm', 'md', 'lg', 'full']
+export const VALID_SPEEDS: readonly string[] = ['slow', 'normal', 'fast']
+
+/**
+ * Validates Ghostly config props in development.
+ * No-op in production builds (tree-shaken via process.env.NODE_ENV check).
+ */
+export function validateGhostlyProps(
+  component: string,
+  props: Partial<GhostlyConfig>,
+): void {
+  if (process.env.NODE_ENV === 'production') return
+
+  if (props.animation && !VALID_ANIMATIONS.includes(props.animation)) {
+    console.warn(
+      `[Ghostly] <${component}> received invalid animation="${props.animation}". ` +
+      `Valid values: ${VALID_ANIMATIONS.join(', ')}`,
+    )
+  }
+  if (props.radius && !VALID_RADII.includes(props.radius)) {
+    console.warn(
+      `[Ghostly] <${component}> received invalid radius="${props.radius}". ` +
+      `Valid values: ${VALID_RADII.join(', ')}`,
+    )
+  }
+  if (props.speed && !VALID_SPEEDS.includes(props.speed)) {
+    console.warn(
+      `[Ghostly] <${component}> received invalid speed="${props.speed}". ` +
+      `Valid values: ${VALID_SPEEDS.join(', ')}`,
+    )
+  }
+}

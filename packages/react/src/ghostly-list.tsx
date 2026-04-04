@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactElement, ReactNode, Ref } from 'react'
 import { Children, cloneElement, forwardRef, isValidElement, useId, useMemo } from 'react'
-import type { GhostlyConfig } from 'ghostly'
+import { validateGhostlyProps, type GhostlyConfig } from 'ghostly'
 import { Ghostly } from './ghostly'
 
 type ListTag = 'div' | 'ul' | 'ol' | 'section' | 'main' | 'aside'
@@ -36,6 +36,8 @@ export const GhostlyList = forwardRef<HTMLElement, GhostlyListProps>(function Gh
   { loading, count, item, children, animation, radius, speed, color, shine, as: Tag = 'div', className, ...rest },
   ref: Ref<HTMLElement>,
 ) {
+  validateGhostlyProps('GhostlyList', { animation, radius, speed })
+
   const listId = useId()
   const template = item ?? getFirstChild(children)
 
