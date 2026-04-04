@@ -10,11 +10,15 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-      <img
-        src={product?.image ?? ''}
-        alt={product?.title ?? ''}
-        className="h-48 w-full object-cover"
-      />
+      {product?.image ? (
+        <img
+          src={product.image}
+          alt={product.title}
+          className="h-48 w-full object-cover"
+        />
+      ) : (
+        <div className="h-48 w-full bg-gray-200" />
+      )}
       <div className="flex flex-col gap-2 p-4">
         <span className="w-fit rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
           {product?.category ?? ''}
