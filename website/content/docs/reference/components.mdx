@@ -1,0 +1,189 @@
+---
+title: Components & Hooks
+description: Complete API reference for all Ghostly React components and hooks.
+---
+
+import { TypeTable } from 'fumadocs-ui/components/type-table'
+
+## `<Ghostly>`
+
+The primary component. Wraps any content to display skeleton loaders while data is loading.
+
+```tsx
+import { Ghostly } from '@ghostly/react'
+```
+
+### Props
+
+<TypeTable
+  type={{
+    loading: { description: 'When true, shows skeleton effect', type: 'boolean', required: true },
+    animation: { description: 'Animation style', type: "'shimmer' | 'pulse' | 'wave' | 'none'", default: "'shimmer'" },
+    radius: { description: 'Skeleton block border radius', type: "'none' | 'xs' | 'sm' | 'md' | 'lg' | 'full'", default: "'sm'" },
+    speed: { description: 'Animation speed', type: "'slow' | 'normal' | 'fast'", default: "'normal'" },
+    as: { description: 'HTML tag for wrapper', type: "'div' | 'section' | 'article' | 'main' | 'aside' | 'span'", default: "'div'" },
+    className: { description: 'CSS classes for wrapper', type: 'string' },
+    style: { description: 'Inline styles (merged with CSS vars)', type: 'CSSProperties' },
+    children: { description: 'Content to display or skeletonize', type: 'ReactNode', required: true },
+  }}
+/>
+
+### Behavior
+
+When `loading={true}`:
+- Sets `data-ghostly="{animation}"` on the wrapper element
+- Sets `aria-busy="true"` for screen readers
+- Sets CSS custom properties for radius and speed
+- All descendant text/media become skeleton blocks via CSS
+
+When `loading={false}`:
+- Removes all skeleton attributes
+- Children render normally with zero overhead
+
+### Examples
+
+```tsx
+// Basic
+<Ghostly loading={isLoading}>
+  <UserCard user={data} />
+</Ghostly>
+
+// All options
+<Ghostly loading={isLoading} animation="pulse" radius="lg" speed="fast" as="article">
+  <BlogPost post={data} />
+</Ghostly>
+
+// Custom colors per instance
+<Ghostly
+  loading={true}
+  style={{
+    '--ghostly-color': 'hsl(260 30% 88%)',
+    '--ghostly-shine': 'hsl(260 30% 94%)',
+  } as React.CSSProperties}
+>
+  <HeroSection data={data} />
+</Ghostly>
+```
+
+---
+
+## `<GhostlyList>`
+
+Skeleton loader for lists and grids. Clones a template element N times during loading.
+
+```tsx
+import { GhostlyList } from '@ghostly/react'
+```
+
+### Props
+
+<TypeTable
+  type={{
+    loading: { description: 'When true, shows skeleton items', type: 'boolean', required: true },
+    count: { description: 'Number of skeleton items to render', type: 'number', required: true },
+    item: { description: 'Template element to clone as skeleton', type: 'ReactElement', default: 'first child' },
+    animation: { description: 'Animation style', type: 'GhostlyAnimation', default: "'shimmer'" },
+    radius: { description: 'Border radius', type: 'GhostlyRadius', default: "'sm'" },
+    speed: { description: 'Animation speed', type: 'GhostlySpeed', default: "'normal'" },
+    className: { description: 'CSS classes for list container', type: 'string' },
+    children: { description: 'Real content when not loading', type: 'ReactNode', required: true },
+  }}
+/>
+
+### Example
+
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={8}
+  item={<ProductCard />}
+  className="grid grid-cols-2 gap-4 md:grid-cols-4"
+>
+  {products?.map(p => <ProductCard key={p.id} product={p} />)}
+</GhostlyList>
+```
+
+---
+
+## `<GhostlyProvider>`
+
+Sets default configuration for all Ghostly descendants.
+
+```tsx
+import { GhostlyProvider } from '@ghostly/react'
+```
+
+### Props
+
+<TypeTable
+  type={{
+    animation: { description: 'Default animation', type: 'GhostlyAnimation', default: "'shimmer'" },
+    radius: { description: 'Default radius', type: 'GhostlyRadius', default: "'sm'" },
+    speed: { description: 'Default speed', type: 'GhostlySpeed', default: "'normal'" },
+    children: { description: 'App content', type: 'ReactNode', required: true },
+  }}
+/>
+
+Priority: `Instance props` > `GhostlyProvider` > `Built-in defaults`
+
+---
+
+## `useGhostly()`
+
+Hook to read the nearest Ghostly context.
+
+```tsx
+import { useGhostly } from '@ghostly/react'
+
+function MyComponent() {
+  const { loading, animation, radius, speed } = useGhostly()
+}
+```
+
+### Return value
+
+<TypeTable
+  type={{
+    loading: { description: 'Whether nearest Ghostly ancestor is loading', type: 'boolean' },
+    animation: { description: 'Current animation', type: 'GhostlyAnimation' },
+    radius: { description: 'Current radius', type: 'GhostlyRadius' },
+    speed: { description: 'Current speed', type: 'GhostlySpeed' },
+  }}
+/>
+
+---
+
+## Types
+
+All types are exported from both `ghostly` and `@ghostly/react`.
+
+```tsx
+type GhostlyAnimation = 'shimmer' | 'pulse' | 'wave' | 'none'
+type GhostlyRadius = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'full'
+type GhostlySpeed = 'slow' | 'normal' | 'fast'
+
+interface GhostlyConfig {
+  animation?: GhostlyAnimation
+  radius?: GhostlyRadius
+  speed?: GhostlySpeed
+}
+```
+
+### Radius values
+
+| Prop | CSS Output |
+|------|-----------|
+| `none` | `0px` |
+| `xs` | `2px` |
+| `sm` | `4px` |
+| `md` | `8px` |
+| `lg` | `12px` |
+| `full` | `9999px` |
+
+### Speed values
+
+| Prop | CSS Output |
+|------|-----------|
+| `slow` | `2s` |
+| `normal` | `1.5s` |
+| `fast` | `0.8s` |

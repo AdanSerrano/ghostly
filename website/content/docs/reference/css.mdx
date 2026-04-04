@@ -1,0 +1,147 @@
+---
+title: CSS Reference
+description: Custom properties, selectors, animations, and specificity.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Importing
+
+```css title="globals.css"
+@import 'ghostly/css';
+```
+
+## Custom Properties
+
+Override these to customize Ghostly globally.
+
+### `--ghostly-color`
+
+Base color of skeleton blocks.
+
+| Theme | Default |
+|-------|---------|
+| Light | `hsl(220 13% 87%)` |
+| Dark | `hsl(220 13% 18%)` |
+
+### `--ghostly-shine`
+
+Highlight color for the shimmer gradient.
+
+| Theme | Default |
+|-------|---------|
+| Light | `hsl(220 13% 94%)` |
+| Dark | `hsl(220 13% 25%)` |
+
+### `--ghostly-radius`
+
+Border radius for skeleton blocks. Default: `4px`. Controlled by the `radius` prop.
+
+### `--ghostly-speed`
+
+Animation cycle duration. Default: `1.5s`. Controlled by the `speed` prop.
+
+### Example
+
+```css title="globals.css"
+:root {
+  --ghostly-color: hsl(210 40% 88%);
+  --ghostly-shine: hsl(210 40% 94%);
+  --ghostly-radius: 8px;
+  --ghostly-speed: 1.2s;
+}
+
+.dark {
+  --ghostly-color: hsl(210 15% 15%);
+  --ghostly-shine: hsl(210 15% 22%);
+}
+```
+
+## Animations
+
+### Shimmer (`ghostly-shimmer`)
+
+Gradient sweep from right to left.
+
+```css
+@keyframes ghostly-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+```
+
+### Pulse (`ghostly-pulse`)
+
+Opacity fades between 100% and 40%.
+
+```css
+@keyframes ghostly-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+```
+
+### Wave
+
+Uses `ghostly-pulse` with staggered `animation-delay` on each direct child (0ms, 100ms, 200ms...).
+
+## Dark Mode Detection
+
+Ghostly auto-detects dark mode through three methods:
+
+1. **`.dark` class** — Tailwind convention
+2. **`data-theme="dark"`** — shadcn/ui / Radix convention
+3. **`prefers-color-scheme: dark`** — System preference
+
+```css
+.dark,
+[data-theme='dark'] {
+  --ghostly-color: hsl(220 13% 18%);
+  --ghostly-shine: hsl(220 13% 25%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not([data-theme='light']) {
+    --ghostly-color: hsl(220 13% 18%);
+    --ghostly-shine: hsl(220 13% 25%);
+  }
+}
+```
+
+## Specificity
+
+Ghostly uses `:where()` for most selectors, which has **zero specificity**. Override with a single class:
+
+```css
+/* Overrides Ghostly's min-height for paragraphs */
+[data-ghostly] p {
+  min-height: 2em;
+}
+```
+
+<Callout type="warn">
+  `!important` is used on `color`, `background-color`, and `border-color` to override component-level styles. These are scoped to `[data-ghostly]` and only apply during loading.
+</Callout>
+
+## Minimum Dimensions
+
+| Element | min-height | min-width |
+|---------|-----------|-----------|
+| `h1` | `1.75em` | `40%` |
+| `h2` | `1.5em` | `50%` |
+| `h3` | `1.3em` | `55%` |
+| `h4-h6` | `1.15em` | `45%` |
+| `p` | `3em` | `80%` |
+| `span, a, li` | `1em` | `2rem` |
+| `input, textarea` | `2.5rem` | `8rem` |
+| `button` | `2.25rem` | `5rem` |
+| `img` (no size) | `12rem` | `100%` |
+| `svg` | `1.5rem` | `1.5rem` |
+
+## Reduced Motion
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  [data-ghostly] * { animation: none !important; }
+}
+```

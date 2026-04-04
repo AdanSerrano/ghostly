@@ -1,0 +1,74 @@
+---
+title: HTML Attributes
+description: Data attributes that control Ghostly skeleton behavior.
+---
+
+## `data-ghostly`
+
+**Set by:** `<Ghostly>` component automatically.
+
+The main activation attribute. When present, all descendant elements become skeleton blocks.
+
+| Value | Animation |
+|-------|-----------|
+| `shimmer` | Gradient sweep |
+| `pulse` | Opacity fade |
+| `wave` | Staggered pulse |
+
+### Using without React
+
+Ghostly's CSS works standalone:
+
+```html
+<div data-ghostly="shimmer">
+  <h2>This becomes a skeleton block</h2>
+  <p>So does this</p>
+</div>
+
+<script>
+  fetch('/api/data').then(() => {
+    document.querySelector('[data-ghostly]').removeAttribute('data-ghostly')
+  })
+</script>
+```
+
+---
+
+## `data-ghostly-ignore`
+
+**Set by:** Developer, manually.
+
+Excludes an element **and all its children** from the skeleton effect.
+
+```html
+<div data-ghostly="shimmer">
+  <h2>Skeleton block</h2>
+  <nav data-ghostly-ignore>
+    <a href="/">This stays visible</a>
+  </nav>
+</div>
+```
+
+### Common use cases
+
+- Navigation that should always be visible
+- Action buttons (Share, Save, Close)
+- Logos and branding
+- Fixed action bars
+
+---
+
+## `aria-busy`
+
+**Set by:** `<Ghostly>` automatically.
+
+Set to `"true"` when loading, removed when loaded. Tells assistive technologies the region is updating.
+
+## `aria-live`
+
+**Set by:** `<Ghostly>` automatically.
+
+Always set to `"polite"`. Combined with `aria-busy`, provides complete screen reader support:
+
+1. Loading starts → `aria-busy="true"` → "region busy"
+2. Loading ends → `aria-busy` removed → screen reader announces new content

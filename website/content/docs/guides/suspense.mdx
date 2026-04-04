@@ -1,0 +1,59 @@
+---
+title: Suspense Integration
+description: Using Ghostly with React Suspense, RSC, and streaming SSR.
+---
+
+## Suspense fallback
+
+```tsx
+import { Suspense } from 'react'
+import { Ghostly } from '@ghostly/react'
+
+<Suspense fallback={
+  <Ghostly loading={true}>
+    <ProductCard />
+  </Ghostly>
+}>
+  <AsyncProductCard />
+</Suspense>
+```
+
+## Next.js loading.tsx
+
+```tsx title="app/products/loading.tsx"
+import { GhostlyList } from '@ghostly/react'
+import { ProductCard } from '@/components/product-card'
+
+export default function Loading() {
+  return (
+    <GhostlyList loading={true} count={6} item={<ProductCard />} className="grid grid-cols-3 gap-4">
+      <></>
+    </GhostlyList>
+  )
+}
+```
+
+## Multiple boundaries
+
+```tsx
+<div className="grid grid-cols-12 gap-6">
+  <div className="col-span-8">
+    <Suspense fallback={<Ghostly loading={true}><Chart /></Ghostly>}>
+      <AsyncChart />
+    </Suspense>
+  </div>
+  <div className="col-span-4">
+    <Suspense fallback={<Ghostly loading={true} animation="wave"><Feed /></Ghostly>}>
+      <AsyncFeed />
+    </Suspense>
+  </div>
+</div>
+```
+
+## Why it works with streaming SSR
+
+Ghostly's CSS-first approach is perfect for streaming:
+1. CSS loads once in `<head>`
+2. Streamed boundaries arrive with `data-ghostly` attribute
+3. When data resolves, the attribute is removed
+4. No hydration mismatch — attribute is set server-side

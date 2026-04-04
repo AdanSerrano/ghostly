@@ -1,0 +1,93 @@
+---
+title: Data Fetching
+description: Using Ghostly with TanStack Query, SWR, Apollo, tRPC, and more.
+---
+
+## TanStack Query
+
+```tsx
+import { useQuery } from '@tanstack/react-query'
+import { Ghostly } from '@ghostly/react'
+
+function UserCard({ userId }: { userId: string }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => fetchUser(userId),
+  })
+
+  return (
+    <Ghostly loading={isLoading}>
+      <Card user={data} />
+    </Ghostly>
+  )
+}
+```
+
+## SWR
+
+```tsx
+import useSWR from 'swr'
+import { GhostlyList } from '@ghostly/react'
+
+function BlogIndex() {
+  const { data, isLoading } = useSWR('/api/posts', fetcher)
+
+  return (
+    <GhostlyList loading={isLoading} count={5} item={<PostPreview />} className="space-y-4">
+      {data?.map(post => <PostPreview key={post.id} post={post} />)}
+    </GhostlyList>
+  )
+}
+```
+
+## Apollo GraphQL
+
+```tsx
+import { useQuery, gql } from '@apollo/client'
+
+function UserCard({ userId }: { userId: string }) {
+  const { data, loading } = useQuery(GET_USER, { variables: { id: userId } })
+
+  return (
+    <Ghostly loading={loading}>
+      <Card user={data?.user} />
+    </Ghostly>
+  )
+}
+```
+
+## tRPC
+
+```tsx
+function ProductPage({ id }: { id: string }) {
+  const { data, isLoading } = trpc.product.getById.useQuery({ id })
+
+  return (
+    <Ghostly loading={isLoading}>
+      <ProductDetail product={data} />
+    </Ghostly>
+  )
+}
+```
+
+## Native fetch + useTransition
+
+```tsx
+function SearchResults({ query }: { query: string }) {
+  const [results, setResults] = useState(null)
+  const [isPending, startTransition] = useTransition()
+
+  useEffect(() => {
+    startTransition(async () => {
+      const data = await fetch(`/api/search?q=${query}`).then(r => r.json())
+      setResults(data)
+    })
+  }, [query])
+
+  return (
+    <Ghostly loading={isPending}>
+      <ResultsList results={results} />
+    </Ghostly>
+  )
+}
+```

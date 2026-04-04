@@ -1,0 +1,130 @@
+---
+title: Basic Usage
+description: Learn the fundamentals of using Ghostly skeleton loaders.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Single component
+
+The most basic usage — wrap any component with `<Ghostly>`:
+
+```tsx title="user-page.tsx"
+import { Ghostly } from '@ghostly/react'
+
+function UserPage() {
+  const { data, isLoading } = useQuery('user')
+
+  return (
+    <Ghostly loading={isLoading}>
+      <UserProfile user={data} />
+    </Ghostly>
+  )
+}
+```
+
+When `loading={true}`, all text, images, and interactive elements inside become animated skeleton blocks. When `loading={false}`, your component renders normally.
+
+## Lists and grids
+
+For lists that start empty during loading, use `<GhostlyList>`:
+
+```tsx title="shop-page.tsx"
+import { GhostlyList } from '@ghostly/react'
+
+function ShopPage() {
+  const { data: products, isLoading } = useQuery('products')
+
+  return (
+    <GhostlyList
+      loading={isLoading}
+      count={6}
+      item={<ProductCard />}
+      className="grid grid-cols-3 gap-4"
+    >
+      {products?.map(p => <ProductCard key={p.id} product={p} />)}
+    </GhostlyList>
+  )
+}
+```
+
+`<GhostlyList>` clones the `item` template `count` times during loading, then shows your real children when data arrives.
+
+## Choosing an animation
+
+```tsx
+<Ghostly loading={true} animation="shimmer">  {/* Gradient sweep (default) */}
+<Ghostly loading={true} animation="pulse">    {/* Opacity fade */}
+<Ghostly loading={true} animation="wave">     {/* Staggered fade */}
+<Ghostly loading={true} animation="none">     {/* Static blocks */}
+```
+
+## Excluding elements
+
+Some elements should stay visible during loading. Add `data-ghostly-ignore`:
+
+```tsx
+<Ghostly loading={isLoading}>
+  <div className="flex justify-between">
+    <div>
+      <h2>{data?.title ?? ''}</h2>
+      <p>{data?.description ?? ''}</p>
+    </div>
+    {/* This button stays visible during loading */}
+    <button data-ghostly-ignore className="btn-primary">
+      Share
+    </button>
+  </div>
+</Ghostly>
+```
+
+## Writing skeleton-friendly components
+
+<Callout type="info">
+  Your components should handle `undefined` data gracefully with optional chaining. This is already good React practice.
+</Callout>
+
+```tsx title="product-card.tsx"
+// ✅ Good — handles undefined data
+function ProductCard({ product }: { product?: Product }) {
+  return (
+    <div className="rounded-xl border p-4">
+      {product?.image ? (
+        <img src={product.image} alt={product.title} className="h-48 w-full" />
+      ) : (
+        <div className="h-48 w-full" />
+      )}
+      <h3 className="text-lg font-bold">{product?.title ?? ''}</h3>
+      <p className="text-sm">{product?.price ?? ''}</p>
+    </div>
+  )
+}
+```
+
+## Multiple loading sections
+
+Different sections can have independent loading states:
+
+```tsx
+function Dashboard() {
+  const stats = useQuery('stats')
+  const orders = useQuery('orders')
+
+  return (
+    <div className="space-y-8">
+      <Ghostly loading={stats.isLoading} animation="pulse">
+        <StatsRow stats={stats.data} />
+      </Ghostly>
+
+      <GhostlyList
+        loading={orders.isLoading}
+        count={5}
+        item={<OrderRow />}
+        animation="wave"
+      >
+        {orders.data?.map(o => <OrderRow key={o.id} order={o} />)}
+      </GhostlyList>
+    </div>
+  )
+}
+```

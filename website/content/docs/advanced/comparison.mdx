@@ -1,0 +1,54 @@
+---
+title: Comparison
+description: How Ghostly compares to other skeleton loading libraries.
+---
+
+## Feature Matrix
+
+| Feature | Ghostly | Boneyard | react-loading-skeleton | react-content-loader |
+|---------|---------|----------|----------------------|---------------------|
+| Zero config | Yes | No | Partial | No |
+| Code changes | None | Wrap + fixture | Replace elements | SVG definitions |
+| Build step | None | Playwright | None | None |
+| CSS Grid | Yes | No | N/A | N/A |
+| Dark mode | Auto | Heuristic | Manual | Manual |
+| Animations | 3 | 1 | 2 | 1 |
+| Accessibility | Built-in | Partial | Partial | Partial |
+| Bundle (gzip) | ~3KB | ~16KB | ~4KB | ~6KB |
+| Runtime JS | None | Layout engine | Style injection | SVG rendering |
+
+## vs Boneyard
+
+**Boneyard** captures DOM layout with Playwright for pixel-perfect skeletons.
+
+**Choose Ghostly:** Zero maintenance, fast setup, no build step.
+**Choose Boneyard:** Pixel-perfect skeletons worth the CLI overhead.
+
+## vs react-loading-skeleton
+
+**react-loading-skeleton** replaces elements with `<Skeleton>` components.
+
+```tsx
+// react-loading-skeleton — rewrites your component
+{data ? <h2>{data.title}</h2> : <Skeleton height={28} width={200} />}
+
+// Ghostly — no changes
+<Ghostly loading={!data}><h2>{data?.title}</h2></Ghostly>
+```
+
+**Choose Ghostly:** Zero code changes, no duplication.
+**Choose react-loading-skeleton:** Fine-grained control per element.
+
+## vs react-content-loader
+
+**react-content-loader** uses manual SVG coordinates.
+
+**Choose Ghostly:** Automatic layout-based skeletons.
+**Choose react-content-loader:** Custom artistic shapes.
+
+## Migration
+
+1. Remove old skeleton components/libraries
+2. Ensure components handle `undefined` data (optional chaining)
+3. Wrap with `<Ghostly loading={isLoading}>`
+4. Import `ghostly/css`

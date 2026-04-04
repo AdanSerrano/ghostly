@@ -1,0 +1,42 @@
+---
+title: Accessibility
+description: ARIA attributes, reduced motion, and screen reader support.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Built-in features
+
+### ARIA attributes
+
+Every `<Ghostly>` wrapper automatically sets:
+
+| Attribute | Loading | Loaded |
+|-----------|---------|--------|
+| `aria-busy` | `"true"` | removed |
+| `aria-live` | `"polite"` | `"polite"` |
+
+### Reduced motion
+
+When `prefers-reduced-motion: reduce` is enabled, all animations are disabled. Skeletons show as static blocks.
+
+### Pointer events
+
+During loading, `pointer-events: none` and `user-select: none` prevent interaction with skeleton content.
+
+## Best practices
+
+<Callout type="info">
+  Use semantic HTML tags (`h1-h6`, `p`, `img`, `button`). Ghostly relies on them to identify content.
+</Callout>
+
+- **Label skeleton regions** with `aria-label` for complex pages
+- **Avoid long loading** — show a "Still loading..." message after 5s
+- **Keep alt text** on images for when content loads
+- **Test with screen readers** — VoiceOver (Mac) or NVDA (Windows)
+
+## Screen reader experience
+
+1. Page loads → `aria-busy="true"` → "region busy"
+2. Content arrives → `aria-busy` removed → content announced
+3. User navigates → real content with proper headings/links

@@ -1,0 +1,105 @@
+---
+title: Installation
+description: Install Ghostly and set it up in your project in under 30 seconds.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
+import { Step, Steps } from 'fumadocs-ui/components/steps'
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Install packages
+
+<Tabs items={['npm', 'yarn', 'pnpm', 'bun']}>
+  <Tab value="npm">
+    ```bash
+    npm install ghostly @ghostly/react
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn add ghostly @ghostly/react
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm add ghostly @ghostly/react
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bun add ghostly @ghostly/react
+    ```
+  </Tab>
+</Tabs>
+
+## Setup
+
+<Steps>
+
+<Step>
+### Import the CSS
+
+Add the Ghostly stylesheet to your global CSS file:
+
+```css title="globals.css"
+@import 'ghostly/css';
+```
+
+Or import it directly in your root layout:
+
+```tsx title="app/layout.tsx"
+import 'ghostly/css'
+```
+</Step>
+
+<Step>
+### Wrap your components
+
+```tsx title="page.tsx"
+import { Ghostly } from '@ghostly/react'
+
+function UserPage() {
+  const { data, isLoading } = useFetch('/api/user')
+
+  return (
+    <Ghostly loading={isLoading}>
+      <UserProfile user={data} />
+    </Ghostly>
+  )
+}
+```
+</Step>
+
+<Step>
+### That's it
+
+No CLI. No build step. No config files. No code changes to your components.
+</Step>
+
+</Steps>
+
+## Requirements
+
+- **React** >= 18.0.0
+- **CSS imports** — Any bundler that supports CSS imports (Next.js, Vite, Webpack, etc.)
+
+## Optional: Global configuration
+
+Set default animation, radius, and speed for all Ghostly instances:
+
+```tsx title="app/layout.tsx"
+import { GhostlyProvider } from '@ghostly/react'
+import 'ghostly/css'
+
+export default function RootLayout({ children }) {
+  return (
+    <GhostlyProvider animation="shimmer" radius="md" speed="normal">
+      {children}
+    </GhostlyProvider>
+  )
+}
+```
+
+<Callout type="info">
+  Components handle `undefined` props with optional chaining (`data?.title`). This is standard React best practice and makes components work with Ghostly, Suspense, and loading states.
+</Callout>

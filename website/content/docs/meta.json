@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "pages": [
+    "---Getting Started---",
+    "getting-started",
+    "---Reference---",
+    "reference",
+    "---Guides---",
+    "guides",
+    "---Advanced---",
+    "advanced"
+  ]
+}

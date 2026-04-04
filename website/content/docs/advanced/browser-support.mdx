@@ -1,0 +1,37 @@
+---
+title: Browser Support
+description: Compatibility matrix for Ghostly.
+---
+
+## Minimum Versions
+
+| Browser | Version | Date |
+|---------|---------|------|
+| Chrome | 88+ | Jan 2021 |
+| Firefox | 78+ | Jun 2020 |
+| Safari | 14+ | Sep 2020 |
+| Edge | 88+ | Jan 2021 |
+| iOS Safari | 14+ | Sep 2020 |
+| Android Chrome | 88+ | Jan 2021 |
+
+The limiting factor is `:where()` selector support.
+
+## Not Supported
+
+- Internet Explorer (no CSS Custom Properties)
+- Opera Mini (limited CSS animation)
+
+## Graceful Degradation
+
+On unsupported browsers, skeleton styles won't apply but the page renders normally — no broken layouts.
+
+## Required CSS Features
+
+| Feature | Used for |
+|---------|----------|
+| CSS Custom Properties | Configurable colors, radius, speed |
+| `:where()` | Low-specificity selectors |
+| `::after` | Media element skeletons |
+| `@keyframes` | Animations |
+| `prefers-color-scheme` | Dark mode detection |
+| `prefers-reduced-motion` | Accessibility |

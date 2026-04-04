@@ -1,0 +1,103 @@
+---
+title: Examples
+description: Real-world patterns and common use cases for Ghostly.
+---
+
+## Single component
+
+```tsx
+import { Ghostly } from '@ghostly/react'
+
+function UserPage() {
+  const { data, isLoading } = useQuery('user')
+
+  return (
+    <Ghostly loading={isLoading}>
+      <UserProfile user={data} />
+    </Ghostly>
+  )
+}
+```
+
+## Product grid
+
+```tsx
+import { GhostlyList } from '@ghostly/react'
+
+function ShopPage() {
+  const { data: products, isLoading } = useQuery('products')
+
+  return (
+    <GhostlyList
+      loading={isLoading}
+      count={8}
+      item={<ProductCard />}
+      className="grid grid-cols-2 gap-4 md:grid-cols-4"
+    >
+      {products?.map(p => <ProductCard key={p.id} product={p} />)}
+    </GhostlyList>
+  )
+}
+```
+
+## Dashboard with multiple sections
+
+```tsx
+function DashboardPage() {
+  const stats = useQuery('stats')
+  const orders = useQuery('orders')
+  const chart = useQuery('chart')
+
+  return (
+    <div className="space-y-8">
+      <Ghostly loading={stats.isLoading} animation="pulse">
+        <StatsRow stats={stats.data} />
+      </Ghostly>
+
+      <Ghostly loading={chart.isLoading} animation="shimmer">
+        <RevenueChart data={chart.data} />
+      </Ghostly>
+
+      <GhostlyList
+        loading={orders.isLoading}
+        count={5}
+        item={<OrderRow />}
+        animation="wave"
+        className="flex flex-col divide-y"
+      >
+        {orders.data?.map(o => <OrderRow key={o.id} order={o} />)}
+      </GhostlyList>
+    </div>
+  )
+}
+```
+
+## Exclude elements
+
+```tsx
+<Ghostly loading={isLoading}>
+  <div className="flex items-center justify-between p-4 border rounded-lg">
+    <div>
+      <h3>{data?.title ?? ''}</h3>
+      <p>{data?.description ?? ''}</p>
+    </div>
+    <button data-ghostly-ignore className="btn-primary">
+      Share
+    </button>
+  </div>
+</Ghostly>
+```
+
+## Custom colors per section
+
+```tsx
+<Ghostly
+  loading={true}
+  style={{
+    '--ghostly-color': 'hsl(260 30% 88%)',
+    '--ghostly-shine': 'hsl(260 30% 94%)',
+  } as React.CSSProperties}
+>
+  <SpecialSection />
+</Ghostly>
+```

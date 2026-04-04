@@ -1,0 +1,64 @@
+---
+title: Introduction
+description: Zero-config skeleton loaders for React. Wrap your component, done.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card'
+import { Callout } from 'fumadocs-ui/components/callout'
+
+**Ghostly** transforms your existing components into skeleton loaders using pure CSS. No CLI, no build step, no code changes.
+
+```tsx title="Just wrap your component"
+import { Ghostly } from '@ghostly/react'
+import 'ghostly/css'
+
+<Ghostly loading={isLoading}>
+  <ProductCard product={data} />
+</Ghostly>
+```
+
+Your component **is** the skeleton. Ghostly uses CSS to hide text and images, replacing them with animated placeholder blocks — preserving the exact same layout.
+
+## Why Ghostly?
+
+Most skeleton libraries require you to **rewrite** your components, **run CLI tools**, or **maintain generated files**. Ghostly doesn't.
+
+| | Traditional | Ghostly |
+|---|---|---|
+| Setup | CLI + config + build | `npm install` + CSS import |
+| Code changes | Rewrite components | None |
+| Maintenance | Regenerate on changes | Zero |
+| Bundle size | 4-16KB + runtime JS | ~3KB, zero runtime JS |
+
+## Quick Start
+
+<Cards>
+  <Card title="Installation" href="/docs/getting-started/installation">
+    Install Ghostly in under 30 seconds
+  </Card>
+  <Card title="Basic Usage" href="/docs/getting-started/usage">
+    Learn the basics of wrapping components
+  </Card>
+  <Card title="API Reference" href="/docs/reference/components">
+    Full component and prop reference
+  </Card>
+  <Card title="Examples" href="/docs/guides/examples">
+    Real-world patterns and integrations
+  </Card>
+</Cards>
+
+## Design Principles
+
+1. **Zero config** — Install, import CSS, wrap. No CLI, no build step, no config files
+2. **Zero code changes** — Your components stay exactly as they are
+3. **CSS-first** — All skeleton logic is pure CSS. Zero JavaScript overhead at runtime
+4. **Progressive** — Works with CSR, SSR, RSC, and Suspense
+5. **Accessible** — ARIA attributes, reduced motion, screen reader friendly
+6. **Tiny** — ~2KB CSS + ~1KB React (gzipped). Zero runtime dependencies in core
+
+## Packages
+
+| Package | Description | Size (gzip) |
+|---------|-------------|-------------|
+| `ghostly` | CSS engine + types | ~2KB |
+| `@ghostly/react` | React components | ~1KB |

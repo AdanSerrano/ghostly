@@ -1,0 +1,81 @@
+---
+title: Customization
+description: Colors, animations, dark mode, and theming.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Colors
+
+Override CSS custom properties to match your design system:
+
+```css title="globals.css"
+:root {
+  --ghostly-color: hsl(210 40% 88%);
+  --ghostly-shine: hsl(210 40% 94%);
+}
+
+.dark {
+  --ghostly-color: hsl(210 15% 15%);
+  --ghostly-shine: hsl(210 15% 22%);
+}
+```
+
+### Per-section colors
+
+```tsx
+<Ghostly
+  loading={true}
+  style={{
+    '--ghostly-color': 'hsl(260 60% 90%)',
+    '--ghostly-shine': 'hsl(260 60% 95%)',
+  } as React.CSSProperties}
+>
+  <HeroContent data={data} />
+</Ghostly>
+```
+
+## Animations
+
+| Animation | Best for | Description |
+|-----------|----------|-------------|
+| `shimmer` | General content | Gradient sweep left to right |
+| `pulse` | Minimal UIs | Opacity fade in/out |
+| `wave` | Lists, timelines | Staggered pulse across children |
+| `none` | Print, reduced motion | Static blocks |
+
+## Speed
+
+```tsx
+<Ghostly loading={true} speed="fast">    {/* 0.8s */}
+<Ghostly loading={true} speed="normal">  {/* 1.5s */}
+<Ghostly loading={true} speed="slow">    {/* 2.0s */}
+```
+
+## Border radius
+
+```tsx
+<Ghostly loading={true} radius="none">   {/* 0px */}
+<Ghostly loading={true} radius="sm">     {/* 4px (default) */}
+<Ghostly loading={true} radius="md">     {/* 8px */}
+<Ghostly loading={true} radius="full">   {/* 9999px — pill */}
+```
+
+## Overriding element styles
+
+Ghostly uses `:where()` (zero specificity). Override with one class:
+
+```css
+[data-ghostly] p { min-height: 2em; min-width: 50%; }
+[data-ghostly] img { aspect-ratio: 16 / 9; }
+```
+
+## Global defaults
+
+```tsx title="app/layout.tsx"
+<GhostlyProvider animation="shimmer" radius="md" speed="normal">
+  <App />
+</GhostlyProvider>
+```
+
+Individual instances override the provider.

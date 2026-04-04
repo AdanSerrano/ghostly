@@ -1,0 +1,77 @@
+---
+title: Working with Lists
+description: Skeleton loaders for grids, tables, and dynamic lists.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## The Problem
+
+```tsx
+// products is [] during loading → empty grid → no skeletons!
+<Ghostly loading={isLoading}>
+  <div className="grid grid-cols-3 gap-4">
+    {products.map(p => <ProductCard key={p.id} product={p} />)}
+  </div>
+</Ghostly>
+```
+
+## Solution: GhostlyList
+
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={6}
+  item={<ProductCard />}
+  className="grid grid-cols-3 gap-4"
+>
+  {products.map(p => <ProductCard key={p.id} product={p} />)}
+</GhostlyList>
+```
+
+## Grid layouts
+
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={8}
+  item={<ProductCard />}
+  className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+>
+  {products.map(p => <ProductCard key={p.id} product={p} />)}
+</GhostlyList>
+```
+
+<Callout type="info">
+  Make `count` a multiple of your grid columns for complete rows (e.g., 6 for 3 columns, 8 for 4 columns).
+</Callout>
+
+## Vertical lists
+
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={5}
+  item={<OrderRow />}
+  className="divide-y divide-gray-200"
+>
+  {orders.map(o => <OrderRow key={o.id} order={o} />)}
+</GhostlyList>
+```
+
+## Mixed content
+
+```tsx
+<div>
+  <Ghostly loading={isLoading}>
+    <div className="flex justify-between mb-4">
+      <h2>{data?.title ?? ''}</h2>
+      <span>{data?.count ?? ''} items</span>
+    </div>
+  </Ghostly>
+
+  <GhostlyList loading={isLoading} count={4} item={<ProductCard />} className="grid grid-cols-2 gap-4">
+    {data?.products.map(p => <ProductCard key={p.id} product={p} />)}
+  </GhostlyList>
+</div>
+```

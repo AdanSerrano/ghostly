@@ -1,0 +1,39 @@
+---
+title: Performance
+description: Bundle size, runtime cost, and Core Web Vitals impact.
+---
+
+## Bundle Size
+
+| Package | Gzipped | Brotli |
+|---------|---------|--------|
+| `ghostly` (CSS) | ~2KB | ~1.5KB |
+| `@ghostly/react` | ~1KB | ~0.8KB |
+| **Total** | **~3KB** | **~2.3KB** |
+
+### Comparison
+
+| Library | Gzipped | Runtime JS | Build step |
+|---------|---------|-----------|------------|
+| **Ghostly** | **~3KB** | **None** | **None** |
+| react-loading-skeleton | ~4KB | Style injection | None |
+| react-content-loader | ~6KB | SVG rendering | None |
+| Boneyard | ~16KB | Layout engine | Playwright |
+
+## Runtime Cost
+
+**Zero.** CSS animations are GPU-accelerated, off main thread, and battery efficient. No `requestAnimationFrame`, no `ResizeObserver`, no layout thrashing.
+
+## Core Web Vitals
+
+| Metric | Impact |
+|--------|--------|
+| **CLS** | Reduces — skeleton preserves layout, `min-height` prevents collapse |
+| **LCP** | None — ~2KB CSS doesn't block rendering |
+| **INP** | None — `pointer-events: none` during loading, no JS handlers |
+
+## Best Practices
+
+- Use `count={6-12}` in GhostlyList, not 100+
+- Use `animation="pulse"` for large areas (lighter than shimmer)
+- Avoid re-renders during loading by passing stable references

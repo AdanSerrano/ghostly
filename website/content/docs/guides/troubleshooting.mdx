@@ -1,0 +1,87 @@
+---
+title: Troubleshooting
+description: Common issues and their solutions.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Skeleton doesn't appear
+
+**CSS not imported.** Add to your global CSS:
+
+```css
+@import 'ghostly/css';
+```
+
+## Elements collapse to zero height
+
+**Empty content without min-height.** Ghostly sets `min-height: 1em` on text elements, but if your CSS overrides it:
+
+```css
+/* Override the minimum height */
+[data-ghostly] p { min-height: 3em; }
+```
+
+## Images show broken icon
+
+**Empty `src` attribute.** Use conditional rendering:
+
+```tsx
+// ✅ Good
+{product?.image ? (
+  <img src={product.image} alt={product.title} />
+) : (
+  <div className="h-48 w-full" />
+)}
+
+// ❌ Bad — empty string triggers a request
+<img src={product?.image ?? ''} />
+```
+
+## Component crashes with undefined data
+
+**Missing optional chaining.** Use `data?.property`:
+
+```tsx
+// ✅ Safe
+<h2>{data?.title ?? ''}</h2>
+
+// ❌ Crashes
+<h2>{data.title}</h2>
+```
+
+## Animation not showing
+
+<Callout type="warn">
+  If `prefers-reduced-motion: reduce` is enabled, animations are intentionally disabled. This is correct behavior.
+</Callout>
+
+Check: DevTools → Rendering → Emulate `prefers-reduced-motion`.
+
+## GhostlyList shows nothing
+
+**Missing `item` prop** when children is empty:
+
+```tsx
+// ✅ Always provide item
+<GhostlyList loading={true} count={6} item={<ProductCard />}>
+```
+
+## Dark mode colors wrong
+
+**Custom theme system.** Override for your system:
+
+```css
+.my-dark-mode {
+  --ghostly-color: hsl(220 13% 18%);
+  --ghostly-shine: hsl(220 13% 25%);
+}
+```
+
+## TypeScript: CSS variable error
+
+**Cast to CSSProperties:**
+
+```tsx
+style={{ '--ghostly-color': '...' } as React.CSSProperties}
+```

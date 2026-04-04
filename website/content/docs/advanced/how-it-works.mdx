@@ -1,0 +1,64 @@
+---
+title: How It Works
+description: The CSS-first architecture behind Ghostly, explained.
+---
+
+## The Core Insight
+
+> **Your component IS the skeleton.**
+
+Ghostly doesn't generate a separate skeleton component. It uses your real component with its real CSS layout and transforms it visually using pure CSS.
+
+```
+Traditional:  Component → build tool → Skeleton Component
+Ghostly:      Component → CSS attribute → looks like skeleton
+```
+
+## Three Layers
+
+### 1. React (coordination)
+
+The React layer is minimal — just sets an attribute:
+
+```tsx
+function Ghostly({ loading, children, animation }) {
+  return (
+    <div data-ghostly={loading ? animation : undefined}>
+      {children}
+    </div>
+  )
+}
+```
+
+### 2. CSS Engine (the work)
+
+All visual transformation is pure CSS:
+
+- **Text:** `color: transparent` + `background-color: skeleton`
+- **Media:** `visibility: hidden` + `::after` pseudo-element overlay
+- **Animations:** CSS `@keyframes` (shimmer/pulse/wave)
+
+### 3. CSS Custom Properties (configuration)
+
+```css
+:root {
+  --ghostly-color: hsl(220 13% 87%);
+  --ghostly-shine: hsl(220 13% 94%);
+}
+```
+
+## Why CSS-First?
+
+| Aspect | CSS-first (Ghostly) | JS-based (others) |
+|--------|--------------------|--------------------|
+| Runtime cost | Zero | Measure + position + animate |
+| Responsiveness | Automatic | Breakpoint config |
+| Desync risk | Impossible | Layout changes break skeletons |
+| Bundle | ~3KB | 4-16KB + runtime |
+| GPU acceleration | Yes (CSS animations) | Depends |
+
+## Limitations
+
+- Components must render something (can't skeleton `null`)
+- `::after` conflicts if component already uses it on media elements
+- CSS Grid `auto` rows may size differently with empty content
