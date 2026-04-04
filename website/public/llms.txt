@@ -1,0 +1,44 @@
+# Ghostly
+
+> Zero-config skeleton loaders for React. CSS-first engine that transforms your existing components into skeleton loading states. No CLI, no build step, no code changes. ~3KB gzipped.
+
+Ghostly uses pure CSS to convert your real component layout into animated placeholder blocks. Your component IS the skeleton — Ghostly hides text and images via CSS, preserving the exact same structure, spacing, and dimensions.
+
+## Packages
+
+- `ghostly`: CSS engine + TypeScript types (zero dependencies, framework-agnostic)
+- `@ghostly/react`: React components (`<Ghostly>`, `<GhostlyList>`, `<GhostlyProvider>`, `useGhostly()`)
+
+## Getting Started
+
+- [Installation](/docs/getting-started/installation): Install and set up Ghostly in under 30 seconds
+- [Basic Usage](/docs/getting-started/usage): Learn wrapping components, animations, and exclusions
+
+## Reference
+
+- [Components & Hooks](/docs/reference/components): Full API for Ghostly, GhostlyList, GhostlyProvider, useGhostly
+- [CSS Reference](/docs/reference/css): Custom properties, selectors, animations, specificity, dark mode
+- [HTML Attributes](/docs/reference/attributes): data-ghostly, data-ghostly-ignore, aria-busy, aria-live
+
+## Guides
+
+- [Examples](/docs/guides/examples): Real-world patterns for cards, grids, dashboards
+- [Customization](/docs/guides/customization): Colors, animations, dark mode, theming, per-section styles
+- [Working with Lists](/docs/guides/lists): GhostlyList for grids, tables, and dynamic lists
+- [Suspense Integration](/docs/guides/suspense): React Suspense, RSC, streaming SSR, loading.tsx
+- [Data Fetching](/docs/guides/data-fetching): TanStack Query, SWR, Apollo, tRPC integration
+- [Accessibility](/docs/guides/accessibility): ARIA attributes, reduced motion, screen readers
+- [Troubleshooting](/docs/guides/troubleshooting): Common issues and solutions
+
+## Advanced
+
+- [How It Works](/docs/advanced/how-it-works): CSS-first architecture explained
+- [Performance](/docs/advanced/performance): Bundle size, zero runtime cost, Core Web Vitals
+- [Browser Support](/docs/advanced/browser-support): Compatibility matrix (Chrome 88+, Firefox 78+, Safari 14+)
+- [Comparison](/docs/advanced/comparison): vs Boneyard, react-loading-skeleton, react-content-loader
+
+## Links
+
+- [GitHub](https://github.com/AdanSerrano/ghostly)
+- [npm: ghostly](https://www.npmjs.com/package/ghostly)
+- [npm: @ghostly/react](https://www.npmjs.com/package/@ghostly/react)

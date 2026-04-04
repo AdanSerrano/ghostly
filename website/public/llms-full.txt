@@ -1,0 +1,315 @@
+# Ghostly — Complete Documentation
+
+> Zero-config skeleton loaders for React. CSS-first engine that transforms your existing components into skeleton loading states. No CLI, no build step, no code changes. ~3KB gzipped.
+
+---
+
+## Installation
+
+Install both packages:
+
+```bash
+npm install ghostly @ghostly/react
+```
+
+### Step 1: Import the CSS
+
+```css
+/* globals.css */
+@import 'ghostly/css';
+```
+
+### Step 2: Wrap your components
+
+```tsx
+import { Ghostly } from '@ghostly/react'
+
+function UserPage() {
+  const { data, isLoading } = useFetch('/api/user')
+  return (
+    <Ghostly loading={isLoading}>
+      <UserProfile user={data} />
+    </Ghostly>
+  )
+}
+```
+
+Requirements: React >= 18, any bundler with CSS import support.
+
+### Optional: Global configuration
+
+```tsx
+import { GhostlyProvider } from '@ghostly/react'
+import 'ghostly/css'
+
+export default function RootLayout({ children }) {
+  return (
+    <GhostlyProvider animation="shimmer" radius="md" speed="normal">
+      {children}
+    </GhostlyProvider>
+  )
+}
+```
+
+---
+
+## API Reference
+
+### `<Ghostly>` Component
+
+Wraps any content to show skeleton loaders while loading. Supports ref forwarding.
+
+```tsx
+import { Ghostly } from '@ghostly/react'
+```
+
+Props:
+- `loading` (boolean, required): When true, shows skeleton effect
+- `animation` ('shimmer' | 'pulse' | 'wave' | 'none', default: 'shimmer'): Animation style
+- `radius` ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'full', default: 'sm'): Border radius
+- `speed` ('slow' | 'normal' | 'fast', default: 'normal'): Animation speed
+- `as` ('div' | 'section' | 'article' | 'main' | 'aside' | 'span', default: 'div'): Wrapper tag
+- `className` (string): CSS classes for wrapper
+- `style` (CSSProperties): Inline styles, merged with CSS variables
+- `children` (ReactNode, required): Content to display or skeletonize
+- `ref` (Ref<HTMLElement>): Forwarded to wrapper element
+
+Behavior when `loading={true}`:
+- Sets `data-ghostly="{animation}"` on wrapper
+- Sets `aria-busy="true"` for accessibility
+- Sets CSS variables `--ghostly-radius` and `--ghostly-speed`
+- All descendant text/media elements become skeleton blocks via CSS
+
+Example:
+```tsx
+<Ghostly loading={isLoading} animation="pulse" radius="lg" speed="fast" as="article">
+  <BlogPost post={data} />
+</Ghostly>
+```
+
+### `<GhostlyList>` Component
+
+Skeleton loader for lists and grids. Clones a template element N times during loading. Supports ref forwarding.
+
+```tsx
+import { GhostlyList } from '@ghostly/react'
+```
+
+Props:
+- `loading` (boolean, required): When true, shows skeleton items
+- `count` (number, required): Number of skeleton items to render
+- `item` (ReactElement, default: first child): Template element to clone
+- `animation`, `radius`, `speed`: Same as Ghostly
+- `className` (string): CSS classes for list container
+- `children` (ReactNode, required): Real content when not loading
+
+Example:
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={6}
+  item={<ProductCard />}
+  className="grid grid-cols-3 gap-4"
+>
+  {products?.map(p => <ProductCard key={p.id} product={p} />)}
+</GhostlyList>
+```
+
+### `<GhostlyProvider>` Component
+
+Sets default config for all Ghostly descendants. Priority: Instance props > Provider > Defaults.
+
+Props:
+- `animation` (GhostlyAnimation, default: 'shimmer')
+- `radius` (GhostlyRadius, default: 'sm')
+- `speed` (GhostlySpeed, default: 'normal')
+- `children` (ReactNode, required)
+
+### `useGhostly()` Hook
+
+Returns the current Ghostly context from the nearest ancestor.
+
+```tsx
+const { loading, animation, radius, speed } = useGhostly()
+```
+
+Returns: `{ loading: boolean, animation: GhostlyAnimation, radius: GhostlyRadius, speed: GhostlySpeed }`
+
+---
+
+## CSS Reference
+
+### Custom Properties
+
+Override these globally to customize:
+
+```css
+:root {
+  --ghostly-color: hsl(220 13% 87%);   /* Skeleton block color */
+  --ghostly-shine: hsl(220 13% 94%);   /* Shimmer highlight */
+  --ghostly-radius: 4px;                /* Border radius */
+  --ghostly-speed: 1.5s;                /* Animation duration */
+}
+.dark {
+  --ghostly-color: hsl(220 13% 18%);
+  --ghostly-shine: hsl(220 13% 25%);
+}
+```
+
+### Animations
+
+Shimmer: gradient sweep left-to-right (default, most professional)
+Pulse: opacity fades 100% → 40% → 100%
+Wave: cascading opacity with staggered delays per child (80ms intervals, up to 12 children)
+None: static blocks, no animation
+
+### Dark Mode Detection
+
+Automatic via three methods (priority order):
+1. `.dark` CSS class (Tailwind convention)
+2. `data-theme="dark"` attribute (shadcn/ui convention)
+3. `prefers-color-scheme: dark` media query (system preference)
+
+### Reduced Motion
+
+All animations disabled when `prefers-reduced-motion: reduce` is active. Skeletons render as static blocks.
+
+### HTML Attributes
+
+`data-ghostly="shimmer|pulse|wave"`: Set by Ghostly component. Activates skeleton CSS on all descendants.
+`data-ghostly-ignore`: Add manually to exclude an element and its children from skeleton effect.
+`aria-busy="true"`: Set automatically when loading.
+`aria-live="polite"`: Set automatically for screen reader announcements.
+
+### Element Coverage
+
+Text elements covered: h1-h6, p, span, a, li, td, th, dt, dd, label, legend, figcaption, caption, summary, blockquote, cite, q, em, strong, small, mark, code, pre, button, input, textarea, select, option, fieldset, dialog, details, address.
+
+Media elements covered: img, svg, video, canvas, picture, iframe.
+
+### Minimum Dimensions (prevents empty element collapse)
+
+h1: 1.75em height, 40% width
+h2: 1.5em height, 50% width
+h3: 1.3em height, 55% width
+p: 3em height, 80% width
+pre: 5em height, 100% width
+input/textarea: 2.5rem height, 6rem width
+button: 2.25rem height, 5rem width
+img (no size): 12rem height, 100% width
+svg: 1.5rem height/width
+
+### Specificity
+
+Ghostly uses `:where()` selectors (zero specificity). Override with a single class selector:
+```css
+[data-ghostly] p { min-height: 2em; }
+```
+
+---
+
+## TypeScript Types
+
+```tsx
+type GhostlyAnimation = 'shimmer' | 'pulse' | 'wave' | 'none'
+type GhostlyRadius = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'full'
+type GhostlySpeed = 'slow' | 'normal' | 'fast'
+interface GhostlyConfig { animation?: GhostlyAnimation; radius?: GhostlyRadius; speed?: GhostlySpeed }
+```
+
+Radius values: none=0px, xs=2px, sm=4px, md=8px, lg=12px, full=9999px
+Speed values: slow=2s, normal=1.5s, fast=0.8s
+
+---
+
+## Patterns
+
+### Suspense fallback
+```tsx
+<Suspense fallback={<Ghostly loading={true}><ProductCard /></Ghostly>}>
+  <AsyncProductCard />
+</Suspense>
+```
+
+### Next.js loading.tsx
+```tsx
+export default function Loading() {
+  return (
+    <GhostlyList loading={true} count={6} item={<ProductCard />} className="grid grid-cols-3 gap-4">
+      <></>
+    </GhostlyList>
+  )
+}
+```
+
+### TanStack Query
+```tsx
+const { data, isLoading } = useQuery({ queryKey: ['user'], queryFn: fetchUser })
+<Ghostly loading={isLoading}><UserCard user={data} /></Ghostly>
+```
+
+### SWR
+```tsx
+const { data, isLoading } = useSWR('/api/posts', fetcher)
+<GhostlyList loading={isLoading} count={5} item={<PostPreview />}>{data?.map(...)}</GhostlyList>
+```
+
+### Exclude elements
+```tsx
+<Ghostly loading={isLoading}>
+  <h2>{data?.title}</h2>
+  <button data-ghostly-ignore>Always visible</button>
+</Ghostly>
+```
+
+### Custom colors per section
+```tsx
+<Ghostly loading={true} style={{ '--ghostly-color': 'hsl(260 30% 88%)' } as CSSProperties}>
+  <SpecialSection />
+</Ghostly>
+```
+
+### Multiple independent sections
+```tsx
+<Ghostly loading={stats.isLoading} animation="pulse"><StatsRow /></Ghostly>
+<GhostlyList loading={orders.isLoading} count={5} item={<OrderRow />} animation="wave">
+  {orders.data?.map(...)}
+</GhostlyList>
+```
+
+---
+
+## How It Works
+
+Your component IS the skeleton. Ghostly adds `data-ghostly` attribute to a wrapper. CSS rules then:
+1. Make text transparent + show background color (skeleton block)
+2. Hide images via object-position offset + show background color
+3. Apply animation (shimmer gradient, pulse opacity, wave stagger)
+4. Block pointer events and user selection
+5. Set min-height to prevent empty element collapse
+
+When loading ends, the attribute is removed. No layout shift because the skeleton uses the exact same layout.
+
+Zero runtime JavaScript for rendering. CSS animations are GPU-accelerated and off the main thread.
+
+## Bundle Size
+
+ghostly (CSS): ~2KB gzipped
+@ghostly/react: ~1KB gzipped
+Total: ~3KB gzipped
+
+## Browser Support
+
+Chrome 88+, Firefox 78+, Safari 14+, Edge 88+, iOS Safari 14+. Limiting factor: `:where()` selector.
+
+## Component Requirements
+
+Components should handle undefined data with optional chaining (`data?.title`). This is standard React practice.
+
+---
+
+## Links
+
+- GitHub: https://github.com/AdanSerrano/ghostly
+- npm ghostly: https://www.npmjs.com/package/ghostly
+- npm @ghostly/react: https://www.npmjs.com/package/@ghostly/react

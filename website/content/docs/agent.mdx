@@ -1,0 +1,83 @@
+---
+title: Agent
+description: AI-consumable documentation for LLMs, coding assistants, and MCP servers.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+Ghostly provides machine-readable documentation for AI agents, coding assistants (Cursor, GitHub Copilot, Claude Code), and MCP servers.
+
+<Callout type="info">
+  Also available at [`/llms.txt`](/llms.txt) and [`/llms-full.txt`](/llms-full.txt) for automated agent consumption.
+</Callout>
+
+## Available Formats
+
+| File | Purpose | Token Usage |
+|------|---------|-------------|
+| [`/llms.txt`](/llms.txt) | Lightweight index with links and descriptions | Low |
+| [`/llms-full.txt`](/llms-full.txt) | Complete documentation in a single file | High |
+| [`/agent/llms.txt`](/agent/llms.txt) | Same as `/llms.txt` (alias) | Low |
+
+## Using with AI Assistants
+
+### Cursor
+
+Add to your `.cursorrules` or project settings:
+
+```
+@docs https://ghostly.dev/llms-full.txt
+```
+
+### Claude Code
+
+Reference the documentation in your prompt:
+
+```
+Use the Ghostly library for skeleton loaders.
+Docs: https://ghostly.dev/llms-full.txt
+```
+
+### GitHub Copilot
+
+Copilot automatically discovers `/llms.txt` from packages listed in your `package.json`.
+
+### Custom MCP Server
+
+Use the llms.txt endpoint to build an MCP server:
+
+```typescript
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+
+const server = new McpServer({ name: 'ghostly-docs', version: '0.1.0' })
+
+server.tool('ghostly_docs', 'Get Ghostly documentation', {}, async () => {
+  const res = await fetch('https://ghostly.dev/llms-full.txt')
+  const text = await res.text()
+  return { content: [{ type: 'text', text }] }
+})
+```
+
+## llms.txt Format
+
+The `/llms.txt` file follows the [llms.txt standard](https://llmstxt.org/):
+
+- **H1**: Project name
+- **Blockquote**: One-line description
+- **H2 sections**: Organized links with descriptions
+- **Markdown format**: Optimized for LLM token consumption
+
+## llms-full.txt Content
+
+The `/llms-full.txt` includes the complete documentation:
+
+- Installation and setup
+- Full API reference (all components, hooks, props, types)
+- CSS reference (custom properties, selectors, animations, specificity)
+- HTML attributes reference
+- Usage patterns (Suspense, TanStack Query, SWR, Apollo, tRPC)
+- Architecture explanation
+- Bundle size and performance data
+- Browser compatibility matrix
+
+All in a single markdown file optimized for AI context windows.
