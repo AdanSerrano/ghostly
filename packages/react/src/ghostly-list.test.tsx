@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { GhostlyList } from './ghostly-list'
+import { GhostlyProvider } from './provider'
 
 function MockCard({ title }: { title?: string }) {
   return (
@@ -10,7 +11,17 @@ function MockCard({ title }: { title?: string }) {
   )
 }
 
+function MockRow({ label }: { label?: string }) {
+  return (
+    <tr data-testid="row">
+      <td>{label ?? ''}</td>
+    </tr>
+  )
+}
+
 describe('GhostlyList', () => {
+  // --- Basic rendering ---
+
   it('renders children when not loading', () => {
     render(
       <GhostlyList loading={false} count={3} item={<MockCard />}>
@@ -18,9 +29,18 @@ describe('GhostlyList', () => {
         <MockCard title="Item 2" />
       </GhostlyList>,
     )
-
     expect(screen.getByText('Item 1')).toBeDefined()
     expect(screen.getByText('Item 2')).toBeDefined()
+  })
+
+  it('does not render skeleton items when not loading', () => {
+    const { container } = render(
+      <GhostlyList loading={false} count={5} item={<MockCard />}>
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const cards = container.querySelectorAll('[data-testid="card"]')
+    expect(cards.length).toBe(1) // only real item
   })
 
   it('renders skeleton items when loading', () => {
@@ -29,10 +49,23 @@ describe('GhostlyList', () => {
         <MockCard title="Real item" />
       </GhostlyList>,
     )
-
     const cards = container.querySelectorAll('[data-testid="card"]')
-    expect(cards.length).toBe(4)
+    expect(cards.length).toBe(4) // 4 skeleton clones
   })
+
+  it('renders exact count of skeleton items', () => {
+    for (const count of [1, 3, 6, 10]) {
+      const { container } = render(
+        <GhostlyList loading={true} count={count} item={<MockCard />}>
+          <MockCard title="Real" />
+        </GhostlyList>,
+      )
+      const cards = container.querySelectorAll('[data-testid="card"]')
+      expect(cards.length).toBe(count)
+    }
+  })
+
+  // --- data-ghostly attribute ---
 
   it('sets data-ghostly on wrapper when loading', () => {
     const { container } = render(
@@ -40,7 +73,6 @@ describe('GhostlyList', () => {
         <MockCard title="Real" />
       </GhostlyList>,
     )
-
     const wrapper = container.querySelector('[data-ghostly]')
     expect(wrapper).not.toBeNull()
   })
@@ -51,21 +83,20 @@ describe('GhostlyList', () => {
         <MockCard title="Real" />
       </GhostlyList>,
     )
-
     const wrapper = container.querySelector('[data-ghostly]')
     expect(wrapper).toBeNull()
   })
 
-  it('passes className to container', () => {
+  // --- Animation ---
+
+  it('uses shimmer animation by default', () => {
     const { container } = render(
-      <GhostlyList loading={false} count={2} item={<MockCard />} className="grid gap-4">
+      <GhostlyList loading={true} count={2} item={<MockCard />}>
         <MockCard title="Real" />
       </GhostlyList>,
     )
-
-    const wrapper = container.firstElementChild as HTMLElement
-    expect(wrapper.classList.contains('grid')).toBe(true)
-    expect(wrapper.classList.contains('gap-4')).toBe(true)
+    const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
+    expect(wrapper.getAttribute('data-ghostly')).toBe('shimmer')
   })
 
   it('uses specified animation when loading', () => {
@@ -74,10 +105,45 @@ describe('GhostlyList', () => {
         <MockCard title="Real" />
       </GhostlyList>,
     )
-
     const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
     expect(wrapper.getAttribute('data-ghostly')).toBe('pulse')
   })
+
+  it('uses wave animation', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />} animation="wave">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
+    expect(wrapper.getAttribute('data-ghostly')).toBe('wave')
+  })
+
+  // --- className ---
+
+  it('passes className to container when loading', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />} className="grid gap-4">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const wrapper = container.firstElementChild as HTMLElement
+    expect(wrapper.classList.contains('grid')).toBe(true)
+    expect(wrapper.classList.contains('gap-4')).toBe(true)
+  })
+
+  it('passes className to container when not loading', () => {
+    const { container } = render(
+      <GhostlyList loading={false} count={2} item={<MockCard />} className="grid gap-4">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const wrapper = container.firstElementChild as HTMLElement
+    expect(wrapper.classList.contains('grid')).toBe(true)
+    expect(wrapper.classList.contains('gap-4')).toBe(true)
+  })
+
+  // --- Template (item prop) ---
 
   it('uses first child as template when item prop is omitted', () => {
     const { container } = render(
@@ -86,8 +152,110 @@ describe('GhostlyList', () => {
         <MockCard title="Second child" />
       </GhostlyList>,
     )
-
     const cards = container.querySelectorAll('[data-testid="card"]')
     expect(cards.length).toBe(3)
+  })
+
+  it('uses explicit item prop over first child', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />}>
+        <MockRow label="Should not be used as template" />
+      </GhostlyList>,
+    )
+    const cards = container.querySelectorAll('[data-testid="card"]')
+    const rows = container.querySelectorAll('[data-testid="row"]')
+    expect(cards.length).toBe(2) // uses MockCard from item prop
+    expect(rows.length).toBe(0) // MockRow ignored during loading
+  })
+
+  // --- Edge cases ---
+
+  it('handles empty children array when loading', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={3} item={<MockCard />}>
+        {[]}
+      </GhostlyList>,
+    )
+    const cards = container.querySelectorAll('[data-testid="card"]')
+    expect(cards.length).toBe(3)
+  })
+
+  it('handles text-only children (no valid React element for template)', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2}>
+        just a string
+      </GhostlyList>,
+    )
+    // No template found, skeletonItems is null, but Ghostly still renders
+    const wrapper = container.querySelector('[data-ghostly]')
+    expect(wrapper).not.toBeNull()
+  })
+
+  it('handles count of 0', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={0} item={<MockCard />}>
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const cards = container.querySelectorAll('[data-testid="card"]')
+    expect(cards.length).toBe(0)
+  })
+
+  it('handles count of 1', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={1} item={<MockCard />}>
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const cards = container.querySelectorAll('[data-testid="card"]')
+    expect(cards.length).toBe(1)
+  })
+
+  // --- Provider integration ---
+
+  it('inherits animation from GhostlyProvider', () => {
+    const { container } = render(
+      <GhostlyProvider animation="wave">
+        <GhostlyList loading={true} count={2} item={<MockCard />}>
+          <MockCard title="Real" />
+        </GhostlyList>
+      </GhostlyProvider>,
+    )
+    const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
+    expect(wrapper.getAttribute('data-ghostly')).toBe('wave')
+  })
+
+  it('overrides provider animation with own prop', () => {
+    const { container } = render(
+      <GhostlyProvider animation="wave">
+        <GhostlyList loading={true} count={2} item={<MockCard />} animation="pulse">
+          <MockCard title="Real" />
+        </GhostlyList>
+      </GhostlyProvider>,
+    )
+    const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
+    expect(wrapper.getAttribute('data-ghostly')).toBe('pulse')
+  })
+
+  // --- Radius and speed ---
+
+  it('passes radius to inner Ghostly', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />} radius="lg">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
+    expect(wrapper.style.getPropertyValue('--ghostly-radius')).toBe('12px')
+  })
+
+  it('passes speed to inner Ghostly', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />} speed="fast">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
+    expect(wrapper.style.getPropertyValue('--ghostly-speed')).toBe('0.8s')
   })
 })
