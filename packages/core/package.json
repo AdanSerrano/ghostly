@@ -40,7 +40,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/ghostly"
+    "url": "https://github.com/AdanSerrano/ghostly",
+    "directory": "packages/core"
   },
-  "homepage": "https://ghostly.dev"
+  "bugs": {
+    "url": "https://github.com/AdanSerrano/ghostly/issues"
+  },
+  "homepage": "https://github.com/AdanSerrano/ghostly#readme"
 }

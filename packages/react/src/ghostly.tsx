@@ -1,14 +1,16 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from 'react'
-import { useContext, useMemo } from 'react'
+import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react'
+import { forwardRef, useContext, useMemo } from 'react'
 import { RADIUS_MAP, SPEED_MAP, type GhostlyConfig } from 'ghostly'
 import { GhostlyContext } from './context'
+
+type WrapperTag = 'div' | 'section' | 'article' | 'main' | 'aside' | 'span'
 
 interface GhostlyProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** When true, children appear as skeleton blocks */
   loading: boolean
   children: ReactNode
   /** HTML tag for the wrapper element. Default: 'div' */
-  as?: 'div' | 'section' | 'article' | 'main' | 'aside' | 'span'
+  as?: WrapperTag
 }
 
 /**
@@ -21,17 +23,10 @@ interface GhostlyProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLDivElement
  * </Ghostly>
  * ```
  */
-export function Ghostly({
-  loading,
-  children,
-  animation,
-  radius,
-  speed,
-  as: Tag = 'div',
-  className,
-  style,
-  ...rest
-}: GhostlyProps) {
+export const Ghostly = forwardRef<HTMLElement, GhostlyProps>(function Ghostly(
+  { loading, children, animation, radius, speed, as: Tag = 'div', className, style, ...rest },
+  ref: Ref<HTMLElement>,
+) {
   const parent = useContext(GhostlyContext)
 
   const resolvedAnimation = animation ?? parent.animation
@@ -41,11 +36,11 @@ export function Ghostly({
   const cssVars = useMemo(
     (): CSSProperties =>
       loading
-        ? {
+        ? ({
             '--ghostly-radius': RADIUS_MAP[resolvedRadius],
             '--ghostly-speed': SPEED_MAP[resolvedSpeed],
             ...style,
-          } as CSSProperties
+          } as CSSProperties)
         : (style ?? {}),
     [loading, resolvedRadius, resolvedSpeed, style],
   )
@@ -63,6 +58,7 @@ export function Ghostly({
   return (
     <GhostlyContext value={ctx}>
       <Tag
+        ref={ref as Ref<never>}
         data-ghostly={loading ? resolvedAnimation : undefined}
         aria-busy={loading || undefined}
         aria-live="polite"
@@ -74,4 +70,4 @@ export function Ghostly({
       </Tag>
     </GhostlyContext>
   )
-}
+})

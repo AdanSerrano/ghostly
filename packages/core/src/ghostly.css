@@ -48,7 +48,8 @@
   p, span, a, li, td, th, dt, dd,
   label, legend, figcaption, caption, summary,
   blockquote, cite, q, em, strong, small, mark, code, pre,
-  button, input, textarea, select, option
+  button, input, textarea, select, option,
+  fieldset, dialog, details, address
 ) {
   color: transparent !important;
   background-color: var(--ghostly-color) !important;
@@ -58,7 +59,6 @@
   box-shadow: none !important;
   text-decoration: none !important;
   outline: none !important;
-  /* Prevent fully empty elements from collapsing */
   min-height: 1em;
   min-width: 2rem;
 }
@@ -72,10 +72,13 @@
 /* Paragraphs simulate multi-line text */
 [data-ghostly] :where(p) { min-height: 3em; min-width: 80%; }
 
+/* Code blocks need more height */
+[data-ghostly] :where(pre) { min-height: 5em; min-width: 100%; }
+
 /* Inputs keep their shape */
 [data-ghostly] :where(input, textarea, select) {
   min-height: 2.5rem;
-  min-width: 8rem;
+  min-width: 6rem;
 }
 
 /* Buttons keep their shape */
@@ -89,21 +92,25 @@
    ============================================================ */
 
 [data-ghostly] :where(img, svg, video, canvas, picture, iframe) {
-  visibility: hidden !important;
-  position: relative;
+  color: transparent !important;
+  background-color: var(--ghostly-color) !important;
+  border-radius: var(--ghostly-radius) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
-[data-ghostly] :where(img, svg, video, canvas, picture, iframe)::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  visibility: visible;
-  background-color: var(--ghostly-color);
-  border-radius: inherit;
+/* Hide actual content (images, video frames) */
+[data-ghostly] :where(img) {
+  object-position: -9999px;
+}
+
+[data-ghostly] :where(video, iframe) {
+  opacity: 0;
+  background-color: var(--ghostly-color) !important;
 }
 
 /* Images without explicit dimensions */
-[data-ghostly] :where(img:not([width]), picture:not([width])) {
+[data-ghostly] :where(img:not([width]):not([style*="width"]), picture:not([width])) {
   min-height: 12rem;
   min-width: 100%;
 }
@@ -158,14 +165,16 @@
    6. ANIMATIONS
    ============================================================ */
 
-/* --- Shimmer (default) — gradient sweep left to right --- */
+/* --- Shimmer — gradient sweep left to right --- */
 
 [data-ghostly='shimmer'] :where(
   h1, h2, h3, h4, h5, h6,
   p, span, a, li, td, th, dt, dd,
   label, legend, figcaption, caption, summary,
   blockquote, cite, q, em, strong, small, mark, code, pre,
-  button, input, textarea, select, option
+  button, input, textarea, select, option,
+  fieldset, dialog, details, address,
+  img, svg, video, canvas, picture, iframe
 ) {
   background: linear-gradient(
     90deg,
@@ -177,19 +186,6 @@
   ) !important;
   background-size: 300% 100% !important;
   animation: ghostly-shimmer var(--ghostly-speed) ease-in-out infinite !important;
-}
-
-[data-ghostly='shimmer'] :where(img, svg, video, canvas, picture, iframe)::after {
-  background: linear-gradient(
-    90deg,
-    var(--ghostly-color) 0%,
-    var(--ghostly-color) 33%,
-    var(--ghostly-shine) 50%,
-    var(--ghostly-color) 66%,
-    var(--ghostly-color) 100%
-  );
-  background-size: 300% 100%;
-  animation: ghostly-shimmer var(--ghostly-speed) ease-in-out infinite;
 }
 
 @keyframes ghostly-shimmer {
@@ -204,13 +200,11 @@
   p, span, a, li, td, th, dt, dd,
   label, legend, figcaption, caption, summary,
   blockquote, cite, q, em, strong, small, mark, code, pre,
-  button, input, textarea, select, option
+  button, input, textarea, select, option,
+  fieldset, dialog, details, address,
+  img, svg, video, canvas, picture, iframe
 ) {
   animation: ghostly-pulse var(--ghostly-speed) ease-in-out infinite !important;
-}
-
-[data-ghostly='pulse'] :where(img, svg, video, canvas, picture, iframe)::after {
-  animation: ghostly-pulse var(--ghostly-speed) ease-in-out infinite;
 }
 
 @keyframes ghostly-pulse {
@@ -218,28 +212,42 @@
   50% { opacity: 0.4; }
 }
 
-/* --- Wave — sequential stagger per element --- */
+/* --- Wave — cascading pulse with stagger --- */
 
 [data-ghostly='wave'] :where(
   h1, h2, h3, h4, h5, h6,
   p, span, a, li, td, th, dt, dd,
   label, legend, figcaption, caption, summary,
   blockquote, cite, q, em, strong, small, mark, code, pre,
-  button, input, textarea, select, option
+  button, input, textarea, select, option,
+  fieldset, dialog, details, address,
+  img, svg, video, canvas, picture, iframe
 ) {
-  animation: ghostly-pulse var(--ghostly-speed) ease-in-out infinite !important;
+  animation: ghostly-wave var(--ghostly-speed) ease-in-out infinite !important;
 }
 
-/* Stagger children automatically using nth-child */
+@keyframes ghostly-wave {
+  0% { opacity: 1; }
+  25% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+  75% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* Stagger direct children for cascading effect */
 [data-ghostly='wave'] > :nth-child(1) { animation-delay: 0ms !important; }
-[data-ghostly='wave'] > :nth-child(2) { animation-delay: 100ms !important; }
-[data-ghostly='wave'] > :nth-child(3) { animation-delay: 200ms !important; }
-[data-ghostly='wave'] > :nth-child(4) { animation-delay: 300ms !important; }
-[data-ghostly='wave'] > :nth-child(5) { animation-delay: 400ms !important; }
-[data-ghostly='wave'] > :nth-child(6) { animation-delay: 500ms !important; }
-[data-ghostly='wave'] > :nth-child(7) { animation-delay: 600ms !important; }
-[data-ghostly='wave'] > :nth-child(8) { animation-delay: 700ms !important; }
-[data-ghostly='wave'] > :nth-child(n+9) { animation-delay: 800ms !important; }
+[data-ghostly='wave'] > :nth-child(2) { animation-delay: 80ms !important; }
+[data-ghostly='wave'] > :nth-child(3) { animation-delay: 160ms !important; }
+[data-ghostly='wave'] > :nth-child(4) { animation-delay: 240ms !important; }
+[data-ghostly='wave'] > :nth-child(5) { animation-delay: 320ms !important; }
+[data-ghostly='wave'] > :nth-child(6) { animation-delay: 400ms !important; }
+[data-ghostly='wave'] > :nth-child(7) { animation-delay: 480ms !important; }
+[data-ghostly='wave'] > :nth-child(8) { animation-delay: 560ms !important; }
+[data-ghostly='wave'] > :nth-child(9) { animation-delay: 640ms !important; }
+[data-ghostly='wave'] > :nth-child(10) { animation-delay: 720ms !important; }
+[data-ghostly='wave'] > :nth-child(11) { animation-delay: 800ms !important; }
+[data-ghostly='wave'] > :nth-child(12) { animation-delay: 880ms !important; }
+[data-ghostly='wave'] > :nth-child(n+13) { animation-delay: 960ms !important; }
 
 /* ============================================================
    7. ACCESSIBILITY
@@ -247,6 +255,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   [data-ghostly] *,
+  [data-ghostly] *::before,
   [data-ghostly] *::after {
     animation: none !important;
     transition: none !important;

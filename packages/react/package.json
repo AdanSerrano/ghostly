@@ -45,5 +45,15 @@
     "react",
     "shimmer",
     "zero-config"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AdanSerrano/ghostly",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/AdanSerrano/ghostly/issues"
+  },
+  "homepage": "https://github.com/AdanSerrano/ghostly#readme",
+  "sideEffects": false
 }
