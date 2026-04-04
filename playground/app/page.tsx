@@ -1,0 +1,164 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Ghostly, GhostlyList } from '@ghostly/react'
+import { ProductCard } from '@/components/examples/product-card'
+import { UserProfile } from '@/components/examples/user-profile'
+import { StatsCard } from '@/components/examples/stats-card'
+
+const MOCK_PRODUCTS = [
+  { title: 'Pulp Fiction Poster', price: '€24.99', image: 'https://picsum.photos/seed/1/400/300', category: 'Movies' },
+  { title: 'Abbey Road Print', price: '€19.99', image: 'https://picsum.photos/seed/2/400/300', category: 'Music' },
+  { title: 'Jordan 23 Art', price: '€29.99', image: 'https://picsum.photos/seed/3/400/300', category: 'Sports' },
+  { title: 'Starry Night Repro', price: '€34.99', image: 'https://picsum.photos/seed/4/400/300', category: 'Art' },
+  { title: 'Blade Runner 2049', price: '€22.99', image: 'https://picsum.photos/seed/5/400/300', category: 'Movies' },
+  { title: 'Dark Side of Moon', price: '€27.99', image: 'https://picsum.photos/seed/6/400/300', category: 'Music' },
+]
+
+const MOCK_USER = {
+  name: 'Adan Ulises',
+  email: 'adan@postershouse.es',
+  role: 'Admin',
+  avatar: 'https://picsum.photos/seed/avatar/200/200',
+  bio: 'Founder of Posters House. Movie lover and poster collector since 1998. Based in Barcelona.',
+}
+
+const MOCK_STATS = [
+  { label: 'Total Revenue', value: '€12,450', change: '+12.5% from last month' },
+  { label: 'Orders', value: '342', change: '+8.2% from last month' },
+  { label: 'Customers', value: '1,205', change: '+23.1% from last month' },
+]
+
+type Animation = 'shimmer' | 'pulse' | 'wave'
+
+export default function PlaygroundPage() {
+  const [loading, setLoading] = useState(true)
+  const [animation, setAnimation] = useState<Animation>('shimmer')
+
+  // Simulate data fetching
+  useEffect(() => {
+    if (!loading) return
+    const timer = setTimeout(() => setLoading(false), 3000)
+    return () => clearTimeout(timer)
+  }, [loading])
+
+  return (
+    <div className="mx-auto max-w-6xl px-6 py-12">
+      {/* Header */}
+      <div className="mb-12 text-center">
+        <h1 className="text-4xl font-bold text-gray-900">
+          Ghostly Playground
+        </h1>
+        <p className="mt-2 text-lg text-gray-500">
+          Zero-config skeleton loaders. Wrap your component, done.
+        </p>
+      </div>
+
+      {/* Controls */}
+      <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
+        <button
+          onClick={() => setLoading(true)}
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+        >
+          Reload (3s delay)
+        </button>
+
+        <div className="flex gap-2">
+          {(['shimmer', 'pulse', 'wave'] as const).map((anim) => (
+            <button
+              key={anim}
+              onClick={() => { setAnimation(anim); setLoading(true) }}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
+                animation === anim
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {anim}
+            </button>
+          ))}
+        </div>
+
+        <span className={`rounded-full px-3 py-1 text-xs font-medium ${
+          loading
+            ? 'bg-amber-100 text-amber-700'
+            : 'bg-green-100 text-green-700'
+        }`}>
+          {loading ? 'Loading...' : 'Loaded'}
+        </span>
+      </div>
+
+      {/* Section: Single component */}
+      <section className="mb-12">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+          Single component
+        </h2>
+        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+          {'<Ghostly loading={isLoading}><UserProfile user={data} /></Ghostly>'}
+        </code>
+        <Ghostly loading={loading} animation={animation}>
+          <UserProfile user={loading ? undefined : MOCK_USER} />
+        </Ghostly>
+      </section>
+
+      {/* Section: Grid list */}
+      <section className="mb-12">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+          List with GhostlyList
+        </h2>
+        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+          {'<GhostlyList loading={isLoading} count={6} item={<ProductCard />}>'}
+        </code>
+        <GhostlyList
+          loading={loading}
+          count={6}
+          item={<ProductCard />}
+          animation={animation}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {MOCK_PRODUCTS.map((p) => (
+            <ProductCard key={p.title} product={p} />
+          ))}
+        </GhostlyList>
+      </section>
+
+      {/* Section: Stats row */}
+      <section className="mb-12">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+          Stats dashboard
+        </h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {(loading ? [undefined, undefined, undefined] : MOCK_STATS).map((stat, i) => (
+            <Ghostly key={i} loading={loading} animation={animation}>
+              <StatsCard stat={stat} />
+            </Ghostly>
+          ))}
+        </div>
+      </section>
+
+      {/* Section: data-ghostly-ignore */}
+      <section className="mb-12">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+          Exclude elements with data-ghostly-ignore
+        </h2>
+        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+          {'<button data-ghostly-ignore>Always visible</button>'}
+        </code>
+        <Ghostly loading={loading} animation={animation}>
+          <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-6">
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold">{loading ? '' : 'Product Title'}</h3>
+              <p className="text-sm text-gray-500">{loading ? '' : 'Description of the product'}</p>
+            </div>
+            <button
+              data-ghostly-ignore
+              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white"
+            >
+              Always visible
+            </button>
+          </div>
+        </Ghostly>
+      </section>
+    </div>
+  )
+}

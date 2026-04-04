@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.next/
+*.tsbuildinfo
+.env
+.env.local
+.DS_Store
+coverage/
+
+# Claude Code
+CLAUDE.md
+.agents/
+.claude/

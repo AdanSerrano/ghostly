@@ -1,0 +1,46 @@
+{
+  "name": "ghostly",
+  "version": "0.1.0",
+  "description": "Zero-config skeleton loaders. Wrap your component, done.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./css": "./dist/ghostly.css"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "skeleton",
+    "loading",
+    "placeholder",
+    "shimmer",
+    "css",
+    "zero-config"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ghostly"
+  },
+  "homepage": "https://ghostly.dev"
+}
