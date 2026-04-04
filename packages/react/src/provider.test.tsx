@@ -107,7 +107,7 @@ describe('GhostlyProvider', () => {
     expect(screen.getByTestId('radius').textContent).toBe('lg')
   })
 
-  it('nested providers: inner defaults do not inherit outer values', () => {
+  it('nested providers: inner inherits unspecified values from outer', () => {
     render(
       <GhostlyProvider animation="wave" speed="slow">
         <GhostlyProvider animation="pulse">
@@ -115,8 +115,7 @@ describe('GhostlyProvider', () => {
         </GhostlyProvider>
       </GhostlyProvider>,
     )
-    // Inner provider sets its own defaults, doesn't inherit outer
     expect(screen.getByTestId('animation').textContent).toBe('pulse')
-    expect(screen.getByTestId('speed').textContent).toBe('normal') // inner default, not outer 'slow'
+    expect(screen.getByTestId('speed').textContent).toBe('slow') // inherited from outer
   })
 })

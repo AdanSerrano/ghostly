@@ -11,6 +11,10 @@ export interface GhostlyConfig {
   radius?: GhostlyRadius
   /** Animation speed. Default: 'normal' */
   speed?: GhostlySpeed
+  /** Custom skeleton base color (any CSS color value) */
+  color?: string
+  /** Custom shimmer highlight color (any CSS color value) */
+  shine?: string
 }
 
 /** CSS custom property names used by Ghostly */

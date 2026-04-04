@@ -62,9 +62,23 @@ function UserPage() {
   const { data, isLoading } = useFetch('/api/user')
 
   return (
-    <Ghostly loading={isLoading}>
+    <Ghostly loading={isLoading} smooth>
       <UserProfile user={data} />
     </Ghostly>
+  )
+}
+```
+
+Or use `GhostlySuspense` for automatic skeleton with Suspense:
+
+```tsx title="page.tsx"
+import { GhostlySuspense } from '@ghostly/react'
+
+function UserPage() {
+  return (
+    <GhostlySuspense fallback={<UserProfile />}>
+      <AsyncUserProfile />
+    </GhostlySuspense>
   )
 }
 ```
@@ -99,6 +113,24 @@ export default function RootLayout({ children }) {
   )
 }
 ```
+
+<Callout type="info">
+  Nested `GhostlyProvider` components inherit values from their parent. Only specify the values you want to override.
+</Callout>
+
+## Optional: Tailwind CSS plugin
+
+If your project uses Tailwind CSS, add the Ghostly plugin for utility classes:
+
+```js title="tailwind.config.js"
+import ghostly from 'ghostly/tailwind'
+
+export default {
+  plugins: [ghostly],
+}
+```
+
+This gives you utilities like `ghostly-radius-lg`, `ghostly-speed-fast`, `ghostly-color-[...]`, and the `ghostly:` variant.
 
 <Callout type="info">
   Components handle `undefined` props with optional chaining (`data?.title`). This is standard React best practice and makes components work with Ghostly, Suspense, and loading states.

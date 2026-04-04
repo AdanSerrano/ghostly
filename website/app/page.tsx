@@ -6,7 +6,7 @@ export default function HomePage() {
       <div className="mx-auto max-w-3xl">
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-fd-border bg-fd-secondary/50 px-4 py-1.5 text-sm text-fd-muted-foreground">
           <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-          v0.1.0 — Now available
+          v0.2.0 — New: GhostlySuspense, Tailwind plugin, smooth transitions
         </div>
 
         <h1 className="mb-6 text-5xl font-bold tracking-tight text-fd-foreground md:text-7xl">
@@ -61,13 +61,15 @@ export default function HomePage() {
               <span className="text-fd-foreground">{'={'}</span>
               <span className="text-orange-300">{'isLoading'}</span>
               <span className="text-fd-foreground">{'}'}</span>
+              <span className="text-purple-400">{' smooth'}</span>
               <span className="text-blue-400">{'>'}</span>
               {'\n'}
               <span className="text-fd-foreground">{'  '}</span>
               <span className="text-blue-400">{'<'}</span>
               <span className="text-yellow-300">{'ProductCard'}</span>
               <span className="text-purple-400">{' product'}</span>
-              <span className="text-fd-foreground">{'={'}</span>
+              <span className="text-fd-foreground">{'='}</span>
+              <span className="text-fd-foreground">{'{'}</span>
               <span className="text-orange-300">{'data'}</span>
               <span className="text-fd-foreground">{'}'}</span>
               <span className="text-blue-400">{' />'}</span>
@@ -79,6 +81,7 @@ export default function HomePage() {
           </pre>
         </div>
 
+        {/* Main feature cards */}
         <div className="mt-16 grid grid-cols-1 gap-6 text-left sm:grid-cols-3">
           <div className="rounded-xl border border-fd-border bg-fd-card p-6">
             <div className="mb-3 text-2xl">0</div>
@@ -103,10 +106,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-6 text-left sm:grid-cols-2 lg:grid-cols-4">
+        {/* Feature grid */}
+        <div className="mt-8 grid grid-cols-1 gap-6 text-left sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-fd-border p-5">
             <h3 className="mb-1 text-sm font-semibold text-fd-foreground">3 Animations</h3>
-            <p className="text-xs text-fd-muted-foreground">Shimmer, pulse, wave — all CSS</p>
+            <p className="text-xs text-fd-muted-foreground">Shimmer, pulse, wave — all pure CSS</p>
           </div>
           <div className="rounded-xl border border-fd-border p-5">
             <h3 className="mb-1 text-sm font-semibold text-fd-foreground">Dark Mode</h3>
@@ -117,8 +121,94 @@ export default function HomePage() {
             <p className="text-xs text-fd-muted-foreground">ARIA, reduced motion, screen readers</p>
           </div>
           <div className="rounded-xl border border-fd-border p-5">
-            <h3 className="mb-1 text-sm font-semibold text-fd-foreground">Suspense Ready</h3>
-            <p className="text-xs text-fd-muted-foreground">Works with RSC, streaming, Suspense</p>
+            <h3 className="mb-1 text-sm font-semibold text-fd-foreground">Smooth Transitions</h3>
+            <p className="text-xs text-fd-muted-foreground">Fade-out when loading ends with smooth prop</p>
+          </div>
+        </div>
+
+        {/* New features highlight */}
+        <div className="mt-8 grid grid-cols-1 gap-6 text-left sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl border border-fd-border p-5">
+            <h3 className="mb-1 text-sm font-semibold text-fd-foreground">GhostlySuspense</h3>
+            <p className="text-xs text-fd-muted-foreground">Auto-skeleton with React Suspense</p>
+          </div>
+          <div className="rounded-xl border border-fd-border p-5">
+            <h3 className="mb-1 text-sm font-semibold text-fd-foreground">Tailwind Plugin</h3>
+            <p className="text-xs text-fd-muted-foreground">ghostly-radius-*, ghostly-speed-*, ghostly: variant</p>
+          </div>
+          <div className="rounded-xl border border-fd-border p-5">
+            <h3 className="mb-1 text-sm font-semibold text-fd-foreground">Color Props</h3>
+            <p className="text-xs text-fd-muted-foreground">Inline color and shine customization</p>
+          </div>
+          <div className="rounded-xl border border-fd-border p-5">
+            <h3 className="mb-1 text-sm font-semibold text-fd-foreground">Line Control</h3>
+            <p className="text-xs text-fd-muted-foreground">data-ghostly-lines and aspect-ratio for images</p>
+          </div>
+        </div>
+
+        {/* Code examples for new features */}
+        <div className="mt-12 grid grid-cols-1 gap-6 text-left sm:grid-cols-2">
+          <div className="overflow-hidden rounded-xl border border-fd-border bg-fd-card shadow-sm">
+            <div className="border-b border-fd-border bg-fd-muted/50 px-4 py-2">
+              <span className="text-xs font-medium text-fd-muted-foreground">GhostlySuspense</span>
+            </div>
+            <pre className="overflow-x-auto p-4 text-xs leading-relaxed">
+              <code>
+                <span className="text-blue-400">{'import'}</span>
+                <span className="text-fd-foreground">{' { '}</span>
+                <span className="text-yellow-300">{'GhostlySuspense'}</span>
+                <span className="text-fd-foreground">{' } '}</span>
+                <span className="text-blue-400">{'from'}</span>
+                <span className="text-green-400">{" '@ghostly/react'"}</span>
+                {'\n\n'}
+                <span className="text-blue-400">{'<'}</span>
+                <span className="text-yellow-300">{'GhostlySuspense'}</span>
+                {'\n'}
+                <span className="text-fd-foreground">{'  '}</span>
+                <span className="text-purple-400">{'fallback'}</span>
+                <span className="text-fd-foreground">{'={'}</span>
+                <span className="text-blue-400">{'<'}</span>
+                <span className="text-yellow-300">{'ProductCard'}</span>
+                <span className="text-blue-400">{' />'}</span>
+                <span className="text-fd-foreground">{'}'}</span>
+                {'\n'}
+                <span className="text-blue-400">{'>'}</span>
+                {'\n'}
+                <span className="text-fd-foreground">{'  '}</span>
+                <span className="text-blue-400">{'<'}</span>
+                <span className="text-yellow-300">{'AsyncProductCard'}</span>
+                <span className="text-blue-400">{' />'}</span>
+                {'\n'}
+                <span className="text-blue-400">{'</'}</span>
+                <span className="text-yellow-300">{'GhostlySuspense'}</span>
+                <span className="text-blue-400">{'>'}</span>
+              </code>
+            </pre>
+          </div>
+
+          <div className="overflow-hidden rounded-xl border border-fd-border bg-fd-card shadow-sm">
+            <div className="border-b border-fd-border bg-fd-muted/50 px-4 py-2">
+              <span className="text-xs font-medium text-fd-muted-foreground">Tailwind Plugin</span>
+            </div>
+            <pre className="overflow-x-auto p-4 text-xs leading-relaxed">
+              <code>
+                <span className="text-fd-muted-foreground">{'// tailwind.config.js'}</span>
+                {'\n'}
+                <span className="text-blue-400">{'import'}</span>
+                <span className="text-fd-foreground">{' ghostly '}</span>
+                <span className="text-blue-400">{'from'}</span>
+                <span className="text-green-400">{" 'ghostly/tailwind'"}</span>
+                {'\n\n'}
+                <span className="text-blue-400">{'export default'}</span>
+                <span className="text-fd-foreground">{' {'}</span>
+                {'\n'}
+                <span className="text-fd-foreground">{'  plugins: ['}</span>
+                <span className="text-orange-300">{'ghostly'}</span>
+                <span className="text-fd-foreground">{']'}</span>
+                {'\n'}
+                <span className="text-fd-foreground">{'}'}</span>
+              </code>
+            </pre>
           </div>
         </div>
 

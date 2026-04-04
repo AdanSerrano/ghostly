@@ -1,11 +1,13 @@
 ---
 title: Customization
-description: Colors, animations, dark mode, and theming.
+description: Colors, animations, dark mode, transitions, and theming.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Colors
+
+### Via CSS custom properties (global)
 
 Override CSS custom properties to match your design system:
 
@@ -21,18 +23,40 @@ Override CSS custom properties to match your design system:
 }
 ```
 
-### Per-section colors
+### Via props (per-instance)
+
+Use the `color` and `shine` props directly — no CSS needed:
 
 ```tsx
 <Ghostly
   loading={true}
-  style={{
-    '--ghostly-color': 'hsl(260 60% 90%)',
-    '--ghostly-shine': 'hsl(260 60% 95%)',
-  } as React.CSSProperties}
+  color="hsl(260 60% 90%)"
+  shine="hsl(260 60% 95%)"
 >
   <HeroContent data={data} />
 </Ghostly>
+```
+
+This also works on `GhostlyList` and `GhostlySuspense`:
+
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={4}
+  item={<Card />}
+  color="hsl(340 60% 90%)"
+  shine="hsl(340 60% 95%)"
+>
+  {items?.map(i => <Card key={i.id} item={i} />)}
+</GhostlyList>
+```
+
+### Via Tailwind plugin (arbitrary values)
+
+```html
+<div class="ghostly-color-[hsl(210_40%_88%)] ghostly-shine-[hsl(210_40%_94%)]">
+  ...
+</div>
 ```
 
 ## Animations
@@ -56,9 +80,47 @@ Override CSS custom properties to match your design system:
 
 ```tsx
 <Ghostly loading={true} radius="none">   {/* 0px */}
+<Ghostly loading={true} radius="xs">     {/* 2px */}
 <Ghostly loading={true} radius="sm">     {/* 4px (default) */}
 <Ghostly loading={true} radius="md">     {/* 8px */}
+<Ghostly loading={true} radius="lg">     {/* 12px */}
 <Ghostly loading={true} radius="full">   {/* 9999px — pill */}
+```
+
+## Smooth transitions
+
+Enable a fade-out effect when loading ends with the `smooth` prop:
+
+```tsx
+<Ghostly loading={isLoading} smooth>
+  <UserCard user={data} />
+</Ghostly>
+```
+
+Customize the transition speed globally:
+
+```css title="globals.css"
+:root {
+  --ghostly-transition: 0.5s; /* default: 0.3s */
+}
+```
+
+## Skeleton line count
+
+Control how many lines a text element simulates:
+
+```html
+<p data-ghostly-lines="1">Short label</p>
+<p data-ghostly-lines="5">Long description paragraph</p>
+```
+
+## Image aspect ratio
+
+Images without explicit dimensions use `16/9` by default. Override per-element:
+
+```html
+<img data-ghostly-ratio="1/1" src="avatar.jpg" alt="" />
+<img data-ghostly-ratio="4/3" src="photo.jpg" alt="" />
 ```
 
 ## Overriding element styles
@@ -67,7 +129,7 @@ Ghostly uses `:where()` (zero specificity). Override with one class:
 
 ```css
 [data-ghostly] p { min-height: 2em; min-width: 50%; }
-[data-ghostly] img { aspect-ratio: 16 / 9; }
+[data-ghostly] img { aspect-ratio: 4 / 3; }
 ```
 
 ## Global defaults
@@ -78,4 +140,4 @@ Ghostly uses `:where()` (zero specificity). Override with one class:
 </GhostlyProvider>
 ```
 
-Individual instances override the provider.
+Individual instances override the provider. Nested providers inherit unspecified values from their parent.

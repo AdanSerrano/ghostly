@@ -445,4 +445,100 @@ describe('Ghostly', () => {
     expect(skeletons[0].getAttribute('data-ghostly')).toBe('shimmer')
     expect(skeletons[1].getAttribute('data-ghostly')).toBe('pulse')
   })
+
+  // --- color / shine props ---
+
+  it('sets --ghostly-color CSS variable when color prop is provided', () => {
+    const { container } = render(
+      <Ghostly loading={true} color="hsl(210 40% 88%)">
+        <p>Content</p>
+      </Ghostly>,
+    )
+    const el = container.firstElementChild as HTMLElement
+    expect(el.style.getPropertyValue('--ghostly-color')).toBe('hsl(210 40% 88%)')
+  })
+
+  it('sets --ghostly-shine CSS variable when shine prop is provided', () => {
+    const { container } = render(
+      <Ghostly loading={true} shine="hsl(210 40% 95%)">
+        <p>Content</p>
+      </Ghostly>,
+    )
+    const el = container.firstElementChild as HTMLElement
+    expect(el.style.getPropertyValue('--ghostly-shine')).toBe('hsl(210 40% 95%)')
+  })
+
+  it('does not set color/shine CSS variables when not loading', () => {
+    const { container } = render(
+      <Ghostly loading={false} color="red" shine="pink">
+        <p>Content</p>
+      </Ghostly>,
+    )
+    const el = container.firstElementChild as HTMLElement
+    expect(el.style.getPropertyValue('--ghostly-color')).toBe('')
+    expect(el.style.getPropertyValue('--ghostly-shine')).toBe('')
+  })
+
+  it('does not set color/shine variables when props are omitted', () => {
+    const { container } = render(
+      <Ghostly loading={true}>
+        <p>Content</p>
+      </Ghostly>,
+    )
+    const el = container.firstElementChild as HTMLElement
+    expect(el.style.getPropertyValue('--ghostly-color')).toBe('')
+    expect(el.style.getPropertyValue('--ghostly-shine')).toBe('')
+  })
+
+  // --- smooth prop ---
+
+  it('sets data-ghostly-smooth attribute when smooth is true', () => {
+    const { container } = render(
+      <Ghostly loading={true} smooth>
+        <p>Content</p>
+      </Ghostly>,
+    )
+    const el = container.firstElementChild as HTMLElement
+    expect(el.hasAttribute('data-ghostly-smooth')).toBe(true)
+  })
+
+  it('does not set data-ghostly-smooth when smooth is falsy', () => {
+    const { container } = render(
+      <Ghostly loading={true}>
+        <p>Content</p>
+      </Ghostly>,
+    )
+    const el = container.firstElementChild as HTMLElement
+    expect(el.hasAttribute('data-ghostly-smooth')).toBe(false)
+  })
+
+  it('keeps data-ghostly-smooth when not loading (for transition)', () => {
+    const { container } = render(
+      <Ghostly loading={false} smooth>
+        <p>Content</p>
+      </Ghostly>,
+    )
+    const el = container.firstElementChild as HTMLElement
+    expect(el.hasAttribute('data-ghostly-smooth')).toBe(true)
+  })
+
+  // --- ul / ol wrapper tags ---
+
+  it('renders as ul when as="ul"', () => {
+    const { container } = render(
+      <Ghostly loading={true} as="ul">
+        <li>Item</li>
+      </Ghostly>,
+    )
+    expect(container.querySelector('ul')).not.toBeNull()
+  })
+
+  it('renders as ol when as="ol"', () => {
+    const { container } = render(
+      <Ghostly loading={true} as="ol">
+        <li>Item</li>
+      </Ghostly>,
+    )
+    expect(container.querySelector('ol')).not.toBeNull()
+  })
 })

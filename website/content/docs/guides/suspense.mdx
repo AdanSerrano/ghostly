@@ -3,7 +3,60 @@ title: Suspense Integration
 description: Using Ghostly with React Suspense, RSC, and streaming SSR.
 ---
 
-## Suspense fallback
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## GhostlySuspense (recommended)
+
+The easiest way to use Ghostly with Suspense. No `loading` state to manage.
+
+```tsx
+import { GhostlySuspense } from '@ghostly/react'
+
+<GhostlySuspense fallback={<ProductCard />}>
+  <AsyncProductCard />
+</GhostlySuspense>
+```
+
+`GhostlySuspense` wraps React's `<Suspense>` and automatically renders your fallback inside `<Ghostly loading={true}>` as the Suspense boundary fallback.
+
+<Callout type="info">
+  This is the recommended approach for any project using React Server Components, the `use()` hook, or data-fetching libraries with Suspense support.
+</Callout>
+
+### With options
+
+```tsx
+<GhostlySuspense
+  fallback={<UserProfile />}
+  animation="pulse"
+  radius="lg"
+  color="hsl(260 30% 88%)"
+  smooth
+>
+  <AsyncUserProfile userId={123} />
+</GhostlySuspense>
+```
+
+### Multiple boundaries
+
+```tsx
+<div className="grid grid-cols-12 gap-6">
+  <div className="col-span-8">
+    <GhostlySuspense fallback={<Chart />} animation="shimmer">
+      <AsyncChart />
+    </GhostlySuspense>
+  </div>
+  <div className="col-span-4">
+    <GhostlySuspense fallback={<Feed />} animation="wave">
+      <AsyncFeed />
+    </GhostlySuspense>
+  </div>
+</div>
+```
+
+## Manual Suspense fallback
+
+If you need more control, use `<Ghostly>` directly as a Suspense fallback:
 
 ```tsx
 import { Suspense } from 'react'
@@ -31,23 +84,6 @@ export default function Loading() {
     </GhostlyList>
   )
 }
-```
-
-## Multiple boundaries
-
-```tsx
-<div className="grid grid-cols-12 gap-6">
-  <div className="col-span-8">
-    <Suspense fallback={<Ghostly loading={true}><Chart /></Ghostly>}>
-      <AsyncChart />
-    </Suspense>
-  </div>
-  <div className="col-span-4">
-    <Suspense fallback={<Ghostly loading={true} animation="wave"><Feed /></Ghostly>}>
-      <AsyncFeed />
-    </Suspense>
-  </div>
-</div>
 ```
 
 ## Why it works with streaming SSR

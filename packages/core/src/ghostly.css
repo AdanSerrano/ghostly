@@ -12,6 +12,7 @@
   --ghostly-shine: hsl(220 13% 94%);
   --ghostly-radius: 4px;
   --ghostly-speed: 1.5s;
+  --ghostly-transition: 0.3s;
 }
 
 /* --- Dark mode (automatic) --- */
@@ -30,7 +31,25 @@
 }
 
 /* ============================================================
-   1. CONTAINER — Blocks interaction while loading
+   1. SKELETON TARGET — shared base for all skeleton elements
+   ============================================================ */
+
+/* All targetable elements inside a ghostly container */
+[data-ghostly] :where(
+  h1, h2, h3, h4, h5, h6,
+  p, span, a, li, td, th, dt, dd,
+  label, legend, figcaption, caption, summary,
+  blockquote, cite, q, em, strong, small, mark, code, pre,
+  button, input, textarea, select, option,
+  fieldset, dialog, details, address,
+  time, abbr, sub, sup, del, ins,
+  img, svg, video, canvas, picture, iframe
+) {
+  --_ghostly-target: 1;
+}
+
+/* ============================================================
+   2. CONTAINER — Blocks interaction while loading
    ============================================================ */
 
 [data-ghostly] {
@@ -40,7 +59,7 @@
 }
 
 /* ============================================================
-   2. TEXT ELEMENTS — Become opaque skeleton blocks
+   3. TEXT ELEMENTS — Become opaque skeleton blocks
    ============================================================ */
 
 [data-ghostly] :where(
@@ -49,7 +68,8 @@
   label, legend, figcaption, caption, summary,
   blockquote, cite, q, em, strong, small, mark, code, pre,
   button, input, textarea, select, option,
-  fieldset, dialog, details, address
+  fieldset, dialog, details, address,
+  time, abbr, sub, sup, del, ins
 ) {
   color: transparent !important;
   background-color: var(--ghostly-color) !important;
@@ -88,7 +108,20 @@
 }
 
 /* ============================================================
-   3. MEDIA ELEMENTS — Become solid skeleton blocks
+   4. CUSTOM LINE COUNT — data-ghostly-lines="N"
+   ============================================================ */
+
+[data-ghostly] :where([data-ghostly-lines="1"]) { min-height: 1em; }
+[data-ghostly] :where([data-ghostly-lines="2"]) { min-height: 2em; }
+[data-ghostly] :where([data-ghostly-lines="3"]) { min-height: 3em; }
+[data-ghostly] :where([data-ghostly-lines="4"]) { min-height: 4em; }
+[data-ghostly] :where([data-ghostly-lines="5"]) { min-height: 5em; }
+[data-ghostly] :where([data-ghostly-lines="6"]) { min-height: 6em; }
+[data-ghostly] :where([data-ghostly-lines="7"]) { min-height: 7em; }
+[data-ghostly] :where([data-ghostly-lines="8"]) { min-height: 8em; }
+
+/* ============================================================
+   5. MEDIA ELEMENTS — Become solid skeleton blocks
    ============================================================ */
 
 [data-ghostly] :where(img, svg, video, canvas, picture, iframe) {
@@ -109,11 +142,19 @@
   background-color: var(--ghostly-color) !important;
 }
 
-/* Images without explicit dimensions */
+/* Images without explicit dimensions — use aspect-ratio */
 [data-ghostly] :where(img:not([width]):not([style*="width"]), picture:not([width])) {
-  min-height: 12rem;
-  min-width: 100%;
+  aspect-ratio: 16/9;
+  width: 100%;
 }
+
+/* Custom aspect ratio via data attribute */
+[data-ghostly] :where([data-ghostly-ratio="1/1"]) { aspect-ratio: 1/1 !important; }
+[data-ghostly] :where([data-ghostly-ratio="4/3"]) { aspect-ratio: 4/3 !important; }
+[data-ghostly] :where([data-ghostly-ratio="16/9"]) { aspect-ratio: 16/9 !important; }
+[data-ghostly] :where([data-ghostly-ratio="21/9"]) { aspect-ratio: 21/9 !important; }
+[data-ghostly] :where([data-ghostly-ratio="3/4"]) { aspect-ratio: 3/4 !important; }
+[data-ghostly] :where([data-ghostly-ratio="9/16"]) { aspect-ratio: 9/16 !important; }
 
 /* SVG icons (typically small) */
 [data-ghostly] :where(svg) {
@@ -122,7 +163,7 @@
 }
 
 /* ============================================================
-   4. DECORATIVE — Strip visual noise
+   6. DECORATIVE — Strip visual noise
    ============================================================ */
 
 [data-ghostly] :where(hr) {
@@ -143,7 +184,7 @@
 }
 
 /* ============================================================
-   5. EXCLUSIONS — data-ghostly-ignore restores original styles
+   7. EXCLUSIONS — data-ghostly-ignore restores original styles
    ============================================================ */
 
 [data-ghostly] [data-ghostly-ignore],
@@ -162,11 +203,12 @@
 }
 
 /* ============================================================
-   6. ANIMATIONS
+   8. ANIMATIONS — Applied via --_ghostly-target marker
    ============================================================ */
 
 /* --- Shimmer — gradient sweep left to right --- */
 
+[data-ghostly='shimmer'] :where([style*="--_ghostly-target"]),
 [data-ghostly='shimmer'] :where(
   h1, h2, h3, h4, h5, h6,
   p, span, a, li, td, th, dt, dd,
@@ -174,6 +216,7 @@
   blockquote, cite, q, em, strong, small, mark, code, pre,
   button, input, textarea, select, option,
   fieldset, dialog, details, address,
+  time, abbr, sub, sup, del, ins,
   img, svg, video, canvas, picture, iframe
 ) {
   background: linear-gradient(
@@ -202,6 +245,7 @@
   blockquote, cite, q, em, strong, small, mark, code, pre,
   button, input, textarea, select, option,
   fieldset, dialog, details, address,
+  time, abbr, sub, sup, del, ins,
   img, svg, video, canvas, picture, iframe
 ) {
   animation: ghostly-pulse var(--ghostly-speed) ease-in-out infinite !important;
@@ -221,6 +265,7 @@
   blockquote, cite, q, em, strong, small, mark, code, pre,
   button, input, textarea, select, option,
   fieldset, dialog, details, address,
+  time, abbr, sub, sup, del, ins,
   img, svg, video, canvas, picture, iframe
 ) {
   animation: ghostly-wave var(--ghostly-speed) ease-in-out infinite !important;
@@ -250,7 +295,28 @@
 [data-ghostly='wave'] > :nth-child(n+13) { animation-delay: 960ms !important; }
 
 /* ============================================================
-   7. ACCESSIBILITY
+   9. SMOOTH TRANSITION — fade out when loading ends
+   ============================================================ */
+
+[data-ghostly-smooth] :where(
+  h1, h2, h3, h4, h5, h6,
+  p, span, a, li, td, th, dt, dd,
+  label, legend, figcaption, caption, summary,
+  blockquote, cite, q, em, strong, small, mark, code, pre,
+  button, input, textarea, select, option,
+  fieldset, dialog, details, address,
+  time, abbr, sub, sup, del, ins,
+  img, svg, video, canvas, picture, iframe
+) {
+  transition:
+    color var(--ghostly-transition) ease-out,
+    background-color var(--ghostly-transition) ease-out,
+    background-image var(--ghostly-transition) ease-out,
+    opacity var(--ghostly-transition) ease-out;
+}
+
+/* ============================================================
+   10. ACCESSIBILITY
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {

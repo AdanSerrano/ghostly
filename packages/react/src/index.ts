@@ -1,5 +1,6 @@
 export { Ghostly } from './ghostly'
 export { GhostlyList } from './ghostly-list'
+export { GhostlySuspense } from './ghostly-suspense'
 export { GhostlyProvider } from './provider'
 export { useGhostly } from './context'
 

@@ -1,9 +1,10 @@
 ---
 title: CSS Reference
-description: Custom properties, selectors, animations, and specificity.
+description: Custom properties, selectors, animations, transitions, and Tailwind plugin.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout'
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 
 ## Importing
 
@@ -41,6 +42,10 @@ Border radius for skeleton blocks. Default: `4px`. Controlled by the `radius` pr
 
 Animation cycle duration. Default: `1.5s`. Controlled by the `speed` prop.
 
+### `--ghostly-transition`
+
+Duration of the smooth fade-out transition when loading ends. Default: `0.3s`. Active only when `data-ghostly-smooth` is present.
+
 ### Example
 
 ```css title="globals.css"
@@ -49,6 +54,7 @@ Animation cycle duration. Default: `1.5s`. Controlled by the `speed` prop.
   --ghostly-shine: hsl(210 40% 94%);
   --ghostly-radius: 8px;
   --ghostly-speed: 1.2s;
+  --ghostly-transition: 0.5s;
 }
 
 .dark {
@@ -83,7 +89,7 @@ Opacity fades between 100% and 40%.
 
 ### Wave
 
-Uses `ghostly-pulse` with staggered `animation-delay` on each direct child (0ms, 100ms, 200ms...).
+Uses `ghostly-wave` with staggered `animation-delay` on each direct child (0ms, 80ms, 160ms...). Supports up to 12 children with individual delays, plus a catch-all for 13+.
 
 ## Dark Mode Detection
 
@@ -133,15 +139,72 @@ Ghostly uses `:where()` for most selectors, which has **zero specificity**. Over
 | `h4-h6` | `1.15em` | `45%` |
 | `p` | `3em` | `80%` |
 | `span, a, li` | `1em` | `2rem` |
-| `input, textarea` | `2.5rem` | `8rem` |
+| `input, textarea` | `2.5rem` | `6rem` |
 | `button` | `2.25rem` | `5rem` |
-| `img` (no size) | `12rem` | `100%` |
+| `img` (no size) | `aspect-ratio: 16/9` | `100%` |
 | `svg` | `1.5rem` | `1.5rem` |
 
 ## Reduced Motion
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  [data-ghostly] * { animation: none !important; }
+  [data-ghostly] * { animation: none !important; transition: none !important; }
 }
 ```
+
+---
+
+## Tailwind CSS Plugin
+
+Ghostly includes an official Tailwind CSS plugin for utility-class workflows.
+
+### Setup
+
+```js title="tailwind.config.js"
+import ghostly from 'ghostly/tailwind'
+
+export default {
+  plugins: [ghostly],
+}
+```
+
+### Available Utilities
+
+#### Radius
+
+| Class | CSS Variable |
+|-------|-------------|
+| `ghostly-radius-none` | `--ghostly-radius: 0px` |
+| `ghostly-radius-xs` | `--ghostly-radius: 2px` |
+| `ghostly-radius-sm` | `--ghostly-radius: 4px` |
+| `ghostly-radius-md` | `--ghostly-radius: 8px` |
+| `ghostly-radius-lg` | `--ghostly-radius: 12px` |
+| `ghostly-radius-full` | `--ghostly-radius: 9999px` |
+
+#### Speed
+
+| Class | CSS Variable |
+|-------|-------------|
+| `ghostly-speed-slow` | `--ghostly-speed: 2s` |
+| `ghostly-speed-normal` | `--ghostly-speed: 1.5s` |
+| `ghostly-speed-fast` | `--ghostly-speed: 0.8s` |
+
+#### Arbitrary Colors
+
+```html
+<div class="ghostly-color-[hsl(210_40%_88%)] ghostly-shine-[hsl(210_40%_94%)]">
+  ...
+</div>
+```
+
+### `ghostly:` Variant
+
+Target elements inside a ghostly container:
+
+```html
+<p class="ghostly:min-h-[5em] ghostly:w-3/4">
+  Content that has custom skeleton dimensions
+</p>
+```
+
+This compiles to `[data-ghostly] & { ... }`.

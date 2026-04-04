@@ -88,15 +88,15 @@ export default function PlaygroundPage() {
         </span>
       </div>
 
-      {/* Section: Single component */}
+      {/* Section: Single component with smooth transition */}
       <section className="mb-12">
         <h2 className="mb-4 text-xl font-semibold text-gray-900">
-          Single component
+          Single component (smooth transition)
         </h2>
         <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
-          {'<Ghostly loading={isLoading}><UserProfile user={data} /></Ghostly>'}
+          {'<Ghostly loading={isLoading} smooth><UserProfile /></Ghostly>'}
         </code>
-        <Ghostly loading={loading} animation={animation}>
+        <Ghostly loading={loading} animation={animation} smooth>
           <UserProfile user={loading ? undefined : MOCK_USER} />
         </Ghostly>
       </section>
@@ -122,18 +122,45 @@ export default function PlaygroundPage() {
         </GhostlyList>
       </section>
 
-      {/* Section: Stats row */}
+      {/* Section: Custom colors */}
       <section className="mb-12">
         <h2 className="mb-4 text-xl font-semibold text-gray-900">
-          Stats dashboard
+          Custom colors via props
         </h2>
+        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+          {'<Ghostly loading color="hsl(260 60% 88%)" shine="hsl(260 60% 94%)">'}
+        </code>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {(loading ? [undefined, undefined, undefined] : MOCK_STATS).map((stat, i) => (
-            <Ghostly key={i} loading={loading} animation={animation}>
+            <Ghostly
+              key={i}
+              loading={loading}
+              animation={animation}
+              color="hsl(260 60% 88%)"
+              shine="hsl(260 60% 94%)"
+              smooth
+            >
               <StatsCard stat={stat} />
             </Ghostly>
           ))}
         </div>
+      </section>
+
+      {/* Section: data-ghostly-lines */}
+      <section className="mb-12">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+          Line count control (data-ghostly-lines)
+        </h2>
+        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+          {'<p data-ghostly-lines="1"> / <p data-ghostly-lines="5">'}
+        </code>
+        <Ghostly loading={loading} animation={animation}>
+          <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+            <h3 data-ghostly-lines="1">{loading ? '' : 'Article Title'}</h3>
+            <p data-ghostly-lines="1">{loading ? '' : 'Short subtitle for the article'}</p>
+            <p data-ghostly-lines="5">{loading ? '' : 'This is a long paragraph that would take up multiple lines in the actual rendered content. It demonstrates how data-ghostly-lines="5" creates a taller skeleton block to simulate more text content.'}</p>
+          </div>
+        </Ghostly>
       </section>
 
       {/* Section: data-ghostly-ignore */}

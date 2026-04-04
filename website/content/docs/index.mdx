@@ -29,6 +29,7 @@ Most skeleton libraries require you to **rewrite** your components, **run CLI to
 | Code changes | Rewrite components | None |
 | Maintenance | Regenerate on changes | Zero |
 | Bundle size | 4-16KB + runtime JS | ~3KB, zero runtime JS |
+| Suspense | Manual wiring | `<GhostlySuspense>` built-in |
 
 ## Quick Start
 
@@ -40,25 +41,30 @@ Most skeleton libraries require you to **rewrite** your components, **run CLI to
     Learn the basics of wrapping components
   </Card>
   <Card title="API Reference" href="/docs/reference/components">
-    Full component and prop reference
+    Full component, hook, and prop reference
   </Card>
   <Card title="Examples" href="/docs/guides/examples">
     Real-world patterns and integrations
   </Card>
 </Cards>
 
-## Design Principles
+## Features
 
-1. **Zero config** — Install, import CSS, wrap. No CLI, no build step, no config files
-2. **Zero code changes** — Your components stay exactly as they are
-3. **CSS-first** — All skeleton logic is pure CSS. Zero JavaScript overhead at runtime
-4. **Progressive** — Works with CSR, SSR, RSC, and Suspense
-5. **Accessible** — ARIA attributes, reduced motion, screen reader friendly
-6. **Tiny** — ~2KB CSS + ~1KB React (gzipped). Zero runtime dependencies in core
+- **Zero config** — Install, import CSS, wrap. No CLI, no build step, no config files
+- **Zero code changes** — Your components stay exactly as they are
+- **CSS-first** — All skeleton logic is pure CSS. Zero JavaScript overhead at runtime
+- **GhostlySuspense** — Automatic skeleton with React Suspense. No loading state needed
+- **Smooth transitions** — Fade-out when loading ends with the `smooth` prop
+- **Color props** — Customize colors per-instance with `color` and `shine` props
+- **Line control** — `data-ghostly-lines` for text, `data-ghostly-ratio` for images
+- **Tailwind plugin** — Utility classes: `ghostly-radius-*`, `ghostly-speed-*`, `ghostly:` variant
+- **Progressive** — Works with CSR, SSR, RSC, and Suspense
+- **Accessible** — ARIA attributes, reduced motion, screen reader friendly
+- **Tiny** — ~2KB CSS + ~1KB React (gzipped). Zero runtime dependencies in core
 
 ## Packages
 
 | Package | Description | Size (gzip) |
 |---------|-------------|-------------|
-| `ghostly` | CSS engine + types | ~2KB |
+| `ghostly` | CSS engine + types + Tailwind plugin | ~2KB |
 | `@ghostly/react` | React components | ~1KB |

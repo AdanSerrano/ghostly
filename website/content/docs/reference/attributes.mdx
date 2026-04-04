@@ -58,6 +58,73 @@ Excludes an element **and all its children** from the skeleton effect.
 
 ---
 
+## `data-ghostly-lines`
+
+**Set by:** Developer, manually.
+
+Controls how many text lines a skeleton element simulates. Overrides the default `min-height`. Supports values `1` through `8`.
+
+```html
+<div data-ghostly="shimmer">
+  <p data-ghostly-lines="1">Short text</p>
+  <p data-ghostly-lines="5">Long paragraph that takes multiple lines</p>
+</div>
+```
+
+| Value | min-height |
+|-------|-----------|
+| `1` | `1em` |
+| `2` | `2em` |
+| `3` | `3em` (default for `<p>`) |
+| `4` | `4em` |
+| `5` | `5em` |
+| `6` | `6em` |
+| `7` | `7em` |
+| `8` | `8em` |
+
+---
+
+## `data-ghostly-ratio`
+
+**Set by:** Developer, manually.
+
+Sets a custom aspect ratio for media elements (images, videos) during skeleton loading.
+
+```html
+<div data-ghostly="shimmer">
+  <img data-ghostly-ratio="1/1" src="avatar.jpg" alt="Avatar" />
+  <img data-ghostly-ratio="4/3" src="photo.jpg" alt="Photo" />
+</div>
+```
+
+| Value | Aspect Ratio |
+|-------|-------------|
+| `1/1` | Square |
+| `4/3` | Classic photo |
+| `16/9` | Widescreen (default for images without dimensions) |
+| `21/9` | Ultra-wide |
+| `3/4` | Portrait |
+| `9/16` | Vertical video |
+
+---
+
+## `data-ghostly-smooth`
+
+**Set by:** `<Ghostly smooth>` automatically.
+
+Enables smooth CSS transitions on descendant elements so that when loading ends, skeleton styles fade out gracefully instead of disappearing instantly.
+
+Transition duration is controlled by `--ghostly-transition` (default: `0.3s`).
+
+```html
+<!-- Managed by React component -->
+<div data-ghostly="shimmer" data-ghostly-smooth>
+  <h2>Fades out smoothly when loading ends</h2>
+</div>
+```
+
+---
+
 ## `aria-busy`
 
 **Set by:** `<Ghostly>` automatically.
@@ -70,5 +137,5 @@ Set to `"true"` when loading, removed when loaded. Tells assistive technologies 
 
 Always set to `"polite"`. Combined with `aria-busy`, provides complete screen reader support:
 
-1. Loading starts → `aria-busy="true"` → "region busy"
-2. Loading ends → `aria-busy` removed → screen reader announces new content
+1. Loading starts — `aria-busy="true"` — "region busy"
+2. Loading ends — `aria-busy` removed — screen reader announces new content

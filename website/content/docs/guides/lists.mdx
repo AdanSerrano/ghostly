@@ -46,6 +46,24 @@ import { Callout } from 'fumadocs-ui/components/callout'
   Make `count` a multiple of your grid columns for complete rows (e.g., 6 for 3 columns, 8 for 4 columns).
 </Callout>
 
+## Semantic lists
+
+Use the `as` prop to render as a `<ul>` or `<ol>` instead of a `<div>`:
+
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={5}
+  item={<TodoItem />}
+  as="ul"
+  className="space-y-2"
+>
+  {todos.map(t => <TodoItem key={t.id} todo={t} />)}
+</GhostlyList>
+```
+
+Supported `as` values: `div`, `ul`, `ol`, `section`, `main`, `aside`.
+
 ## Vertical lists
 
 ```tsx
@@ -56,6 +74,21 @@ import { Callout } from 'fumadocs-ui/components/callout'
   className="divide-y divide-gray-200"
 >
   {orders.map(o => <OrderRow key={o.id} order={o} />)}
+</GhostlyList>
+```
+
+## Custom colors per list
+
+```tsx
+<GhostlyList
+  loading={isLoading}
+  count={4}
+  item={<Card />}
+  color="hsl(200 50% 85%)"
+  shine="hsl(200 50% 92%)"
+  className="grid grid-cols-2 gap-4"
+>
+  {items?.map(i => <Card key={i.id} item={i} />)}
 </GhostlyList>
 ```
 

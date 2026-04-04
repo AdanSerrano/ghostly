@@ -258,4 +258,55 @@ describe('GhostlyList', () => {
     const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
     expect(wrapper.style.getPropertyValue('--ghostly-speed')).toBe('0.8s')
   })
+
+  // --- as prop ---
+
+  it('renders as ul when as="ul" and loading', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />} as="ul">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    expect(container.querySelector('ul')).not.toBeNull()
+  })
+
+  it('renders as ul when as="ul" and not loading', () => {
+    const { container } = render(
+      <GhostlyList loading={false} count={2} item={<MockCard />} as="ul">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    expect(container.querySelector('ul')).not.toBeNull()
+  })
+
+  it('renders as ol when as="ol"', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />} as="ol">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    expect(container.querySelector('ol')).not.toBeNull()
+  })
+
+  it('renders as section when as="section"', () => {
+    const { container } = render(
+      <GhostlyList loading={false} count={2} item={<MockCard />} as="section">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    expect(container.querySelector('section')).not.toBeNull()
+  })
+
+  // --- color / shine props ---
+
+  it('passes color and shine to inner Ghostly', () => {
+    const { container } = render(
+      <GhostlyList loading={true} count={2} item={<MockCard />} color="blue" shine="lightblue">
+        <MockCard title="Real" />
+      </GhostlyList>,
+    )
+    const wrapper = container.querySelector('[data-ghostly]') as HTMLElement
+    expect(wrapper.style.getPropertyValue('--ghostly-color')).toBe('blue')
+    expect(wrapper.style.getPropertyValue('--ghostly-shine')).toBe('lightblue')
+  })
 })

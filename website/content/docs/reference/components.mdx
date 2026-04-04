@@ -4,6 +4,7 @@ description: Complete API reference for all Ghostly React components and hooks.
 ---
 
 import { TypeTable } from 'fumadocs-ui/components/type-table'
+import { Callout } from 'fumadocs-ui/components/callout'
 
 ## `<Ghostly>`
 
@@ -21,7 +22,10 @@ import { Ghostly } from '@ghostly/react'
     animation: { description: 'Animation style', type: "'shimmer' | 'pulse' | 'wave' | 'none'", default: "'shimmer'" },
     radius: { description: 'Skeleton block border radius', type: "'none' | 'xs' | 'sm' | 'md' | 'lg' | 'full'", default: "'sm'" },
     speed: { description: 'Animation speed', type: "'slow' | 'normal' | 'fast'", default: "'normal'" },
-    as: { description: 'HTML tag for wrapper', type: "'div' | 'section' | 'article' | 'main' | 'aside' | 'span'", default: "'div'" },
+    color: { description: 'Custom skeleton base color (any CSS color)', type: 'string' },
+    shine: { description: 'Custom shimmer highlight color (any CSS color)', type: 'string' },
+    smooth: { description: 'Enable smooth fade-out transition when loading ends', type: 'boolean', default: 'false' },
+    as: { description: 'HTML tag for wrapper', type: "'div' | 'section' | 'article' | 'main' | 'aside' | 'span' | 'ul' | 'ol'", default: "'div'" },
     className: { description: 'CSS classes for wrapper', type: 'string' },
     style: { description: 'Inline styles (merged with CSS vars)', type: 'CSSProperties' },
     children: { description: 'Content to display or skeletonize', type: 'ReactNode', required: true },
@@ -33,12 +37,13 @@ import { Ghostly } from '@ghostly/react'
 When `loading={true}`:
 - Sets `data-ghostly="{animation}"` on the wrapper element
 - Sets `aria-busy="true"` for screen readers
-- Sets CSS custom properties for radius and speed
+- Sets CSS custom properties for radius, speed, color, and shine
 - All descendant text/media become skeleton blocks via CSS
 
 When `loading={false}`:
 - Removes all skeleton attributes
 - Children render normally with zero overhead
+- If `smooth` is true, elements fade out gracefully
 
 ### Examples
 
@@ -49,17 +54,22 @@ When `loading={false}`:
 </Ghostly>
 
 // All options
-<Ghostly loading={isLoading} animation="pulse" radius="lg" speed="fast" as="article">
+<Ghostly
+  loading={isLoading}
+  animation="pulse"
+  radius="lg"
+  speed="fast"
+  as="article"
+  smooth
+>
   <BlogPost post={data} />
 </Ghostly>
 
-// Custom colors per instance
+// Custom colors via props (no CSS needed)
 <Ghostly
   loading={true}
-  style={{
-    '--ghostly-color': 'hsl(260 30% 88%)',
-    '--ghostly-shine': 'hsl(260 30% 94%)',
-  } as React.CSSProperties}
+  color="hsl(260 30% 88%)"
+  shine="hsl(260 30% 94%)"
 >
   <HeroSection data={data} />
 </Ghostly>
@@ -85,6 +95,9 @@ import { GhostlyList } from '@ghostly/react'
     animation: { description: 'Animation style', type: 'GhostlyAnimation', default: "'shimmer'" },
     radius: { description: 'Border radius', type: 'GhostlyRadius', default: "'sm'" },
     speed: { description: 'Animation speed', type: 'GhostlySpeed', default: "'normal'" },
+    color: { description: 'Custom skeleton base color', type: 'string' },
+    shine: { description: 'Custom shimmer highlight color', type: 'string' },
+    as: { description: 'HTML tag for wrapper', type: "'div' | 'ul' | 'ol' | 'section' | 'main' | 'aside'", default: "'div'" },
     className: { description: 'CSS classes for list container', type: 'string' },
     children: { description: 'Real content when not loading', type: 'ReactNode', required: true },
   }}
@@ -93,6 +106,7 @@ import { GhostlyList } from '@ghostly/react'
 ### Example
 
 ```tsx
+// Basic grid
 <GhostlyList
   loading={isLoading}
   count={8}
@@ -101,13 +115,92 @@ import { GhostlyList } from '@ghostly/react'
 >
   {products?.map(p => <ProductCard key={p.id} product={p} />)}
 </GhostlyList>
+
+// Semantic list with custom colors
+<GhostlyList
+  loading={isLoading}
+  count={5}
+  item={<TodoItem />}
+  as="ul"
+  color="hsl(200 50% 85%)"
+  className="space-y-2"
+>
+  {todos?.map(t => <TodoItem key={t.id} todo={t} />)}
+</GhostlyList>
+```
+
+---
+
+## `<GhostlySuspense>`
+
+Suspense-powered skeleton loader. Automatically shows a skeleton of your fallback component while children are suspended. No manual `loading` state needed.
+
+```tsx
+import { GhostlySuspense } from '@ghostly/react'
+```
+
+### Props
+
+<TypeTable
+  type={{
+    fallback: { description: 'Template element shown as skeleton while suspended', type: 'ReactElement', required: true },
+    animation: { description: 'Animation style', type: 'GhostlyAnimation', default: "'shimmer'" },
+    radius: { description: 'Border radius', type: 'GhostlyRadius', default: "'sm'" },
+    speed: { description: 'Animation speed', type: 'GhostlySpeed', default: "'normal'" },
+    color: { description: 'Custom skeleton base color', type: 'string' },
+    shine: { description: 'Custom shimmer highlight color', type: 'string' },
+    smooth: { description: 'Smooth fade-out when content resolves', type: 'boolean', default: 'false' },
+    as: { description: 'HTML tag for the skeleton wrapper', type: "'div' | 'section' | 'article' | 'main' | 'aside'", default: "'div'" },
+    className: { description: 'CSS class for skeleton wrapper', type: 'string' },
+    children: { description: 'Component tree that may suspend', type: 'ReactNode', required: true },
+  }}
+/>
+
+### How it works
+
+`GhostlySuspense` wraps React's `<Suspense>` and automatically:
+1. Renders your `fallback` component inside `<Ghostly loading={true}>` as the Suspense fallback
+2. When children resolve, shows them normally
+
+<Callout type="info">
+  This is the recommended approach for apps using React Server Components, `use()`, or any data-fetching library that integrates with Suspense.
+</Callout>
+
+### Examples
+
+```tsx
+// Basic — zero loading state management
+<GhostlySuspense fallback={<ProductCard />}>
+  <AsyncProductCard id={123} />
+</GhostlySuspense>
+
+// With options
+<GhostlySuspense
+  fallback={<UserProfile />}
+  animation="pulse"
+  radius="lg"
+  smooth
+  className="p-4"
+>
+  <AsyncUserProfile userId={456} />
+</GhostlySuspense>
+
+// Multiple boundaries
+<div className="grid grid-cols-2 gap-6">
+  <GhostlySuspense fallback={<Chart />} animation="shimmer">
+    <AsyncChart />
+  </GhostlySuspense>
+  <GhostlySuspense fallback={<Feed />} animation="wave">
+    <AsyncFeed />
+  </GhostlySuspense>
+</div>
 ```
 
 ---
 
 ## `<GhostlyProvider>`
 
-Sets default configuration for all Ghostly descendants.
+Sets default configuration for all Ghostly descendants. Nested providers inherit from their parent — only override what you specify.
 
 ```tsx
 import { GhostlyProvider } from '@ghostly/react'
@@ -117,27 +210,35 @@ import { GhostlyProvider } from '@ghostly/react'
 
 <TypeTable
   type={{
-    animation: { description: 'Default animation', type: 'GhostlyAnimation', default: "'shimmer'" },
-    radius: { description: 'Default radius', type: 'GhostlyRadius', default: "'sm'" },
-    speed: { description: 'Default speed', type: 'GhostlySpeed', default: "'normal'" },
+    animation: { description: 'Default animation', type: 'GhostlyAnimation', default: "inherited or 'shimmer'" },
+    radius: { description: 'Default radius', type: 'GhostlyRadius', default: "inherited or 'sm'" },
+    speed: { description: 'Default speed', type: 'GhostlySpeed', default: "inherited or 'normal'" },
     children: { description: 'App content', type: 'ReactNode', required: true },
   }}
 />
 
-Priority: `Instance props` > `GhostlyProvider` > `Built-in defaults`
+Priority: `Instance props` > `Nearest GhostlyProvider` > `Parent GhostlyProvider` > `Built-in defaults`
+
+### Nested providers
+
+```tsx
+<GhostlyProvider animation="wave" radius="lg">
+  {/* animation="wave", radius="lg", speed="normal" */}
+  <GhostlyProvider speed="fast">
+    {/* animation="wave" (inherited), radius="lg" (inherited), speed="fast" */}
+    <App />
+  </GhostlyProvider>
+</GhostlyProvider>
+```
 
 ---
 
 ## `useGhostly()`
 
-Hook to read the nearest Ghostly context.
+Hook to read the nearest Ghostly context and get spreadable skeleton props.
 
 ```tsx
 import { useGhostly } from '@ghostly/react'
-
-function MyComponent() {
-  const { loading, animation, radius, speed } = useGhostly()
-}
 ```
 
 ### Return value
@@ -148,8 +249,37 @@ function MyComponent() {
     animation: { description: 'Current animation', type: 'GhostlyAnimation' },
     radius: { description: 'Current radius', type: 'GhostlyRadius' },
     speed: { description: 'Current speed', type: 'GhostlySpeed' },
+    getGhostlyProps: { description: 'Returns props to spread onto any element to make it a skeleton container', type: '() => GhostlySpreadProps' },
   }}
 />
+
+### `getGhostlyProps()`
+
+Returns an object you can spread onto any HTML element to apply skeleton styles manually — useful for custom components that don't use `<Ghostly>`.
+
+```tsx
+function CustomSkeleton() {
+  const { loading, getGhostlyProps } = useGhostly()
+
+  return (
+    <div {...getGhostlyProps()}>
+      <h2>Title placeholder</h2>
+      <p>Description placeholder</p>
+    </div>
+  )
+}
+
+// Usage: inside a Ghostly or GhostlyProvider tree
+<Ghostly loading={isLoading}>
+  <CustomSkeleton />
+</Ghostly>
+```
+
+The returned object contains:
+- `data-ghostly` — animation value (only when loading)
+- `aria-busy` — true (only when loading)
+- `aria-live` — "polite" (always)
+- `style` — CSS variables for radius and speed (only when loading)
 
 ---
 
@@ -166,6 +296,8 @@ interface GhostlyConfig {
   animation?: GhostlyAnimation
   radius?: GhostlyRadius
   speed?: GhostlySpeed
+  color?: string   // Custom skeleton base color
+  shine?: string   // Custom shimmer highlight color
 }
 ```
 

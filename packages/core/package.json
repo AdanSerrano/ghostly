@@ -18,7 +18,17 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./css": "./dist/ghostly.css"
+    "./css": "./dist/ghostly.css",
+    "./tailwind": {
+      "import": {
+        "types": "./dist/tailwind.d.ts",
+        "default": "./dist/tailwind.js"
+      },
+      "require": {
+        "types": "./dist/tailwind.d.cts",
+        "default": "./dist/tailwind.cjs"
+      }
+    }
   },
   "files": ["dist", "README.md", "LICENSE"],
   "sideEffects": ["*.css"],
@@ -26,7 +36,16 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
+  "peerDependencies": {
+    "tailwindcss": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "tailwindcss": "^4.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3"
   },

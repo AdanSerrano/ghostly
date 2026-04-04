@@ -12,7 +12,7 @@ function UserPage() {
   const { data, isLoading } = useQuery('user')
 
   return (
-    <Ghostly loading={isLoading}>
+    <Ghostly loading={isLoading} smooth>
       <UserProfile user={data} />
     </Ghostly>
   )
@@ -40,6 +40,20 @@ function ShopPage() {
 }
 ```
 
+## Suspense-powered (zero state management)
+
+```tsx
+import { GhostlySuspense } from '@ghostly/react'
+
+function ProductPage({ id }: { id: string }) {
+  return (
+    <GhostlySuspense fallback={<ProductCard />} animation="shimmer" smooth>
+      <AsyncProductCard id={id} />
+    </GhostlySuspense>
+  )
+}
+```
+
 ## Dashboard with multiple sections
 
 ```tsx
@@ -50,11 +64,11 @@ function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <Ghostly loading={stats.isLoading} animation="pulse">
+      <Ghostly loading={stats.isLoading} animation="pulse" smooth>
         <StatsRow stats={stats.data} />
       </Ghostly>
 
-      <Ghostly loading={chart.isLoading} animation="shimmer">
+      <Ghostly loading={chart.isLoading} animation="shimmer" smooth>
         <RevenueChart data={chart.data} />
       </Ghostly>
 
@@ -63,6 +77,7 @@ function DashboardPage() {
         count={5}
         item={<OrderRow />}
         animation="wave"
+        as="ul"
         className="flex flex-col divide-y"
       >
         {orders.data?.map(o => <OrderRow key={o.id} order={o} />)}
@@ -93,11 +108,57 @@ function DashboardPage() {
 ```tsx
 <Ghostly
   loading={true}
-  style={{
-    '--ghostly-color': 'hsl(260 30% 88%)',
-    '--ghostly-shine': 'hsl(260 30% 94%)',
-  } as React.CSSProperties}
+  color="hsl(260 30% 88%)"
+  shine="hsl(260 30% 94%)"
 >
   <SpecialSection />
+</Ghostly>
+```
+
+## Control skeleton line count
+
+```tsx
+<Ghostly loading={isLoading}>
+  <div>
+    <h2>{data?.title ?? ''}</h2>
+    <p data-ghostly-lines="1">{data?.subtitle ?? ''}</p>
+    <p data-ghostly-lines="5">{data?.body ?? ''}</p>
+  </div>
+</Ghostly>
+```
+
+## Custom image aspect ratios
+
+```tsx
+<Ghostly loading={isLoading}>
+  <div className="flex gap-4">
+    <img data-ghostly-ratio="1/1" src={data?.avatar} alt="" className="w-16 h-16 rounded-full" />
+    <div>
+      <h3>{data?.name ?? ''}</h3>
+      <p>{data?.bio ?? ''}</p>
+    </div>
+  </div>
+</Ghostly>
+```
+
+## useGhostly for custom skeleton elements
+
+```tsx
+import { useGhostly } from '@ghostly/react'
+
+function CustomWidget() {
+  const { loading, getGhostlyProps } = useGhostly()
+
+  return (
+    <div {...getGhostlyProps()}>
+      <canvas className="w-full h-48" />
+      <p>Chart description</p>
+    </div>
+  )
+}
+
+// Wrap in Ghostly to activate
+<Ghostly loading={isLoading}>
+  <CustomWidget />
 </Ghostly>
 ```

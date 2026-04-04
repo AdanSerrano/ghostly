@@ -3,14 +3,16 @@ import { forwardRef, useContext, useMemo } from 'react'
 import { RADIUS_MAP, SPEED_MAP, type GhostlyConfig } from 'ghostly'
 import { GhostlyContext } from './context'
 
-type WrapperTag = 'div' | 'section' | 'article' | 'main' | 'aside' | 'span'
+type WrapperTag = 'div' | 'section' | 'article' | 'main' | 'aside' | 'span' | 'ul' | 'ol'
 
-interface GhostlyProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+interface GhostlyProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** When true, children appear as skeleton blocks */
   loading: boolean
   children: ReactNode
   /** HTML tag for the wrapper element. Default: 'div' */
   as?: WrapperTag
+  /** Enable smooth fade-out transition when loading ends */
+  smooth?: boolean
 }
 
 /**
@@ -24,7 +26,7 @@ interface GhostlyProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLDivElement
  * ```
  */
 export const Ghostly = forwardRef<HTMLElement, GhostlyProps>(function Ghostly(
-  { loading, children, animation, radius, speed, as: Tag = 'div', className, style, ...rest },
+  { loading, children, animation, radius, speed, color, shine, as: Tag = 'div', smooth, className, style, ...rest },
   ref: Ref<HTMLElement>,
 ) {
   const parent = useContext(GhostlyContext)
@@ -39,10 +41,12 @@ export const Ghostly = forwardRef<HTMLElement, GhostlyProps>(function Ghostly(
         ? ({
             '--ghostly-radius': RADIUS_MAP[resolvedRadius],
             '--ghostly-speed': SPEED_MAP[resolvedSpeed],
+            ...(color ? { '--ghostly-color': color } : {}),
+            ...(shine ? { '--ghostly-shine': shine } : {}),
             ...style,
           } as CSSProperties)
         : (style ?? {}),
-    [loading, resolvedRadius, resolvedSpeed, style],
+    [loading, resolvedRadius, resolvedSpeed, color, shine, style],
   )
 
   const ctx = useMemo(
@@ -60,6 +64,7 @@ export const Ghostly = forwardRef<HTMLElement, GhostlyProps>(function Ghostly(
       <Tag
         ref={ref as Ref<never>}
         data-ghostly={loading ? resolvedAnimation : undefined}
+        data-ghostly-smooth={smooth || undefined}
         aria-busy={loading || undefined}
         aria-live="polite"
         className={className}

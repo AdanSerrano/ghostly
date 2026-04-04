@@ -178,3 +178,47 @@ describe('useGhostly', () => {
     expect(screen.getByTestId('speed').textContent).toBe('fast') // own prop
   })
 })
+
+describe('useGhostly getGhostlyProps', () => {
+  function PropsDisplay() {
+    const { getGhostlyProps } = useGhostly()
+    const props = getGhostlyProps()
+    return (
+      <div>
+        <span data-testid="data-ghostly">{props['data-ghostly'] ?? 'undefined'}</span>
+        <span data-testid="aria-busy">{String(props['aria-busy'] ?? 'undefined')}</span>
+        <span data-testid="aria-live">{props['aria-live']}</span>
+        <span data-testid="has-style">{Object.keys(props.style).length > 0 ? 'yes' : 'no'}</span>
+      </div>
+    )
+  }
+
+  it('returns skeleton props when loading', () => {
+    render(
+      <Ghostly loading={true} animation="pulse">
+        <PropsDisplay />
+      </Ghostly>,
+    )
+    expect(screen.getByTestId('data-ghostly').textContent).toBe('pulse')
+    expect(screen.getByTestId('aria-busy').textContent).toBe('true')
+    expect(screen.getByTestId('aria-live').textContent).toBe('polite')
+    expect(screen.getByTestId('has-style').textContent).toBe('yes')
+  })
+
+  it('returns no skeleton attributes when not loading', () => {
+    render(
+      <Ghostly loading={false}>
+        <PropsDisplay />
+      </Ghostly>,
+    )
+    expect(screen.getByTestId('data-ghostly').textContent).toBe('undefined')
+    expect(screen.getByTestId('aria-busy').textContent).toBe('undefined')
+  })
+
+  it('returns empty style object when not loading', () => {
+    render(
+      <PropsDisplay />,
+    )
+    expect(screen.getByTestId('has-style').textContent).toBe('no')
+  })
+})

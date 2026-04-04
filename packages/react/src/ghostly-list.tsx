@@ -3,13 +3,17 @@ import { Children, cloneElement, forwardRef, isValidElement, useId, useMemo } fr
 import type { GhostlyConfig } from 'ghostly'
 import { Ghostly } from './ghostly'
 
-interface GhostlyListProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+type ListTag = 'div' | 'ul' | 'ol' | 'section' | 'main' | 'aside'
+
+interface GhostlyListProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** When true, shows skeleton items instead of children */
   loading: boolean
   /** Number of skeleton items to show while loading */
   count: number
   /** Template element to repeat as skeleton. If omitted, uses the first child as template */
   item?: ReactElement
+  /** HTML tag for the wrapper element. Default: 'div' */
+  as?: ListTag
   children: ReactNode
 }
 
@@ -29,7 +33,7 @@ interface GhostlyListProps extends GhostlyConfig, Omit<HTMLAttributes<HTMLDivEle
  * ```
  */
 export const GhostlyList = forwardRef<HTMLElement, GhostlyListProps>(function GhostlyList(
-  { loading, count, item, children, animation, radius, speed, className, ...rest },
+  { loading, count, item, children, animation, radius, speed, color, shine, as: Tag = 'div', className, ...rest },
   ref: Ref<HTMLElement>,
 ) {
   const listId = useId()
@@ -50,6 +54,9 @@ export const GhostlyList = forwardRef<HTMLElement, GhostlyListProps>(function Gh
         animation={animation}
         radius={radius}
         speed={speed}
+        color={color}
+        shine={shine}
+        as={Tag}
         className={className}
         {...rest}
       >
@@ -59,9 +66,9 @@ export const GhostlyList = forwardRef<HTMLElement, GhostlyListProps>(function Gh
   }
 
   return (
-    <div ref={ref as Ref<HTMLDivElement>} className={className} {...rest}>
+    <Tag ref={ref as Ref<never>} className={className} {...rest}>
       {children}
-    </div>
+    </Tag>
   )
 })
 
