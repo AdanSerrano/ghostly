@@ -34,9 +34,9 @@ export function Ghostly({
 }: GhostlyProps) {
   const parent = useContext(GhostlyContext)
 
-  const resolvedAnimation = animation ?? parent.animation ?? 'shimmer'
-  const resolvedRadius = radius ?? parent.radius ?? 'sm'
-  const resolvedSpeed = speed ?? parent.speed ?? 'normal'
+  const resolvedAnimation = animation ?? parent.animation
+  const resolvedRadius = radius ?? parent.radius
+  const resolvedSpeed = speed ?? parent.speed
 
   const cssVars = useMemo(
     (): CSSProperties =>

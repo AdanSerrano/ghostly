@@ -44,9 +44,7 @@ export function GhostlyList({
   const skeletonItems = useMemo(() => {
     if (!loading || !template) return null
     return Array.from({ length: count }, (_, i) =>
-      isValidElement(template)
-        ? cloneElement(template, { key: `ghostly-item-${i}` })
-        : null,
+      cloneElement(template, { key: `ghostly-item-${i}` }),
     )
   }, [loading, count, template])
 
