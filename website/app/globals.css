@@ -2,3 +2,116 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 @import '@ghostly-ui/core/css';
+
+/* ===== Homepage animations ===== */
+
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hero-scale-in {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer-bg {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes border-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-hero-1 { animation: hero-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.1s; }
+.animate-hero-2 { animation: hero-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.25s; }
+.animate-hero-3 { animation: hero-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.4s; }
+.animate-hero-4 { animation: hero-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.55s; }
+.animate-hero-5 { animation: hero-scale-in 1s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.5s; }
+.animate-hero-6 { animation: hero-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.7s; }
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+/* Shimmer text decoration */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-fd-foreground) 0%,
+    var(--color-fd-primary) 40%,
+    var(--color-fd-foreground) 60%,
+    var(--color-fd-primary) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-bg 4s linear infinite;
+}
+
+/* Glowing border card */
+.glow-card {
+  position: relative;
+}
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    var(--color-fd-primary) 50%,
+    transparent 80%
+  );
+  background-size: 300% 300%;
+  animation: border-shimmer 6s ease infinite;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: -1;
+}
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+/* Noise texture overlay */
+.noise-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Grid pattern background */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, var(--color-fd-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-fd-border) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Radial fade mask for grid */
+.grid-fade {
+  mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+}
