@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       links={[
         {
           text: 'Playground',
-          url: 'https://ghostly-playground.vercel.app',
+          url: '/playground',
         },
       ]}
       githubUrl="https://github.com/AdanSerrano/ghostly"
