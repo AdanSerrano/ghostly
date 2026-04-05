@@ -77,16 +77,39 @@
   --_ghostly-display: inline-block;
 }
 
-/* ── Prevent text elements from collapsing horizontally ──
-   Since text is transparent, the element's width comes from the text
-   content. When content is empty ('') the element collapses to 0 width.
-   We use min-width to prevent this. When real (visible) content is loaded,
-   the content width will naturally exceed the min-width. */
-[data-ghostly] :where(h1) { min-width: 60%; }
-[data-ghostly] :where(h2) { min-width: 50%; }
-[data-ghostly] :where(h3) { min-width: 45%; }
-[data-ghostly] :where(h4, h5, h6) { min-width: 40%; }
-[data-ghostly] :where(p) { min-width: 80%; }
+/* ── Layout preservation ──
+   The critical problem: when text is empty, flex children collapse to 0 width.
+   Solution: force non-leaf containers to grow, and text elements to fill.
+   Uses !important to beat utility-class frameworks (Tailwind, etc). */
+
+/* Non-leaf containers (divs wrapping text/images) must expand in flex/grid.
+   flex-grow:1 makes them fill available space instead of collapsing. */
+[data-ghostly] div,
+[data-ghostly] section,
+[data-ghostly] article,
+[data-ghostly] main,
+[data-ghostly] aside,
+[data-ghostly] header,
+[data-ghostly] footer,
+[data-ghostly] nav {
+  flex-grow: 1 !important;
+  min-width: 0 !important;
+}
+
+/* Leaf containers (empty divs used as placeholders like avatars)
+   should NOT grow — they have their own explicit dimensions. */
+[data-ghostly] div:empty {
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Text elements: fill full width of their parent */
+[data-ghostly] :where(h1, h2, h3, h4, h5, h6, p, pre,
+  blockquote, figcaption, caption, summary, address) {
+  width: 100%;
+}
+
+/* Inline-turned-block: reasonable minimums */
 [data-ghostly] :where(span, a, em, strong, small, label, time, code) { min-width: 3rem; }
 [data-ghostly] :where(button) { min-width: 5rem; }
 [data-ghostly] :where(input, textarea, select) { min-width: 6rem; }
