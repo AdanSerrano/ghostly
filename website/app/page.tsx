@@ -192,7 +192,7 @@ export default function HomePage() {
             <div>
               <div className="animate-hero-1 mb-8 inline-flex items-center gap-2.5 rounded-full border border-fd-border/60 bg-fd-card/60 px-4 py-2 text-sm text-fd-muted-foreground backdrop-blur-md">
                 <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_2px] shadow-emerald-400/40" />
-                <span className="font-medium">v0.2.3</span>
+                <span className="font-medium">v0.2.4</span>
                 <span className="h-3 w-px bg-fd-border" />
                 <span>Production Ready</span>
               </div>
