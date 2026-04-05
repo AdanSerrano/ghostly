@@ -5,7 +5,7 @@ import { COMPONENTS, INSTALLATION, CSS_REFERENCE, EXAMPLES } from './docs.js'
 
 const server = new McpServer({
   name: 'ghostly',
-  version: '0.2.0',
+  version: '0.2.4',
 })
 
 // --- Tool: list_components ---
