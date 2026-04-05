@@ -30,6 +30,12 @@ export default function HomePage() {
             Get Started
           </Link>
           <Link
+            href="/playground"
+            className="inline-flex h-12 items-center justify-center rounded-lg border border-fd-border bg-fd-background px-8 text-base font-medium text-fd-foreground shadow-sm transition-colors hover:bg-fd-accent"
+          >
+            Live Demo
+          </Link>
+          <Link
             href="https://github.com/AdanSerrano/ghostly"
             className="inline-flex h-12 items-center justify-center rounded-lg border border-fd-border bg-fd-background px-8 text-base font-medium text-fd-foreground shadow-sm transition-colors hover:bg-fd-accent"
           >

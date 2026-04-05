@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { Ghostly, GhostlyList } from '@ghostly/react'
 import { ProductCard } from '@/components/examples/product-card'
 import { UserProfile } from '@/components/examples/user-profile'
@@ -35,7 +36,6 @@ export default function PlaygroundPage() {
   const [loading, setLoading] = useState(true)
   const [animation, setAnimation] = useState<Animation>('shimmer')
 
-  // Simulate data fetching
   useEffect(() => {
     if (!loading) return
     const timer = setTimeout(() => setLoading(false), 3000)
@@ -46,11 +46,14 @@ export default function PlaygroundPage() {
     <div className="mx-auto max-w-6xl px-6 py-12">
       {/* Header */}
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold text-gray-900">
+        <Link href="/" className="mb-4 inline-block text-sm text-fd-muted-foreground hover:text-fd-foreground">
+          &larr; Back to home
+        </Link>
+        <h1 className="text-4xl font-bold text-fd-foreground">
           Ghostly Playground
         </h1>
-        <p className="mt-2 text-lg text-gray-500">
-          Zero-config skeleton loaders. Wrap your component, done.
+        <p className="mt-2 text-lg text-fd-muted-foreground">
+          Interactive demo. Try the animations, see the code.
         </p>
       </div>
 
@@ -58,7 +61,7 @@ export default function PlaygroundPage() {
       <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
         <button
           onClick={() => setLoading(true)}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-lg bg-fd-primary px-4 py-2 text-sm font-medium text-fd-primary-foreground hover:bg-fd-primary/90"
         >
           Reload (3s delay)
         </button>
@@ -68,10 +71,10 @@ export default function PlaygroundPage() {
             <button
               key={anim}
               onClick={() => { setAnimation(anim); setLoading(true) }}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                 animation === anim
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-fd-foreground text-fd-background'
+                  : 'bg-fd-secondary text-fd-muted-foreground hover:bg-fd-accent'
               }`}
             >
               {anim}
@@ -81,19 +84,19 @@ export default function PlaygroundPage() {
 
         <span className={`rounded-full px-3 py-1 text-xs font-medium ${
           loading
-            ? 'bg-amber-100 text-amber-700'
-            : 'bg-green-100 text-green-700'
+            ? 'bg-amber-500/10 text-amber-600'
+            : 'bg-green-500/10 text-green-600'
         }`}>
           {loading ? 'Loading...' : 'Loaded'}
         </span>
       </div>
 
-      {/* Section: Single component with smooth transition */}
+      {/* Section: Single component */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+        <h2 className="mb-2 text-xl font-semibold text-fd-foreground">
           Single component (smooth transition)
         </h2>
-        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+        <code className="mb-4 block rounded-lg border border-fd-border bg-fd-muted/50 p-3 text-sm text-fd-muted-foreground">
           {'<Ghostly loading={isLoading} smooth><UserProfile /></Ghostly>'}
         </code>
         <Ghostly loading={loading} animation={animation} smooth>
@@ -103,10 +106,10 @@ export default function PlaygroundPage() {
 
       {/* Section: Grid list */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+        <h2 className="mb-2 text-xl font-semibold text-fd-foreground">
           List with GhostlyList
         </h2>
-        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+        <code className="mb-4 block rounded-lg border border-fd-border bg-fd-muted/50 p-3 text-sm text-fd-muted-foreground">
           {'<GhostlyList loading={isLoading} count={6} item={<ProductCard />}>'}
         </code>
         <GhostlyList
@@ -124,10 +127,10 @@ export default function PlaygroundPage() {
 
       {/* Section: Custom colors */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+        <h2 className="mb-2 text-xl font-semibold text-fd-foreground">
           Custom colors via props
         </h2>
-        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+        <code className="mb-4 block rounded-lg border border-fd-border bg-fd-muted/50 p-3 text-sm text-fd-muted-foreground">
           {'<Ghostly loading color="hsl(260 60% 88%)" shine="hsl(260 60% 94%)">'}
         </code>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -148,14 +151,14 @@ export default function PlaygroundPage() {
 
       {/* Section: data-ghostly-lines */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+        <h2 className="mb-2 text-xl font-semibold text-fd-foreground">
           Line count control (data-ghostly-lines)
         </h2>
-        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+        <code className="mb-4 block rounded-lg border border-fd-border bg-fd-muted/50 p-3 text-sm text-fd-muted-foreground">
           {'<p data-ghostly-lines="1"> / <p data-ghostly-lines="5">'}
         </code>
         <Ghostly loading={loading} animation={animation}>
-          <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+          <div className="space-y-4 rounded-xl border border-fd-border bg-fd-card p-6">
             <h3 data-ghostly-lines="1">{loading ? '' : 'Article Title'}</h3>
             <p data-ghostly-lines="1">{loading ? '' : 'Short subtitle for the article'}</p>
             <p data-ghostly-lines="5">{loading ? '' : 'This is a long paragraph that would take up multiple lines in the actual rendered content. It demonstrates how data-ghostly-lines="5" creates a taller skeleton block to simulate more text content.'}</p>
@@ -165,17 +168,17 @@ export default function PlaygroundPage() {
 
       {/* Section: data-ghostly-ignore */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+        <h2 className="mb-2 text-xl font-semibold text-fd-foreground">
           Exclude elements with data-ghostly-ignore
         </h2>
-        <code className="mb-4 block rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+        <code className="mb-4 block rounded-lg border border-fd-border bg-fd-muted/50 p-3 text-sm text-fd-muted-foreground">
           {'<button data-ghostly-ignore>Always visible</button>'}
         </code>
         <Ghostly loading={loading} animation={animation}>
-          <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-6">
+          <div className="flex items-center gap-4 rounded-xl border border-fd-border bg-fd-card p-6">
             <div className="flex-1">
-              <h3 className="text-lg font-semibold">{loading ? '' : 'Product Title'}</h3>
-              <p className="text-sm text-gray-500">{loading ? '' : 'Description of the product'}</p>
+              <h3 className="text-lg font-semibold text-fd-foreground">{loading ? '' : 'Product Title'}</h3>
+              <p className="text-sm text-fd-muted-foreground">{loading ? '' : 'Description of the product'}</p>
             </div>
             <button
               data-ghostly-ignore

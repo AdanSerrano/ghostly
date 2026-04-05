@@ -1,9 +1,9 @@
 {
   "name": "ghostly-monorepo",
   "private": true,
-  "workspaces": ["packages/*", "playground", "website"],
+  "workspaces": ["packages/*", "website"],
   "scripts": {
-    "dev": "bun run --filter playground dev",
+    "dev": "bun run --filter website dev",
     "build": "bun run build:core && bun run build:react",
     "build:core": "bun run --filter ghostly build",
     "build:react": "bun run --filter @ghostly/react build",
@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc -b",
-    "clean": "rm -rf packages/*/dist playground/.next",
+    "clean": "rm -rf packages/*/dist website/.next",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
