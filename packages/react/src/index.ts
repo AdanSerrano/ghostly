@@ -5,4 +5,4 @@ export { GhostlyProvider } from './provider'
 export { useGhostly } from './context'
 
 // Re-export core types for convenience
-export type { GhostlyAnimation, GhostlyRadius, GhostlySpeed, GhostlyConfig } from 'ghostly'
+export type { GhostlyAnimation, GhostlyRadius, GhostlySpeed, GhostlyConfig } from '@ghostly-ui/core'

@@ -1,4 +1,4 @@
-# @ghostly/mcp
+# @ghostly-ui/mcp
 
 MCP (Model Context Protocol) server for [Ghostly](https://github.com/AdanSerrano/ghostly) skeleton loaders.
 
@@ -15,7 +15,7 @@ Add to your project's `.mcp.json`:
   "mcpServers": {
     "ghostly": {
       "command": "npx",
-      "args": ["@ghostly/mcp"]
+      "args": ["@ghostly-ui/mcp"]
     }
   }
 }
@@ -30,7 +30,7 @@ Add to `.cursor/mcp.json`:
   "mcpServers": {
     "ghostly": {
       "command": "npx",
-      "args": ["@ghostly/mcp"]
+      "args": ["@ghostly-ui/mcp"]
     }
   }
 }
@@ -45,7 +45,7 @@ Add to `.vscode/mcp.json`:
   "servers": {
     "ghostly": {
       "command": "npx",
-      "args": ["@ghostly/mcp"]
+      "args": ["@ghostly-ui/mcp"]
     }
   }
 }

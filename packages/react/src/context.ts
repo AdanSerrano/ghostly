@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { createContext, useContext, useMemo } from 'react'
-import { RADIUS_MAP, SPEED_MAP, type GhostlyAnimation, type GhostlyRadius, type GhostlySpeed } from 'ghostly'
+import { RADIUS_MAP, SPEED_MAP, type GhostlyAnimation, type GhostlyRadius, type GhostlySpeed } from '@ghostly-ui/core'
 
 interface GhostlyContextValue {
   /** Whether the nearest Ghostly ancestor is in loading state */

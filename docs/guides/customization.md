@@ -205,8 +205,8 @@ Set defaults once for your entire app:
 
 ```tsx
 // app/layout.tsx
-import { GhostlyProvider } from '@ghostly/react'
-import 'ghostly/css'
+import { GhostlyProvider } from '@ghostly-ui/react'
+import '@ghostly-ui/core/css'
 
 export default function Layout({ children }) {
   return (

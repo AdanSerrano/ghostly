@@ -6,8 +6,8 @@ Ghostly uses pure CSS to convert your real component layout into animated placeh
 
 ## Packages
 
-- `ghostly`: CSS engine + TypeScript types (zero dependencies, framework-agnostic)
-- `@ghostly/react`: React components (`<Ghostly>`, `<GhostlyList>`, `<GhostlyProvider>`, `useGhostly()`)
+- `@ghostly-ui/core`: CSS engine + TypeScript types (zero dependencies, framework-agnostic)
+- `@ghostly-ui/react`: React components (`<Ghostly>`, `<GhostlyList>`, `<GhostlyProvider>`, `useGhostly()`)
 
 ## Getting Started
 
@@ -40,5 +40,5 @@ Ghostly uses pure CSS to convert your real component layout into animated placeh
 ## Links
 
 - [GitHub](https://github.com/AdanSerrano/ghostly)
-- [npm: ghostly](https://www.npmjs.com/package/ghostly)
-- [npm: @ghostly/react](https://www.npmjs.com/package/@ghostly/react)
+- [npm: @ghostly-ui/core](https://www.npmjs.com/package/@ghostly-ui/core)
+- [npm: @ghostly-ui/react](https://www.npmjs.com/package/@ghostly-ui/react)

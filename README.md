@@ -5,8 +5,8 @@
 Wrap your component. Import the CSS. Done. No CLI, no build step, no code changes.
 
 ```tsx
-import { Ghostly } from '@ghostly/react'
-import 'ghostly/css'
+import { Ghostly } from '@ghostly-ui/react'
+import '@ghostly-ui/core/css'
 
 <Ghostly loading={isLoading}>
   <ProductCard product={data} />
@@ -18,7 +18,7 @@ Your component **is** the skeleton. Ghostly uses pure CSS to transform your real
 ## Install
 
 ```bash
-npm install ghostly @ghostly/react
+npm install @ghostly-ui/core @ghostly-ui/react
 ```
 
 ## Setup
@@ -26,7 +26,7 @@ npm install ghostly @ghostly/react
 **1. Import the CSS** (once, in your global stylesheet or root layout):
 
 ```css
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 ```
 
 **2. Wrap your components:**

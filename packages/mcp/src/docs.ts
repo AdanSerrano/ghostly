@@ -4,7 +4,7 @@ export const COMPONENTS = {
   Ghostly: {
     name: 'Ghostly',
     description: 'Main skeleton wrapper. Wraps any component to show skeleton while loading.',
-    import: "import { Ghostly } from '@ghostly/react'",
+    import: "import { Ghostly } from '@ghostly-ui/react'",
     props: {
       loading: { type: 'boolean', required: true, description: 'Show skeleton effect' },
       animation: { type: "'shimmer' | 'pulse' | 'wave' | 'none'", default: "'shimmer'", description: 'Animation style' },
@@ -25,7 +25,7 @@ export const COMPONENTS = {
   GhostlyList: {
     name: 'GhostlyList',
     description: 'Skeleton loader for lists and grids. Clones a template element N times during loading.',
-    import: "import { GhostlyList } from '@ghostly/react'",
+    import: "import { GhostlyList } from '@ghostly-ui/react'",
     props: {
       loading: { type: 'boolean', required: true, description: 'Show skeleton items' },
       count: { type: 'number', required: true, description: 'Number of skeleton items' },
@@ -50,7 +50,7 @@ export const COMPONENTS = {
   GhostlySuspense: {
     name: 'GhostlySuspense',
     description: 'React Suspense wrapper with automatic skeleton fallback. Zero loading state management.',
-    import: "import { GhostlySuspense } from '@ghostly/react'",
+    import: "import { GhostlySuspense } from '@ghostly-ui/react'",
     props: {
       fallback: { type: 'ReactElement', required: true, description: 'Template shown as skeleton while suspended' },
       animation: { type: 'GhostlyAnimation', default: "'shimmer'" },
@@ -70,7 +70,7 @@ export const COMPONENTS = {
   GhostlyProvider: {
     name: 'GhostlyProvider',
     description: 'Global config provider. Nested providers inherit from parent.',
-    import: "import { GhostlyProvider } from '@ghostly/react'",
+    import: "import { GhostlyProvider } from '@ghostly-ui/react'",
     props: {
       animation: { type: 'GhostlyAnimation', default: "inherited or 'shimmer'" },
       radius: { type: 'GhostlyRadius', default: "inherited or 'sm'" },
@@ -84,7 +84,7 @@ export const COMPONENTS = {
   useGhostly: {
     name: 'useGhostly',
     description: 'Hook to read nearest Ghostly context and get spreadable skeleton props.',
-    import: "import { useGhostly } from '@ghostly/react'",
+    import: "import { useGhostly } from '@ghostly-ui/react'",
     props: {},
     example: `const { loading, animation, getGhostlyProps } = useGhostly()
 
@@ -98,19 +98,19 @@ export const COMPONENTS = {
 export const INSTALLATION = `## Install
 
 \`\`\`bash
-npm install ghostly @ghostly/react
+npm install @ghostly-ui/core @ghostly-ui/react
 \`\`\`
 
 ## Setup
 
 1. Import CSS in your globals.css:
 \`\`\`css
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 \`\`\`
 
 2. Wrap your components:
 \`\`\`tsx
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 <Ghostly loading={isLoading}>
   <YourComponent data={data} />
@@ -119,7 +119,7 @@ import { Ghostly } from '@ghostly/react'
 
 ## Optional: Global config
 \`\`\`tsx
-import { GhostlyProvider } from '@ghostly/react'
+import { GhostlyProvider } from '@ghostly-ui/react'
 
 <GhostlyProvider animation="shimmer" radius="md">
   <App />
@@ -128,7 +128,7 @@ import { GhostlyProvider } from '@ghostly/react'
 
 ## Optional: Tailwind plugin
 \`\`\`js
-import ghostly from 'ghostly/tailwind'
+import ghostly from '@ghostly-ui/core/tailwind'
 export default { plugins: [ghostly] }
 \`\`\`
 `

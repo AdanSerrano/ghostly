@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "bun run --filter website dev",
     "build": "bun run build:core && bun run build:react",
-    "build:core": "bun run --filter ghostly build",
-    "build:react": "bun run --filter @ghostly/react build",
+    "build:core": "bun run --filter @ghostly-ui/core build",
+    "build:react": "bun run --filter @ghostly-ui/react build",
     "lint": "eslint packages/*/src/**/*.{ts,tsx}",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

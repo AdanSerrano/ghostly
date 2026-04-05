@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from 'react'
 import { Suspense } from 'react'
-import type { GhostlyConfig } from 'ghostly'
+import type { GhostlyConfig } from '@ghostly-ui/core'
 import { Ghostly } from './ghostly'
 
 interface GhostlySuspenseProps extends GhostlyConfig {

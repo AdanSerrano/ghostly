@@ -7,7 +7,7 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   minify: false,
-  external: ['react', 'react-dom', 'ghostly'],
+  external: ['react', 'react-dom', '@ghostly-ui/core'],
   banner: {
     js: "'use client';",
   },

@@ -10,7 +10,7 @@ import { Callout } from 'fumadocs-ui/components/callout'
 The most basic usage — wrap any component with `<Ghostly>`:
 
 ```tsx title="user-page.tsx"
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function UserPage() {
   const { data, isLoading } = useQuery('user')
@@ -30,7 +30,7 @@ When `loading={true}`, all text, images, and interactive elements inside become 
 For lists that start empty during loading, use `<GhostlyList>`:
 
 ```tsx title="shop-page.tsx"
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 
 function ShopPage() {
   const { data: products, isLoading } = useQuery('products')

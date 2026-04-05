@@ -8,8 +8,8 @@ Ghostly is designed for zero runtime overhead. Here's the performance profile.
 
 | Package | Raw | Gzipped | Brotli |
 |---------|-----|---------|--------|
-| `ghostly` (CSS) | ~4KB | ~2KB | ~1.5KB |
-| `@ghostly/react` | ~3KB | ~1KB | ~0.8KB |
+| `@ghostly-ui/core` (CSS) | ~4KB | ~2KB | ~1.5KB |
+| `@ghostly-ui/react` | ~3KB | ~1KB | ~0.8KB |
 | **Total** | **~7KB** | **~3KB** | **~2.3KB** |
 
 ### Comparison

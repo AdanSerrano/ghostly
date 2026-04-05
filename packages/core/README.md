@@ -1,4 +1,4 @@
-# ghostly
+# @ghostly-ui/core
 
 CSS-first skeleton loading engine. Zero dependencies. Framework-agnostic.
 
@@ -7,7 +7,7 @@ CSS-first skeleton loading engine. Zero dependencies. Framework-agnostic.
 ## Install
 
 ```bash
-npm install ghostly
+npm install @ghostly-ui/core
 ```
 
 ## Quick Start
@@ -15,7 +15,7 @@ npm install ghostly
 Import the CSS and add `data-ghostly` to any container:
 
 ```css
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 ```
 
 ```html
@@ -62,7 +62,7 @@ Remove the attribute to show real content. That's it.
 
 ```js
 // tailwind.config.js
-import ghostly from 'ghostly/tailwind'
+import ghostly from '@ghostly-ui/core/tailwind'
 
 export default {
   plugins: [ghostly],
@@ -73,7 +73,7 @@ Utilities: `ghostly-radius-*`, `ghostly-speed-*`, `ghostly-color-[...]`, `ghostl
 
 ## Framework Adapters
 
-- **[@ghostly/react](https://www.npmjs.com/package/@ghostly/react)** -- React components with `<Ghostly>`, `<GhostlyList>`, `<GhostlySuspense>`
+- **[@ghostly-ui/react](https://www.npmjs.com/package/@ghostly-ui/react)** -- React components with `<Ghostly>`, `<GhostlyList>`, `<GhostlySuspense>`
 
 ## Documentation
 

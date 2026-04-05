@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`data-ghostly-lines`** -- Control skeleton text line count (1-8).
 - **`data-ghostly-ratio`** -- Aspect ratio presets for images (1/1, 4/3, 16/9, 21/9, 3/4, 9/16).
 - **`getGhostlyProps()`** -- Spreadable props helper returned by `useGhostly()`.
-- **Tailwind CSS plugin** (`ghostly/tailwind`) -- `ghostly-radius-*`, `ghostly-speed-*`, `ghostly-color-[...]`, `ghostly-shine-[...]` utilities and `ghostly:` variant.
+- **Tailwind CSS plugin** (`@ghostly-ui/core/tailwind`) -- `ghostly-radius-*`, `ghostly-speed-*`, `ghostly-color-[...]`, `ghostly-shine-[...]` utilities and `ghostly:` variant.
 - **Dev mode validation** -- `console.warn` for invalid `animation`, `radius`, or `speed` values.
 - **New CSS elements** -- `time`, `abbr`, `sub`, `sup`, `del`, `ins` now supported as skeleton targets.
 
@@ -35,14 +35,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ghostly` core package with CSS-first skeleton engine
+- `@ghostly-ui/core` package with CSS-first skeleton engine
   - 3 animations: shimmer, pulse, wave
   - Automatic dark mode detection (`.dark`, `data-theme`, `prefers-color-scheme`)
   - CSS custom properties for customization (`--ghostly-color`, `--ghostly-shine`, `--ghostly-radius`, `--ghostly-speed`)
   - `prefers-reduced-motion: reduce` support
   - `data-ghostly-ignore` attribute for exclusions
   - Semantic min-height defaults for headings, paragraphs, buttons, inputs
-- `@ghostly/react` package with React components
+- `@ghostly-ui/react` package with React components
   - `<Ghostly>` -- main wrapper component
   - `<GhostlyList>` -- skeleton loader for lists and grids
   - `<GhostlyProvider>` -- global configuration provider

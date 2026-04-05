@@ -1,4 +1,4 @@
-# @ghostly/react
+# @ghostly-ui/react
 
 React components for [Ghostly](https://github.com/AdanSerrano/ghostly) skeleton loaders.
 
@@ -7,18 +7,18 @@ React components for [Ghostly](https://github.com/AdanSerrano/ghostly) skeleton 
 ## Install
 
 ```bash
-npm install ghostly @ghostly/react
+npm install @ghostly-ui/core @ghostly-ui/react
 ```
 
 ```css
 /* globals.css */
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 ```
 
 ## Quick Start
 
 ```tsx
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 <Ghostly loading={isLoading} smooth>
   <ProductCard product={data} />
@@ -63,7 +63,7 @@ import { Ghostly } from '@ghostly/react'
 Zero state management. Works with RSC, `use()`, and Suspense-based data fetching.
 
 ```tsx
-import { GhostlySuspense } from '@ghostly/react'
+import { GhostlySuspense } from '@ghostly-ui/react'
 
 <GhostlySuspense fallback={<ProductCard />} animation="shimmer" smooth>
   <AsyncProductCard id={123} />

@@ -59,7 +59,7 @@ export default function HomePage() {
               <span className="text-yellow-300">{'Ghostly'}</span>
               <span className="text-fd-foreground">{' } '}</span>
               <span className="text-blue-400">{'from'}</span>
-              <span className="text-green-400">{" '@ghostly/react'"}</span>
+              <span className="text-green-400">{" '@ghostly-ui/react'"}</span>
               {'\n\n'}
               <span className="text-blue-400">{'<'}</span>
               <span className="text-yellow-300">{'Ghostly'}</span>
@@ -165,7 +165,7 @@ export default function HomePage() {
                 <span className="text-yellow-300">{'GhostlySuspense'}</span>
                 <span className="text-fd-foreground">{' } '}</span>
                 <span className="text-blue-400">{'from'}</span>
-                <span className="text-green-400">{" '@ghostly/react'"}</span>
+                <span className="text-green-400">{" '@ghostly-ui/react'"}</span>
                 {'\n\n'}
                 <span className="text-blue-400">{'<'}</span>
                 <span className="text-yellow-300">{'GhostlySuspense'}</span>
@@ -203,7 +203,7 @@ export default function HomePage() {
                 <span className="text-blue-400">{'import'}</span>
                 <span className="text-fd-foreground">{' ghostly '}</span>
                 <span className="text-blue-400">{'from'}</span>
-                <span className="text-green-400">{" 'ghostly/tailwind'"}</span>
+                <span className="text-green-400">{" '@ghostly-ui/core/tailwind'"}</span>
                 {'\n\n'}
                 <span className="text-blue-400">{'export default'}</span>
                 <span className="text-fd-foreground">{' {'}</span>

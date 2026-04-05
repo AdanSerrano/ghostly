@@ -10,7 +10,7 @@ Use `<Ghostly>` as a Suspense fallback:
 
 ```tsx
 import { Suspense } from 'react'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function Page() {
   return (
@@ -72,7 +72,7 @@ export default async function ProductsPage() {
 }
 
 // app/products/loading.tsx (Suspense fallback)
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 import { ProductCard } from '@/components/product-card'
 
 export default function Loading() {

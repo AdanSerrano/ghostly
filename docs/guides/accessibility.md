@@ -158,7 +158,7 @@ function ContentWithTimeout() {
 
 ```tsx
 import { render } from '@testing-library/react'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 test('sets aria-busy when loading', () => {
   const { container } = render(

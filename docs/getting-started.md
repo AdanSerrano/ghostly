@@ -4,16 +4,16 @@
 
 ```bash
 # npm
-npm install ghostly @ghostly/react
+npm install @ghostly-ui/core @ghostly-ui/react
 
 # yarn
-yarn add ghostly @ghostly/react
+yarn add @ghostly-ui/core @ghostly-ui/react
 
 # pnpm
-pnpm add ghostly @ghostly/react
+pnpm add @ghostly-ui/core @ghostly-ui/react
 
 # bun
-bun add ghostly @ghostly/react
+bun add @ghostly-ui/core @ghostly-ui/react
 ```
 
 ## Setup (2 steps)
@@ -24,20 +24,20 @@ Add the Ghostly stylesheet to your app's global CSS file:
 
 ```css
 /* globals.css or app.css */
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 ```
 
 Or import it in your root layout/component:
 
 ```tsx
 // layout.tsx or App.tsx
-import 'ghostly/css'
+import '@ghostly-ui/core/css'
 ```
 
 ### Step 2: Wrap your components
 
 ```tsx
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function MyPage() {
   const { data, isLoading } = useFetch('/api/products')

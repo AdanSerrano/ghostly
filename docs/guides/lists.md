@@ -23,7 +23,7 @@ Lists, grids, and tables need special handling because the data array starts emp
 `<GhostlyList>` renders N copies of a template component while loading:
 
 ```tsx
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 
 <GhostlyList
   loading={isLoading}

@@ -11,7 +11,7 @@ import { Callout } from 'fumadocs-ui/components/callout'
 The primary component. Wraps any content to display skeleton loaders while data is loading.
 
 ```tsx
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 ```
 
 ### Props
@@ -82,7 +82,7 @@ When `loading={false}`:
 Skeleton loader for lists and grids. Clones a template element N times during loading.
 
 ```tsx
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 ```
 
 ### Props
@@ -136,7 +136,7 @@ import { GhostlyList } from '@ghostly/react'
 Suspense-powered skeleton loader. Automatically shows a skeleton of your fallback component while children are suspended. No manual `loading` state needed.
 
 ```tsx
-import { GhostlySuspense } from '@ghostly/react'
+import { GhostlySuspense } from '@ghostly-ui/react'
 ```
 
 ### Props
@@ -203,7 +203,7 @@ import { GhostlySuspense } from '@ghostly/react'
 Sets default configuration for all Ghostly descendants. Nested providers inherit from their parent — only override what you specify.
 
 ```tsx
-import { GhostlyProvider } from '@ghostly/react'
+import { GhostlyProvider } from '@ghostly-ui/react'
 ```
 
 ### Props
@@ -238,7 +238,7 @@ Priority: `Instance props` > `Nearest GhostlyProvider` > `Parent GhostlyProvider
 Hook to read the nearest Ghostly context and get spreadable skeleton props.
 
 ```tsx
-import { useGhostly } from '@ghostly/react'
+import { useGhostly } from '@ghostly-ui/react'
 ```
 
 ### Return value
@@ -285,7 +285,7 @@ The returned object contains:
 
 ## Types
 
-All types are exported from both `ghostly` and `@ghostly/react`.
+All types are exported from both `@ghostly-ui/core` and `@ghostly-ui/react`.
 
 ```tsx
 type GhostlyAnimation = 'shimmer' | 'pulse' | 'wave' | 'none'

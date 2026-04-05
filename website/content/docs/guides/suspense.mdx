@@ -10,7 +10,7 @@ import { Callout } from 'fumadocs-ui/components/callout'
 The easiest way to use Ghostly with Suspense. No `loading` state to manage.
 
 ```tsx
-import { GhostlySuspense } from '@ghostly/react'
+import { GhostlySuspense } from '@ghostly-ui/react'
 
 <GhostlySuspense fallback={<ProductCard />}>
   <AsyncProductCard />
@@ -60,7 +60,7 @@ If you need more control, use `<Ghostly>` directly as a Suspense fallback:
 
 ```tsx
 import { Suspense } from 'react'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 <Suspense fallback={
   <Ghostly loading={true}>
@@ -74,7 +74,7 @@ import { Ghostly } from '@ghostly/react'
 ## Next.js loading.tsx
 
 ```tsx title="app/products/loading.tsx"
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 import { ProductCard } from '@/components/product-card'
 
 export default function Loading() {

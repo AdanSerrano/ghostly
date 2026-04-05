@@ -7,7 +7,7 @@ description: Using Ghostly with TanStack Query, SWR, Apollo, tRPC, and more.
 
 ```tsx
 import { useQuery } from '@tanstack/react-query'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function UserCard({ userId }: { userId: string }) {
   const { data, isLoading } = useQuery({
@@ -27,7 +27,7 @@ function UserCard({ userId }: { userId: string }) {
 
 ```tsx
 import useSWR from 'swr'
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 
 function BlogIndex() {
   const { data, isLoading } = useSWR('/api/posts', fetcher)

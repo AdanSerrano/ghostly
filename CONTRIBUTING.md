@@ -77,7 +77,7 @@ Scopes: `core`, `react`, `playground`, `docs`, `deps`, `repo`
 ## Adding Framework Support
 
 1. Create `packages/yourframework/`
-2. Depend on `ghostly` core package
+2. Depend on `@ghostly-ui/core` package
 3. Implement wrapper components that set `data-ghostly` attribute
 4. Add build config (tsup)
 5. Add to CI workflow

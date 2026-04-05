@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactElement, ReactNode, Ref } from 'react'
 import { Children, cloneElement, forwardRef, isValidElement, useId, useMemo } from 'react'
-import { validateGhostlyProps, type GhostlyConfig } from 'ghostly'
+import { validateGhostlyProps, type GhostlyConfig } from '@ghostly-ui/core'
 import { Ghostly } from './ghostly'
 
 type ListTag = 'div' | 'ul' | 'ol' | 'section' | 'main' | 'aside'

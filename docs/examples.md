@@ -3,7 +3,7 @@
 ## Basic: Single component
 
 ```tsx
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function UserPage() {
   const { data, isLoading } = useQuery('user')
@@ -19,7 +19,7 @@ function UserPage() {
 ## List: Product grid
 
 ```tsx
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 
 function ShopPage() {
   const { data: products, isLoading } = useQuery('products')
@@ -41,7 +41,7 @@ function ShopPage() {
 
 ```tsx
 import { Suspense } from 'react'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function Page() {
   return (
@@ -120,8 +120,8 @@ Set defaults once in your app root:
 
 ```tsx
 // layout.tsx
-import { GhostlyProvider } from '@ghostly/react'
-import 'ghostly/css'
+import { GhostlyProvider } from '@ghostly-ui/react'
+import '@ghostly-ui/core/css'
 
 export default function RootLayout({ children }) {
   return (
@@ -140,7 +140,7 @@ export default function RootLayout({ children }) {
 
 ```tsx
 import { useQuery } from '@tanstack/react-query'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function UserCard({ userId }: { userId: string }) {
   const { data, isLoading } = useQuery({
@@ -169,7 +169,7 @@ function UserCard({ userId }: { userId: string }) {
 
 ```tsx
 import useSWR from 'swr'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function PostList() {
   const { data, isLoading } = useSWR('/api/posts', fetcher)

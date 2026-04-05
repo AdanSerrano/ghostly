@@ -9,8 +9,8 @@ import { Callout } from 'fumadocs-ui/components/callout'
 **Ghostly** transforms your existing components into skeleton loaders using pure CSS. No CLI, no build step, no code changes.
 
 ```tsx title="Just wrap your component"
-import { Ghostly } from '@ghostly/react'
-import 'ghostly/css'
+import { Ghostly } from '@ghostly-ui/react'
+import '@ghostly-ui/core/css'
 
 <Ghostly loading={isLoading}>
   <ProductCard product={data} />
@@ -66,5 +66,5 @@ Most skeleton libraries require you to **rewrite** your components, **run CLI to
 
 | Package | Description | Size (gzip) |
 |---------|-------------|-------------|
-| `ghostly` | CSS engine + types + Tailwind plugin | ~2KB |
-| `@ghostly/react` | React components | ~1KB |
+| `@ghostly-ui/core` | CSS engine + types + Tailwind plugin | ~2KB |
+| `@ghostly-ui/react` | React components | ~1KB |

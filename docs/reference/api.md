@@ -11,7 +11,7 @@ Complete reference for all Ghostly React components, hooks, and types.
 The primary component. Wraps any content to display skeleton loaders while data is loading.
 
 ```tsx
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 ```
 
 #### Props
@@ -85,7 +85,7 @@ All standard `HTMLDivElement` attributes (`id`, `data-*`, `role`, etc.) are also
 Specialized component for rendering skeleton loaders in lists and grids. Clones a template element N times during loading.
 
 ```tsx
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 ```
 
 #### Props
@@ -153,7 +153,7 @@ When your data is an array that starts empty (`[]`), wrapping with `<Ghostly>` w
 Sets default configuration values for all `<Ghostly>` and `<GhostlyList>` descendants. Place it at the root of your app.
 
 ```tsx
-import { GhostlyProvider } from '@ghostly/react'
+import { GhostlyProvider } from '@ghostly-ui/react'
 ```
 
 #### Props
@@ -177,8 +177,8 @@ Instance props > GhostlyProvider > Built-in defaults
 
 ```tsx
 // app/layout.tsx
-import { GhostlyProvider } from '@ghostly/react'
-import 'ghostly/css'
+import { GhostlyProvider } from '@ghostly-ui/react'
+import '@ghostly-ui/core/css'
 
 export default function RootLayout({ children }) {
   return (
@@ -202,7 +202,7 @@ export default function RootLayout({ children }) {
 Returns the current Ghostly context value from the nearest `<Ghostly>` or `<GhostlyProvider>` ancestor.
 
 ```tsx
-import { useGhostly } from '@ghostly/react'
+import { useGhostly } from '@ghostly-ui/react'
 ```
 
 #### Return value
@@ -244,7 +244,7 @@ function StatusBadge({ status }: { status?: string }) {
 
 ## Types
 
-All types are exported from both `ghostly` (core) and `@ghostly/react`.
+All types are exported from both `@ghostly-ui/core` and `@ghostly-ui/react`.
 
 ### `GhostlyAnimation`
 
@@ -299,7 +299,7 @@ interface GhostlyConfig {
 ### Constants
 
 ```tsx
-import { CSS_VARS, RADIUS_MAP, SPEED_MAP } from 'ghostly'
+import { CSS_VARS, RADIUS_MAP, SPEED_MAP } from '@ghostly-ui/core'
 
 CSS_VARS.color   // '--ghostly-color'
 CSS_VARS.shine   // '--ghostly-shine'

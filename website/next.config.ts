@@ -4,5 +4,5 @@ const withMDX = createMDX()
 
 export default withMDX({
   reactStrictMode: true,
-  transpilePackages: ['ghostly', '@ghostly/react'],
+  transpilePackages: ['@ghostly-ui/core', '@ghostly-ui/react'],
 })

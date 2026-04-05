@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useContext } from 'react'
-import type { GhostlyConfig } from 'ghostly'
+import type { GhostlyConfig } from '@ghostly-ui/core'
 import { GhostlyContext } from './context'
 
 interface GhostlyProviderProps extends GhostlyConfig {

@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react'
 import { forwardRef, useContext, useMemo } from 'react'
-import { RADIUS_MAP, SPEED_MAP, validateGhostlyProps, type GhostlyConfig } from 'ghostly'
+import { RADIUS_MAP, SPEED_MAP, validateGhostlyProps, type GhostlyConfig } from '@ghostly-ui/core'
 import { GhostlyContext } from './context'
 
 type WrapperTag = 'div' | 'section' | 'article' | 'main' | 'aside' | 'span' | 'ul' | 'ol'

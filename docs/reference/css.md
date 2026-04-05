@@ -8,13 +8,13 @@ Complete reference for all CSS custom properties, selectors, and animations prov
 
 ```css
 /* In your global stylesheet */
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 ```
 
 Or in your root component:
 
 ```tsx
-import 'ghostly/css'
+import '@ghostly-ui/core/css'
 ```
 
 ---

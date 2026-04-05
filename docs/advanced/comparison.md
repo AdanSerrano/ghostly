@@ -121,7 +121,7 @@ function CardSkeleton() {
 1. Remove `<Skeleton>` components from your JSX
 2. Ensure your component handles undefined data (optional chaining)
 3. Wrap with `<Ghostly loading={isLoading}>`
-4. Import `ghostly/css`
+4. Import `@ghostly-ui/core/css`
 5. Remove `react-loading-skeleton` package
 
 ### From react-content-loader
@@ -129,7 +129,7 @@ function CardSkeleton() {
 1. Remove `<ContentLoader>` SVG components
 2. Ensure your real component has proper HTML structure
 3. Wrap with `<Ghostly loading={isLoading}>`
-4. Import `ghostly/css`
+4. Import `@ghostly-ui/core/css`
 5. Remove `react-content-loader` package
 
 ### From manual skeleton components
@@ -137,4 +137,4 @@ function CardSkeleton() {
 1. Remove your `*Skeleton` component files
 2. Ensure main components handle undefined data
 3. Replace `{isLoading ? <MySkeleton /> : <MyComponent />}` with `<Ghostly loading={isLoading}><MyComponent /></Ghostly>`
-4. Import `ghostly/css`
+4. Import `@ghostly-ui/core/css`

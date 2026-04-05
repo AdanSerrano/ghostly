@@ -23,8 +23,8 @@
       },
     },
     "packages/core": {
-      "name": "ghostly",
-      "version": "0.1.0",
+      "name": "@ghostly-ui/core",
+      "version": "0.2.0",
       "devDependencies": {
         "tailwindcss": "^4.0.0",
         "tsup": "^8.5.0",
@@ -38,7 +38,7 @@
       ],
     },
     "packages/mcp": {
-      "name": "@ghostly/mcp",
+      "name": "@ghostly-ui/mcp",
       "version": "0.2.0",
       "bin": {
         "ghostly-mcp": "./dist/index.js",
@@ -53,10 +53,10 @@
       },
     },
     "packages/react": {
-      "name": "@ghostly/react",
-      "version": "0.1.0",
+      "name": "@ghostly-ui/react",
+      "version": "0.2.0",
       "dependencies": {
-        "ghostly": "workspace:*",
+        "@ghostly-ui/core": "workspace:*",
       },
       "devDependencies": {
         "@types/react": "^19.2.14",
@@ -75,11 +75,11 @@
       "name": "website",
       "version": "0.0.0",
       "dependencies": {
-        "@ghostly/react": "workspace:*",
+        "@ghostly-ui/core": "workspace:*",
+        "@ghostly-ui/react": "workspace:*",
         "fumadocs-core": "15.7.13",
         "fumadocs-mdx": "11.10.1",
         "fumadocs-ui": "15.7.13",
-        "ghostly": "workspace:*",
         "next": "^15.3.3",
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
@@ -222,9 +222,11 @@
 
     "@formatjs/intl-localematcher": ["@formatjs/intl-localematcher@0.6.2", "", { "dependencies": { "tslib": "^2.8.0" } }, "sha512-XOMO2Hupl0wdd172Y06h6kLpBz6Dv+J4okPLl4LPtzbr8f66WbIoy4ev98EBuZ6ZK4h5ydTN6XneT4QVpD7cdA=="],
 
-    "@ghostly/mcp": ["@ghostly/mcp@workspace:packages/mcp"],
+    "@ghostly-ui/core": ["@ghostly-ui/core@workspace:packages/core"],
 
-    "@ghostly/react": ["@ghostly/react@workspace:packages/react"],
+    "@ghostly-ui/mcp": ["@ghostly-ui/mcp@workspace:packages/mcp"],
+
+    "@ghostly-ui/react": ["@ghostly-ui/react@workspace:packages/react"],
 
     "@hono/node-server": ["@hono/node-server@1.19.12", "", { "peerDependencies": { "hono": "^4" } }, "sha512-txsUW4SQ1iilgE0l9/e9VQWmELXifEFvmdA1j6WFh/aFPj99hIntrSsq/if0UWyGVkmrRPKA1wCeP+UCr1B9Uw=="],
 
@@ -857,8 +859,6 @@
     "get-nonce": ["get-nonce@1.0.1", "", {}, "sha512-FJhYRoDaiatfEkUK8HKlicmu/3SGFD51q3itKDGoSTysQJBnfOcxU5GxnhE1E6soB76MbT0MBtnKJuXyAx+96Q=="],
 
     "get-proto": ["get-proto@1.0.1", "", { "dependencies": { "dunder-proto": "^1.0.1", "es-object-atoms": "^1.0.0" } }, "sha512-sTSfBjoXBp89JvIKIefqw7U2CCebsc74kiY6awiGogKtoSGbgjYE/G/+l9sF3MWFPNc9IcoOC4ODfKHfxFmp0g=="],
-
-    "ghostly": ["ghostly@workspace:packages/core"],
 
     "github-slugger": ["github-slugger@2.0.0", "", {}, "sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw=="],
 

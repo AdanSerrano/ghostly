@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Ghostly, GhostlyList } from '@ghostly/react'
+import { Ghostly, GhostlyList } from '@ghostly-ui/react'
 import { ProductCard } from '@/components/examples/product-card'
 import { UserProfile } from '@/components/examples/user-profile'
 import { StatsCard } from '@/components/examples/stats-card'

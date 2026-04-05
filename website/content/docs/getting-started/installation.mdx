@@ -12,22 +12,22 @@ import { Callout } from 'fumadocs-ui/components/callout'
 <Tabs items={['npm', 'yarn', 'pnpm', 'bun']}>
   <Tab value="npm">
     ```bash
-    npm install ghostly @ghostly/react
+    npm install @ghostly-ui/core @ghostly-ui/react
     ```
   </Tab>
   <Tab value="yarn">
     ```bash
-    yarn add ghostly @ghostly/react
+    yarn add @ghostly-ui/core @ghostly-ui/react
     ```
   </Tab>
   <Tab value="pnpm">
     ```bash
-    pnpm add ghostly @ghostly/react
+    pnpm add @ghostly-ui/core @ghostly-ui/react
     ```
   </Tab>
   <Tab value="bun">
     ```bash
-    bun add ghostly @ghostly/react
+    bun add @ghostly-ui/core @ghostly-ui/react
     ```
   </Tab>
 </Tabs>
@@ -42,13 +42,13 @@ import { Callout } from 'fumadocs-ui/components/callout'
 Add the Ghostly stylesheet to your global CSS file:
 
 ```css title="globals.css"
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 ```
 
 Or import it directly in your root layout:
 
 ```tsx title="app/layout.tsx"
-import 'ghostly/css'
+import '@ghostly-ui/core/css'
 ```
 </Step>
 
@@ -56,7 +56,7 @@ import 'ghostly/css'
 ### Wrap your components
 
 ```tsx title="page.tsx"
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function UserPage() {
   const { data, isLoading } = useFetch('/api/user')
@@ -72,7 +72,7 @@ function UserPage() {
 Or use `GhostlySuspense` for automatic skeleton with Suspense:
 
 ```tsx title="page.tsx"
-import { GhostlySuspense } from '@ghostly/react'
+import { GhostlySuspense } from '@ghostly-ui/react'
 
 function UserPage() {
   return (
@@ -102,8 +102,8 @@ No CLI. No build step. No config files. No code changes to your components.
 Set default animation, radius, and speed for all Ghostly instances:
 
 ```tsx title="app/layout.tsx"
-import { GhostlyProvider } from '@ghostly/react'
-import 'ghostly/css'
+import { GhostlyProvider } from '@ghostly-ui/react'
+import '@ghostly-ui/core/css'
 
 export default function RootLayout({ children }) {
   return (
@@ -123,7 +123,7 @@ export default function RootLayout({ children }) {
 If your project uses Tailwind CSS, add the Ghostly plugin for utility classes:
 
 ```js title="tailwind.config.js"
-import ghostly from 'ghostly/tailwind'
+import ghostly from '@ghostly-ui/core/tailwind'
 
 export default {
   plugins: [ghostly],

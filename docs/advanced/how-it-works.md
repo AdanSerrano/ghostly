@@ -120,8 +120,8 @@ Traditional skeleton libraries generate skeleton layouts that can become stale w
 
 ### Tiny bundle size
 
-- `ghostly` (CSS core): ~2KB gzipped
-- `@ghostly/react`: ~1KB gzipped
+- `@ghostly-ui/core` (CSS): ~2KB gzipped
+- `@ghostly-ui/react`: ~1KB gzipped
 
 Compare with Boneyard (~16KB + Playwright as a dev dependency) or react-loading-skeleton (~4KB + runtime style injection).
 

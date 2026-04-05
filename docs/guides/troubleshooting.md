@@ -14,12 +14,12 @@ Common issues and their solutions when using Ghostly.
 
 ```css
 /* globals.css */
-@import 'ghostly/css';
+@import '@ghostly-ui/core/css';
 ```
 
 Or in your root component:
 ```tsx
-import 'ghostly/css'
+import '@ghostly-ui/core/css'
 ```
 
 ### CSS import order
@@ -30,7 +30,7 @@ import 'ghostly/css'
 
 ```css
 @import 'tailwindcss';       /* 1. Framework */
-@import 'ghostly/css';        /* 2. Ghostly */
+@import '@ghostly-ui/core/css';        /* 2. Ghostly */
 /* Your custom styles below */ /* 3. Your overrides */
 ```
 

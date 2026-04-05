@@ -9,7 +9,7 @@ import plugin from 'tailwindcss/plugin'
  * @example
  * ```js
  * // tailwind.config.js
- * import ghostly from 'ghostly/tailwind'
+ * import ghostly from '@ghostly-ui/core/tailwind'
  * export default { plugins: [ghostly] }
  * ```
  *

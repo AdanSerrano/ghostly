@@ -8,7 +8,7 @@ Ghostly works with any data fetching library. Here's how to integrate with the m
 
 ```tsx
 import { useQuery } from '@tanstack/react-query'
-import { Ghostly, GhostlyList } from '@ghostly/react'
+import { Ghostly, GhostlyList } from '@ghostly-ui/react'
 
 // Single item
 function UserProfile({ userId }: { userId: string }) {
@@ -67,7 +67,7 @@ const { data, isPlaceholderData } = useQuery({
 
 ```tsx
 import useSWR from 'swr'
-import { Ghostly, GhostlyList } from '@ghostly/react'
+import { Ghostly, GhostlyList } from '@ghostly-ui/react'
 
 // Single item
 function PostDetail({ slug }: { slug: string }) {
@@ -103,7 +103,7 @@ function BlogIndex() {
 
 ```tsx
 import { useState, useTransition, useEffect } from 'react'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function SearchResults({ query }: { query: string }) {
   const [results, setResults] = useState(null)
@@ -132,7 +132,7 @@ function SearchResults({ query }: { query: string }) {
 'use client'
 
 import { useTransition } from 'react'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function Dashboard() {
   const [data, setData] = useState(null)
@@ -159,7 +159,7 @@ function Dashboard() {
 
 ```tsx
 import { useQuery, gql } from '@apollo/client'
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 const GET_USER = gql`
   query GetUser($id: ID!) {
@@ -190,7 +190,7 @@ function UserCard({ userId }: { userId: string }) {
 
 ```tsx
 import { trpc } from '@/utils/trpc'
-import { Ghostly, GhostlyList } from '@ghostly/react'
+import { Ghostly, GhostlyList } from '@ghostly-ui/react'
 
 function ProductPage({ id }: { id: string }) {
   const { data, isLoading } = trpc.product.getById.useQuery({ id })
@@ -226,7 +226,7 @@ For consistency, create a reusable wrapper:
 
 ```tsx
 // components/with-skeleton.tsx
-import { Ghostly, GhostlyList } from '@ghostly/react'
+import { Ghostly, GhostlyList } from '@ghostly-ui/react'
 
 interface WithSkeletonProps {
   loading: boolean

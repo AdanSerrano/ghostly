@@ -6,7 +6,7 @@ description: Real-world patterns and common use cases for Ghostly.
 ## Single component
 
 ```tsx
-import { Ghostly } from '@ghostly/react'
+import { Ghostly } from '@ghostly-ui/react'
 
 function UserPage() {
   const { data, isLoading } = useQuery('user')
@@ -22,7 +22,7 @@ function UserPage() {
 ## Product grid
 
 ```tsx
-import { GhostlyList } from '@ghostly/react'
+import { GhostlyList } from '@ghostly-ui/react'
 
 function ShopPage() {
   const { data: products, isLoading } = useQuery('products')
@@ -43,7 +43,7 @@ function ShopPage() {
 ## Suspense-powered (zero state management)
 
 ```tsx
-import { GhostlySuspense } from '@ghostly/react'
+import { GhostlySuspense } from '@ghostly-ui/react'
 
 function ProductPage({ id }: { id: string }) {
   return (
@@ -144,7 +144,7 @@ function DashboardPage() {
 ## useGhostly for custom skeleton elements
 
 ```tsx
-import { useGhostly } from '@ghostly/react'
+import { useGhostly } from '@ghostly-ui/react'
 
 function CustomWidget() {
   const { loading, getGhostlyProps } = useGhostly()
