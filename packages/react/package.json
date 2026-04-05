@@ -1,6 +1,6 @@
 {
   "name": "@ghostly-ui/react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React components for Ghostly skeleton loaders",
   "license": "MIT",
   "type": "module",
@@ -24,10 +24,8 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {
-    "@ghostly-ui/core": "workspace:*"
-  },
   "peerDependencies": {
+    "@ghostly-ui/core": ">=0.2.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
