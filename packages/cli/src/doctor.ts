@@ -1,4 +1,5 @@
-import { existsSync } from 'fs'
+import { existsSync, readdirSync } from 'fs'
+import { join } from 'path'
 import pc from 'picocolors'
 import { GHOSTLY, success, warn, error, fileContains, findFile, readJson, isNextJs, getAppDir } from './utils.js'
 
@@ -164,22 +165,19 @@ function countRoutes(dir: string): { total: number; withLoading: number } {
   let total = 0
   let withLoading = 0
 
-  const { readdirSync } = require('fs')
-  const { join } = require('path')
-
   function scan(d: string) {
     if (!existsSync(d)) return
     const entries = readdirSync(d, { withFileTypes: true })
-    const hasPage = entries.some((e: { name: string }) => e.name.match(/^page\.(tsx|jsx|ts|js)$/))
-    const hasLoading = entries.some((e: { name: string }) => e.name.match(/^loading\.(tsx|jsx|ts|js)$/))
+    const hasPage = entries.some((e) => /^page\.(tsx|jsx|ts|js)$/.test(e.name))
+    const hasLoadingFile = entries.some((e) => /^loading\.(tsx|jsx|ts|js)$/.test(e.name))
 
     if (hasPage) {
       total++
-      if (hasLoading) withLoading++
+      if (hasLoadingFile) withLoading++
     }
 
     for (const entry of entries) {
-      if ((entry as { isDirectory: () => boolean }).isDirectory() && !entry.name.startsWith('_') && !entry.name.startsWith('.')) {
+      if (entry.isDirectory() && !entry.name.startsWith('_') && !entry.name.startsWith('.')) {
         scan(join(d, entry.name))
       }
     }
