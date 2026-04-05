@@ -1,8 +1,9 @@
 /* ============================================================
    GHOSTLY — Zero-config skeleton loaders
 
-   Usage: add data-ghostly="shimmer|pulse|wave" to any container.
-   All leaf elements inside become skeleton blocks automatically.
+   Philosophy: NEVER override layout properties. Only hide content
+   and add skeleton background. The component's own CSS defines
+   all sizing, spacing, and border-radius.
    ============================================================ */
 
 /* --- Custom properties (override these to customize) --- */
@@ -31,25 +32,7 @@
 }
 
 /* ============================================================
-   1. SKELETON TARGET — shared base for all skeleton elements
-   ============================================================ */
-
-/* All targetable elements inside a ghostly container */
-[data-ghostly] :where(
-  h1, h2, h3, h4, h5, h6,
-  p, span, a, li, td, th, dt, dd,
-  label, legend, figcaption, caption, summary,
-  blockquote, cite, q, em, strong, small, mark, code, pre,
-  button, input, textarea, select, option,
-  fieldset, dialog, details, address,
-  time, abbr, sub, sup, del, ins,
-  img, svg, video, canvas, picture, iframe
-) {
-  --_ghostly-target: 1;
-}
-
-/* ============================================================
-   2. CONTAINER — Blocks interaction while loading
+   1. CONTAINER — Blocks interaction while loading
    ============================================================ */
 
 [data-ghostly] {
@@ -59,7 +42,8 @@
 }
 
 /* ============================================================
-   3. TEXT ELEMENTS — Become opaque skeleton blocks
+   2. TEXT ELEMENTS — Hide text, show skeleton background
+   Only override visual properties. NEVER touch layout.
    ============================================================ */
 
 [data-ghostly] :where(
@@ -74,41 +58,122 @@
   color: transparent !important;
   background-color: var(--ghostly-color) !important;
   background-image: none !important;
-  border-radius: var(--ghostly-radius) !important;
   border-color: transparent !important;
   box-shadow: none !important;
   text-decoration: none !important;
+  text-shadow: none !important;
   outline: none !important;
+  /* Prevent empty elements from collapsing vertically */
   min-height: 1em;
-  min-width: 2rem;
+  /* Inline elements need display block/inline-block to respect min-height */
+  display: var(--_ghostly-display, revert);
 }
 
-/* Headings get proportional min-height */
-[data-ghostly] :where(h1) { min-height: 1.75em; min-width: 40%; }
-[data-ghostly] :where(h2) { min-height: 1.5em; min-width: 50%; }
-[data-ghostly] :where(h3) { min-height: 1.3em; min-width: 55%; }
-[data-ghostly] :where(h4, h5, h6) { min-height: 1.15em; min-width: 45%; }
-
-/* Paragraphs simulate multi-line text */
-[data-ghostly] :where(p) { min-height: 3em; min-width: 80%; }
-
-/* Code blocks need more height */
-[data-ghostly] :where(pre) { min-height: 5em; min-width: 100%; }
-
-/* Inputs keep their shape */
-[data-ghostly] :where(input, textarea, select) {
-  min-height: 2.5rem;
-  min-width: 6rem;
+/* Make inline elements (span, a, em, etc.) respect min-height/width */
+[data-ghostly] :where(
+  span, a, em, strong, small, mark, code, abbr,
+  cite, q, sub, sup, del, ins, time, label
+) {
+  --_ghostly-display: inline-block;
 }
 
-/* Buttons keep their shape */
-[data-ghostly] :where(button) {
-  min-height: 2.25rem;
-  min-width: 5rem;
+/* ── Prevent text elements from collapsing horizontally ──
+   Since text is transparent, the element's width comes from the text
+   content. When content is empty ('') the element collapses to 0 width.
+   We use min-width to prevent this. When real (visible) content is loaded,
+   the content width will naturally exceed the min-width. */
+[data-ghostly] :where(h1) { min-width: 60%; }
+[data-ghostly] :where(h2) { min-width: 50%; }
+[data-ghostly] :where(h3) { min-width: 45%; }
+[data-ghostly] :where(h4, h5, h6) { min-width: 40%; }
+[data-ghostly] :where(p) { min-width: 80%; }
+[data-ghostly] :where(span, a, em, strong, small, label, time, code) { min-width: 3rem; }
+[data-ghostly] :where(button) { min-width: 5rem; }
+[data-ghostly] :where(input, textarea, select) { min-width: 6rem; }
+
+/* Headings: proportional min-height */
+[data-ghostly] :where(h1) { min-height: 1.75em; }
+[data-ghostly] :where(h2) { min-height: 1.5em; }
+[data-ghostly] :where(h3) { min-height: 1.3em; }
+[data-ghostly] :where(h4, h5, h6) { min-height: 1.15em; }
+
+/* Paragraphs: taller to simulate multi-line text */
+[data-ghostly] :where(p) { min-height: 3em; }
+
+/* Code blocks: taller */
+[data-ghostly] :where(pre) { min-height: 5em; }
+
+/* Interactive elements: reasonable minimums */
+[data-ghostly] :where(input, textarea, select) { min-height: 2.5rem; }
+[data-ghostly] :where(button) { min-height: 2.25rem; }
+
+/* ============================================================
+   3. MEDIA ELEMENTS — Hide content, show skeleton block
+   Preserves ALL existing dimensions and border-radius.
+   ============================================================ */
+
+[data-ghostly] :where(img, svg, video, canvas, picture, iframe) {
+  background-color: var(--ghostly-color) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Hide image content without changing dimensions */
+[data-ghostly] :where(img) {
+  color: transparent !important;
+  object-position: -9999px !important;
+}
+
+[data-ghostly] :where(video, iframe) {
+  opacity: 0;
+}
+
+/* SVG: hide strokes/fills but keep size */
+[data-ghostly] :where(svg) {
+  color: transparent !important;
+  fill: transparent !important;
+  stroke: transparent !important;
+}
+
+/* Only add min-size for SVG icons that might be empty */
+[data-ghostly] :where(svg:empty) {
+  min-height: 1.5rem;
+  min-width: 1.5rem;
 }
 
 /* ============================================================
-   4. CUSTOM LINE COUNT — data-ghostly-lines="N"
+   4. EMPTY CONTAINERS — Style divs that act as placeholders
+   When a component renders an empty div instead of an img
+   (e.g. avatar placeholder), it should still show skeleton.
+   ============================================================ */
+
+[data-ghostly] :where(div:empty) {
+  background-color: var(--ghostly-color) !important;
+}
+
+/* ============================================================
+   5. BORDER RADIUS — Use computed value, fallback to default
+   Never override existing border-radius from the component.
+   ============================================================ */
+
+/* Apply default radius ONLY to elements that don't have one set.
+   We use a very low specificity so any component CSS wins. */
+@layer ghostly-defaults {
+  [data-ghostly] h1, [data-ghostly] h2, [data-ghostly] h3,
+  [data-ghostly] h4, [data-ghostly] h5, [data-ghostly] h6,
+  [data-ghostly] p, [data-ghostly] span, [data-ghostly] a,
+  [data-ghostly] li, [data-ghostly] td, [data-ghostly] th,
+  [data-ghostly] button, [data-ghostly] input,
+  [data-ghostly] textarea, [data-ghostly] select,
+  [data-ghostly] code, [data-ghostly] pre,
+  [data-ghostly] img, [data-ghostly] svg,
+  [data-ghostly] video, [data-ghostly] canvas {
+    border-radius: var(--ghostly-radius);
+  }
+}
+
+/* ============================================================
+   6. CUSTOM LINE COUNT — data-ghostly-lines="N"
    ============================================================ */
 
 [data-ghostly] :where([data-ghostly-lines="1"]) { min-height: 1em; }
@@ -121,34 +186,9 @@
 [data-ghostly] :where([data-ghostly-lines="8"]) { min-height: 8em; }
 
 /* ============================================================
-   5. MEDIA ELEMENTS — Become solid skeleton blocks
+   7. CUSTOM ASPECT RATIO — data-ghostly-ratio
    ============================================================ */
 
-[data-ghostly] :where(img, svg, video, canvas, picture, iframe) {
-  color: transparent !important;
-  background-color: var(--ghostly-color) !important;
-  border-radius: var(--ghostly-radius) !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Hide actual content (images, video frames) */
-[data-ghostly] :where(img) {
-  object-position: -9999px;
-}
-
-[data-ghostly] :where(video, iframe) {
-  opacity: 0;
-  background-color: var(--ghostly-color) !important;
-}
-
-/* Images without explicit dimensions — use aspect-ratio */
-[data-ghostly] :where(img:not([width]):not([style*="width"]), picture:not([width])) {
-  aspect-ratio: 16/9;
-  width: 100%;
-}
-
-/* Custom aspect ratio via data attribute */
 [data-ghostly] :where([data-ghostly-ratio="1/1"]) { aspect-ratio: 1/1 !important; }
 [data-ghostly] :where([data-ghostly-ratio="4/3"]) { aspect-ratio: 4/3 !important; }
 [data-ghostly] :where([data-ghostly-ratio="16/9"]) { aspect-ratio: 16/9 !important; }
@@ -156,35 +196,16 @@
 [data-ghostly] :where([data-ghostly-ratio="3/4"]) { aspect-ratio: 3/4 !important; }
 [data-ghostly] :where([data-ghostly-ratio="9/16"]) { aspect-ratio: 9/16 !important; }
 
-/* SVG icons (typically small) */
-[data-ghostly] :where(svg) {
-  min-height: 1.5rem;
-  min-width: 1.5rem;
-}
-
 /* ============================================================
-   6. DECORATIVE — Strip visual noise
+   8. DECORATIVE — Strip visual noise
    ============================================================ */
 
 [data-ghostly] :where(hr) {
   border-color: var(--ghostly-color) !important;
 }
 
-[data-ghostly] :where(
-  [class*="badge"],
-  [class*="chip"],
-  [class*="tag"],
-  [class*="avatar"]
-) {
-  color: transparent !important;
-  background-color: var(--ghostly-color) !important;
-  background-image: none !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
 /* ============================================================
-   7. EXCLUSIONS — data-ghostly-ignore restores original styles
+   9. EXCLUSIONS — data-ghostly-ignore restores original styles
    ============================================================ */
 
 [data-ghostly] [data-ghostly-ignore],
@@ -198,17 +219,15 @@
   pointer-events: auto;
   user-select: auto;
   min-height: initial;
-  min-width: initial;
   animation: none !important;
 }
 
 /* ============================================================
-   8. ANIMATIONS — Applied via --_ghostly-target marker
+   10. ANIMATIONS
    ============================================================ */
 
 /* --- Shimmer — gradient sweep left to right --- */
 
-[data-ghostly='shimmer'] :where([style*="--_ghostly-target"]),
 [data-ghostly='shimmer'] :where(
   h1, h2, h3, h4, h5, h6,
   p, span, a, li, td, th, dt, dd,
@@ -217,7 +236,8 @@
   button, input, textarea, select, option,
   fieldset, dialog, details, address,
   time, abbr, sub, sup, del, ins,
-  img, svg, video, canvas, picture, iframe
+  img, svg, video, canvas, picture, iframe,
+  div:empty
 ) {
   background: linear-gradient(
     90deg,
@@ -246,7 +266,8 @@
   button, input, textarea, select, option,
   fieldset, dialog, details, address,
   time, abbr, sub, sup, del, ins,
-  img, svg, video, canvas, picture, iframe
+  img, svg, video, canvas, picture, iframe,
+  div:empty
 ) {
   animation: ghostly-pulse var(--ghostly-speed) ease-in-out infinite !important;
 }
@@ -266,7 +287,8 @@
   button, input, textarea, select, option,
   fieldset, dialog, details, address,
   time, abbr, sub, sup, del, ins,
-  img, svg, video, canvas, picture, iframe
+  img, svg, video, canvas, picture, iframe,
+  div:empty
 ) {
   animation: ghostly-wave var(--ghostly-speed) ease-in-out infinite !important;
 }
@@ -295,7 +317,7 @@
 [data-ghostly='wave'] > :nth-child(n+13) { animation-delay: 960ms !important; }
 
 /* ============================================================
-   9. SMOOTH TRANSITION — fade out when loading ends
+   11. SMOOTH TRANSITION — fade out when loading ends
    ============================================================ */
 
 [data-ghostly-smooth] :where(
@@ -316,7 +338,7 @@
 }
 
 /* ============================================================
-   10. ACCESSIBILITY
+   12. ACCESSIBILITY
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
