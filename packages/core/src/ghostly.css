@@ -67,6 +67,12 @@
   min-height: 1em;
 }
 
+/* Hide placeholders and ::before pseudo-content visibility */
+[data-ghostly] :where(input, textarea)::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+}
+
 /* Inline elements need inline-block to respect min-height */
 [data-ghostly] :where(
   span, a, em, strong, small, mark, code, abbr,

@@ -1,6 +1,6 @@
 {
   "name": "@ghostly-ui/core",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Zero-config skeleton loaders. Wrap your component, done.",
   "license": "MIT",
   "type": "module",
