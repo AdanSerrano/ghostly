@@ -46,11 +46,15 @@ Most skeleton libraries require you to **rewrite** your components, **run CLI to
   <Card title="Examples" href="/docs/guides/examples">
     Real-world patterns and integrations
   </Card>
+  <Card title="CLI" href="/docs/getting-started/cli">
+    Auto-generate loading.tsx, setup wizard, health check
+  </Card>
 </Cards>
 
 ## Features
 
-- **Zero config** — Install, import CSS, wrap. No CLI, no build step, no config files
+- **Zero config** — Install, import CSS, wrap. No build step, no config files
+- **CLI tool** — `ghostly init` to set up, `ghostly add loading` to auto-generate loading.tsx, `ghostly doctor` to diagnose
 - **Zero code changes** — Your components stay exactly as they are
 - **CSS-first** — All skeleton logic is pure CSS. Zero JavaScript overhead at runtime
 - **GhostlySuspense** — Automatic skeleton with React Suspense. No loading state needed
@@ -58,6 +62,7 @@ Most skeleton libraries require you to **rewrite** your components, **run CLI to
 - **Color props** — Customize colors per-instance with `color` and `shine` props
 - **Line control** — `data-ghostly-lines` for text, `data-ghostly-ratio` for images
 - **Tailwind plugin** — Utility classes: `ghostly-radius-*`, `ghostly-speed-*`, `ghostly:` variant
+- **MCP server** — AI assistants (Claude, Cursor, Copilot) get real documentation
 - **Progressive** — Works with CSR, SSR, RSC, and Suspense
 - **Accessible** — ARIA attributes, reduced motion, screen reader friendly
 - **Tiny** — ~2KB CSS + ~1KB React (gzipped). Zero runtime dependencies in core
@@ -66,5 +71,6 @@ Most skeleton libraries require you to **rewrite** your components, **run CLI to
 
 | Package | Description | Size (gzip) |
 |---------|-------------|-------------|
+| `@ghostly-ui/cli` | CLI: init, add loading, doctor | — |
 | `@ghostly-ui/core` | CSS engine + types + Tailwind plugin | ~2KB |
 | `@ghostly-ui/react` | React components | ~1KB |

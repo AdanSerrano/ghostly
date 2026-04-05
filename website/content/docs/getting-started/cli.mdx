@@ -1,0 +1,117 @@
+---
+title: CLI
+description: Set up Ghostly, generate loading states, and diagnose issues from the command line.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
+import { Callout } from 'fumadocs-ui/components/callout'
+
+The Ghostly CLI automates setup, generates `loading.tsx` files by analyzing your components, and checks your project health.
+
+```bash
+npx @ghostly-ui/cli --help
+```
+
+## `ghostly init`
+
+Interactive setup wizard. Detects your package manager, installs packages, adds CSS import, configures GhostlyProvider and Tailwind plugin.
+
+```bash
+npx @ghostly-ui/cli init
+```
+
+What it does:
+1. Installs `@ghostly-ui/core` and `@ghostly-ui/react`
+2. Adds `@import '@ghostly-ui/core/css'` to your `globals.css`
+3. Wraps `{children}` with `<GhostlyProvider>` in your `layout.tsx`
+4. (Optional) Adds the Tailwind plugin to your config
+
+<Callout type="info">
+  You can run `init` at any time — it skips steps that are already done.
+</Callout>
+
+## `ghostly add loading`
+
+Scans your Next.js App Router pages, analyzes which components they import, and generates `loading.tsx` files with the correct Ghostly wrappers.
+
+### Interactive mode (recommended)
+
+```bash
+npx @ghostly-ui/cli add loading
+```
+
+This scans all routes, shows which ones are missing `loading.tsx`, and lets you select which to generate.
+
+### Specific route
+
+```bash
+npx @ghostly-ui/cli add loading app/dashboard
+```
+
+### How it works
+
+1. Finds `page.tsx` in the route directory
+2. Extracts component imports (detects PascalCase names)
+3. Detects list patterns (components used inside `.map()`)
+4. Generates `loading.tsx` with `<Ghostly>` for single components and `<GhostlyList>` for lists
+5. Lets you confirm/select which components to include
+
+### Example output
+
+For a page that imports `UserProfile` and maps over `ProductCard`:
+
+```tsx title="app/dashboard/loading.tsx (generated)"
+import { Ghostly, GhostlyList } from '@ghostly-ui/react'
+import { UserProfile } from '@/components/user-profile'
+import { ProductCard } from '@/components/product-card'
+
+export default function Loading() {
+  return (
+    <div className="space-y-6">
+      <Ghostly loading={true}>
+        <UserProfile />
+      </Ghostly>
+      <GhostlyList loading={true} count={4} item={<ProductCard />}>
+        <></>
+      </GhostlyList>
+    </div>
+  )
+}
+```
+
+## `ghostly doctor`
+
+Health check that verifies your Ghostly setup is correct.
+
+```bash
+npx @ghostly-ui/cli doctor
+```
+
+Checks:
+- Packages installed (`@ghostly-ui/core`, `@ghostly-ui/react`)
+- CSS imported in `globals.css`
+- React version (>= 18)
+- GhostlyProvider in layout
+- `loading.tsx` coverage (how many routes have one)
+- Tailwind plugin configured
+- Built CSS exists in `node_modules`
+
+Example output:
+
+```
+ghostly — Health check
+
+  ✓ package.json: Found
+  ✓ @ghostly-ui/core: Installed (^0.2.4)
+  ✓ @ghostly-ui/react: Installed (^0.2.4)
+  ✓ CSS import: Found in app/globals.css
+  ✓ React version: ^19.0.0
+  ✓ Framework: Next.js detected
+  ✓ App Router: Found at app/
+  ✓ GhostlyProvider: Found in app/layout.tsx
+  ! loading.tsx coverage: 3/5 routes have loading.tsx
+  ✓ Tailwind plugin: Found in tailwind.config.ts
+  ✓ Built CSS: ghostly.css found in node_modules
+
+  10/11 checks passed. Fix the issues above.
+```

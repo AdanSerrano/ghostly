@@ -1,0 +1,32 @@
+{
+  "name": "@ghostly-ui/cli",
+  "version": "0.2.4",
+  "description": "CLI for Ghostly — init, generate loading.tsx, diagnose issues",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "ghostly": "./dist/index.js"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "prompts": "^2.4.2",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.4.9",
+    "@types/node": "^22.19.15",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "keywords": ["ghostly", "skeleton", "cli", "loading", "react", "nextjs"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AdanSerrano/ghostly",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://ghostly.adanulissess.com"
+}
