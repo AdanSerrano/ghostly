@@ -1,17 +1,98 @@
 ---
-title: Agent
-description: AI-consumable documentation for LLMs, coding assistants, and MCP servers.
+title: AI & MCP
+description: MCP server, llms.txt, and AI agent integration for Ghostly.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout'
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 
-Ghostly provides machine-readable documentation for AI agents, coding assistants (Cursor, GitHub Copilot, Claude Code), and MCP servers.
+Ghostly provides first-class AI integration through an **MCP server** and machine-readable documentation for AI agents, coding assistants, and LLMs.
+
+## MCP Server
+
+The `@ghostly/mcp` package gives AI assistants direct access to Ghostly's API, components, installation instructions, and examples — no hallucination, always up-to-date.
+
+### Setup
+
+<Tabs items={['Claude Code', 'Cursor', 'VS Code (Copilot)']}>
+  <Tab value="Claude Code">
+    Add to your project's `.mcp.json`:
+    ```json
+    {
+      "mcpServers": {
+        "ghostly": {
+          "command": "npx",
+          "args": ["@ghostly/mcp"]
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab value="Cursor">
+    Add to `.cursor/mcp.json`:
+    ```json
+    {
+      "mcpServers": {
+        "ghostly": {
+          "command": "npx",
+          "args": ["@ghostly/mcp"]
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab value="VS Code (Copilot)">
+    Add to `.vscode/mcp.json`:
+    ```json
+    {
+      "servers": {
+        "ghostly": {
+          "command": "npx",
+          "args": ["@ghostly/mcp"]
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `list_components` | List all Ghostly components and hooks |
+| `get_component` | Get full docs for a specific component (props, examples, import) |
+| `get_installation` | Installation and setup instructions |
+| `get_css_reference` | CSS custom properties, animations, data attributes |
+| `get_examples` | Real-world usage examples |
+| `search_docs` | Search documentation by keyword |
+
+### Example Prompts
+
+Once the MCP server is configured, you can ask your AI assistant:
+
+- *"Add a skeleton loader to this product grid using Ghostly"*
+- *"How do I use GhostlySuspense with React Server Components?"*
+- *"What CSS variables does Ghostly support for dark mode?"*
+- *"Show me how to customize skeleton colors per section"*
+
+The AI will call the MCP tools to get accurate documentation instead of guessing.
 
 <Callout type="info">
-  Also available at [`/llms.txt`](/llms.txt) and [`/llms-full.txt`](/llms-full.txt) for automated agent consumption.
+  The MCP server runs locally via STDIO transport — no data is sent to external servers. All documentation is bundled in the package.
 </Callout>
 
-## Available Formats
+---
+
+## llms.txt
+
+Ghostly also provides machine-readable documentation in the [llms.txt standard](https://llmstxt.org/) format.
+
+<Callout type="info">
+  Available at [`/llms.txt`](/llms.txt) and [`/llms-full.txt`](/llms-full.txt) for automated agent consumption.
+</Callout>
+
+### Available Formats
 
 | File | Purpose | Token Usage |
 |------|---------|-------------|
@@ -19,53 +100,30 @@ Ghostly provides machine-readable documentation for AI agents, coding assistants
 | [`/llms-full.txt`](/llms-full.txt) | Complete documentation in a single file | High |
 | [`/agent/llms.txt`](/agent/llms.txt) | Same as `/llms.txt` (alias) | Low |
 
-## Using with AI Assistants
+### Using with AI Assistants
 
-### Cursor
+#### Cursor
 
 Add to your `.cursorrules` or project settings:
 
 ```
-@docs https://ghostly.dev/llms-full.txt
+@docs https://ghostly.adanulissess.com/llms-full.txt
 ```
 
-### Claude Code
+#### Claude Code
 
 Reference the documentation in your prompt:
 
 ```
 Use the Ghostly library for skeleton loaders.
-Docs: https://ghostly.dev/llms-full.txt
+Docs: https://ghostly.adanulissess.com/llms-full.txt
 ```
 
-### GitHub Copilot
+#### GitHub Copilot
 
 Copilot automatically discovers `/llms.txt` from packages listed in your `package.json`.
 
-### Custom MCP Server
-
-Use the llms.txt endpoint to build an MCP server:
-
-```typescript
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-
-const server = new McpServer({ name: 'ghostly-docs', version: '0.1.0' })
-
-server.tool('ghostly_docs', 'Get Ghostly documentation', {}, async () => {
-  const res = await fetch('https://ghostly.dev/llms-full.txt')
-  const text = await res.text()
-  return { content: [{ type: 'text', text }] }
-})
-```
-
-## llms.txt Format
-
-The `/llms.txt` file follows the [llms.txt standard](https://llmstxt.org/):
-
-- **H1**: Project name
-- **Blockquote**: One-line description
-- **H2 sections**: Organized links with descriptions
-- **Markdown format**: Optimized for LLM token consumption
+---
 
 ## llms-full.txt Content
 
@@ -74,7 +132,7 @@ The `/llms-full.txt` includes the complete documentation:
 - Installation and setup
 - Full API reference (all components, hooks, props, types)
 - CSS reference (custom properties, selectors, animations, specificity)
-- HTML attributes reference
+- HTML attributes reference (data-ghostly-lines, data-ghostly-ratio, etc.)
 - Usage patterns (Suspense, TanStack Query, SWR, Apollo, tRPC)
 - Architecture explanation
 - Bundle size and performance data

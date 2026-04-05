@@ -114,7 +114,7 @@ const { loading, animation, getGhostlyProps } = useGhostly()
 
 ## Documentation
 
-Full docs at [ghostly.adanulisses.com](https://ghostly.adanulisses.com)
+Full docs at [ghostly.adanulissess.com](https://ghostly.adanulissess.com)
 
 ## License
 

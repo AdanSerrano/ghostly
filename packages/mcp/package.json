@@ -1,0 +1,49 @@
+{
+  "name": "@ghostly/mcp",
+  "version": "0.2.0",
+  "description": "MCP server for Ghostly skeleton loaders — gives AI assistants access to docs, components, and API reference",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "ghostly-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "ghostly",
+    "skeleton",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "claude",
+    "cursor"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AdanSerrano/ghostly",
+    "directory": "packages/mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/AdanSerrano/ghostly/issues"
+  },
+  "homepage": "https://ghostly.adanulissess.com"
+}
