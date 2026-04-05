@@ -1,6 +1,6 @@
 {
   "name": "@ghostly-ui/react",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "React components for Ghostly skeleton loaders",
   "license": "MIT",
   "type": "module",
