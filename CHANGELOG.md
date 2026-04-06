@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.8] - 2026-04-06
+
+### Fixed
+
+- **CLI `EISDIR` crash** -- Fixed crash when component import path points to a directory (e.g., `@/modules/auth/components`). Now correctly resolves `index.tsx` files.
+- **CLI skips utility components** -- `BackToTop`, `ScrollToTop`, `CookieConsent` added to skip list.
+
+## [0.2.7] - 2026-04-06
+
+### Fixed
+
+- **CLI generates only safe loading.tsx** -- Analyzes component source files for required props. Skips components that need data and warns the user. Zero TypeScript errors in generated files.
+- **CLI checks prop usage in page.tsx** -- Detects `<Component prop={x}>` patterns and marks those components as needing props.
+
 ## [0.2.6] - 2026-04-06
 
 ### Fixed

@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync } from 'fs'
+import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync, statSync } from 'fs'
 import { join, relative } from 'path'
 import prompts from 'prompts'
 import pc from 'picocolors'
@@ -8,6 +8,7 @@ interface ComponentImport {
   name: string
   path: string
   isList: boolean
+  hasRequiredProps: boolean
 }
 
 // Components/imports to NEVER include in loading.tsx
@@ -18,72 +19,99 @@ const SKIP_NAMES = new Set([
   'Image', 'Script',
 ])
 
-// Import paths to skip (utilities, hooks, constants, configs)
+// Import paths to skip
 const SKIP_PATH_PATTERNS = [
-  /\/hooks\//,
-  /\/lib\//,
-  /\/utils/,
-  /\/config/,
-  /\/routes/,
-  /\/constants/,
-  /\/actions\//,
-  /\/services\//,
-  /\/store\//,
-  /\/types/,
-  /\/seo/,
-  /lucide/,
-  /\/ui\//,
-  /\/i18n\//,
-  /next-intl/,
-  /next\/image/,
-  /next\/link/,
-  /next\/navigation/,
+  /\/hooks\//,  /\/lib\//,  /\/utils/,  /\/config/,
+  /\/routes/,   /\/constants/,  /\/actions\//,
+  /\/services\//, /\/store\//, /\/types/,  /\/seo/,
+  /lucide/,  /\/ui\//,  /\/i18n\//,
+  /next-intl/,  /next\/image/,  /next\/link/,  /next\/navigation/,
 ]
 
 function isSkippable(name: string, path: string): boolean {
   if (SKIP_NAMES.has(name)) return true
-  // Skip UPPER_SNAKE_CASE constants
   if (/^[A-Z][A-Z_0-9]+$/.test(name)) return true
-  // Skip names ending in Skeleton (already a skeleton)
   if (name.endsWith('Skeleton')) return true
-  // Skip Stream components (used with Suspense)
   if (name.endsWith('Stream')) return true
-  // Skip path patterns
+  if (name.endsWith('JsonLd')) return true
+  if (name.endsWith('Scripts')) return true
+  if (name === 'BackToTop') return true
+  if (name === 'ScrollToTop') return true
+  if (name === 'CookieConsent') return true
   if (SKIP_PATH_PATTERNS.some(p => p.test(path))) return true
   return false
 }
 
-function extractMainComponent(filePath: string): ComponentImport | null {
-  const content = readFileSync(filePath, 'utf-8')
+/**
+ * Check if a component is rendered WITH props in the page content.
+ * If `<Component prop={x} />` has props, it needs data → can't be empty in loading.
+ */
+function hasPropsInUsage(componentName: string, pageContent: string): boolean {
+  // Match <ComponentName followed by a prop (word=)
+  const usagePattern = new RegExp(
+    `<${componentName}\\s+[a-zA-Z]`,
+  )
+  return usagePattern.test(pageContent)
+}
 
-  // Strategy 1: Find `return <ComponentName` in the default export function
-  // This catches: return <PostersPage initialStats={stats} />
-  const returnPattern = /return\s+<(\w+)/g
-  const returnMatches: string[] = []
-  let match
-  while ((match = returnPattern.exec(content)) !== null) {
-    const name = match[1]
-    if (/^[A-Z]/.test(name) && !SKIP_NAMES.has(name) && name !== 'Ghostly') {
-      returnMatches.push(name)
+/**
+ * Try to resolve the component source file and check for required props.
+ */
+function checkComponentRequiresProps(componentName: string, importPath: string): boolean {
+  // Resolve the file path
+  const base = importPath.replace(/^@\//, '')
+  const candidates = [
+    base + '.tsx',
+    base + '.ts',
+    base + '/index.tsx',
+    base + '/index.ts',
+  ]
+
+  for (const candidate of candidates) {
+    if (!existsSync(candidate)) continue
+    // Skip directories
+    try { if (statSync(candidate).isDirectory()) continue } catch { continue }
+    const content = readFileSync(candidate, 'utf-8')
+
+    // Check if the component accepts required props
+    // Look for interface/type with non-optional properties
+    const interfaceMatch = content.match(
+      new RegExp(`interface\\s+${componentName}Props\\s*\\{([^}]+)\\}`)
+    )
+    if (interfaceMatch) {
+      const body = interfaceMatch[1]
+      // Check for required props (no ? before :)
+      const props = body.split('\n').filter(line => {
+        const trimmed = line.trim()
+        return trimmed.length > 0
+          && !trimmed.startsWith('//')
+          && !trimmed.startsWith('*')
+          && trimmed.includes(':')
+          && !trimmed.includes('?:') // optional
+          && !trimmed.startsWith('children') // children is ok empty
+      })
+      if (props.length > 0) return true
+    }
+
+    // Also check for destructured props with defaults
+    const funcMatch = content.match(
+      new RegExp(`function\\s+${componentName}\\s*\\(\\s*\\{([^}]+)\\}`)
+    )
+    if (funcMatch) {
+      const params = funcMatch[1]
+      // If any param doesn't have a default value and isn't children
+      const required = params.split(',').filter(p => {
+        const trimmed = p.trim()
+        return trimmed.length > 0
+          && !trimmed.includes('=') // has default
+          && !trimmed.startsWith('children')
+          && !trimmed.startsWith('...')
+      })
+      if (required.length > 0) return true
     }
   }
 
-  // Find all imports
-  const imports = extractImports(content)
-
-  // If we found a clear return component, prefer it
-  if (returnMatches.length === 1) {
-    const imp = imports.find(i => i.name === returnMatches[0])
-    if (imp) return imp
-  }
-
-  // Strategy 2: Filter to only "page-level" components
-  const pageComponents = imports.filter(i => !isSkippable(i.name, i.path))
-
-  if (pageComponents.length === 1) return pageComponents[0]
-  if (pageComponents.length > 0) return null // ambiguous, ask user
-
-  return null
+  return false
 }
 
 function extractImports(content: string): ComponentImport[] {
@@ -102,9 +130,9 @@ function extractImports(content: string): ComponentImport[] {
 
     for (const name of names) {
       if (/^[A-Z]/.test(name) && !isSkippable(name, importPath)) {
-        // Check for list pattern
         const isList = new RegExp(`\\.map\\s*\\([^)]*<${name}`).test(content)
-        imports.push({ name, path: importPath, isList })
+        const hasRequiredProps = hasPropsInUsage(name, content) || checkComponentRequiresProps(name, importPath)
+        imports.push({ name, path: importPath, isList, hasRequiredProps })
       }
     }
   }
@@ -128,9 +156,6 @@ function generateLoadingFile(components: ComponentImport[]): string {
   lines.push('export default function Loading() {')
   lines.push('  return (')
 
-  const nonListComponents = components.filter(c => !c.isList)
-  const listComponents = components.filter(c => c.isList)
-
   if (components.length === 1 && !components[0].isList) {
     lines.push('    <Ghostly loading={true}>')
     lines.push(`      <${components[0].name} />`)
@@ -140,14 +165,10 @@ function generateLoadingFile(components: ComponentImport[]): string {
     lines.push('      <></>')
     lines.push('    </GhostlyList>')
   } else {
-    // Wrap ALL non-list components in a single Ghostly
     lines.push('    <Ghostly loading={true}>')
     lines.push('      <div className="space-y-6">')
-    for (const comp of nonListComponents) {
+    for (const comp of components) {
       lines.push(`        <${comp.name} />`)
-    }
-    for (const comp of listComponents) {
-      lines.push(`        {/* List: ${comp.name} */}`)
     }
     lines.push('      </div>')
     lines.push('    </Ghostly>')
@@ -196,11 +217,11 @@ export async function addLoading(routePath?: string) {
     if (!selected || selected.length === 0) return
 
     for (const route of selected) {
-      await generateForRoute(route, appDir)
+      await generateForRoute(route)
     }
   } else {
     const fullPath = routePath.startsWith(appDir) ? routePath : join(appDir, routePath)
-    await generateForRoute(fullPath, appDir)
+    await generateForRoute(fullPath)
   }
 
   console.log()
@@ -232,7 +253,7 @@ function scanRoutes(dir: string, routes: RouteInfo[] = []): RouteInfo[] {
   return routes
 }
 
-async function generateForRoute(routePath: string, _appDir: string) {
+async function generateForRoute(routePath: string) {
   const pageFile = findPageFile(routePath)
   if (!pageFile) {
     warn(`No page.tsx found in ${routePath}`)
@@ -245,24 +266,35 @@ async function generateForRoute(routePath: string, _appDir: string) {
     return
   }
 
-  // Try to find the main component automatically
-  const mainComp = extractMainComponent(pageFile)
   const content = readFileSync(pageFile, 'utf-8')
   const allComponents = extractImports(content)
 
+  // Split into safe (no required props) and unsafe (has required props)
+  const safeComponents = allComponents.filter(c => !c.hasRequiredProps)
+  const unsafeComponents = allComponents.filter(c => c.hasRequiredProps)
+
+  if (unsafeComponents.length > 0) {
+    warn(`Skipping components with required props in ${relative('.', pageFile)}:`)
+    unsafeComponents.forEach(c => log(`  ${pc.dim('×')} ${c.name} ${pc.dim('(needs props)')}`))
+  }
+
+  if (safeComponents.length === 0) {
+    warn(`No zero-prop components found in ${relative('.', pageFile)} — skipping`)
+    log(pc.dim('  Tip: components with required props need manual loading.tsx'))
+    return
+  }
+
   let finalComponents: ComponentImport[]
 
-  if (mainComp) {
-    // Found a clear main component
-    finalComponents = [mainComp]
-    log(`${pc.dim('Auto-detected:')} ${pc.cyan(mainComp.name)} in ${relative('.', pageFile)}`)
-  } else if (allComponents.length > 0) {
-    // Ask user to select
+  if (safeComponents.length === 1) {
+    finalComponents = safeComponents
+    log(`${pc.dim('Auto-detected:')} ${pc.cyan(safeComponents[0].name)}`)
+  } else {
     const { selected } = await prompts({
       type: 'multiselect',
       name: 'selected',
-      message: `Components in ${relative('.', pageFile)}:`,
-      choices: allComponents.map(c => ({
+      message: `Safe components in ${relative('.', pageFile)}:`,
+      choices: safeComponents.map(c => ({
         title: `${c.name}${c.isList ? pc.dim(' (list)') : ''}`,
         value: c.name,
         selected: true,
@@ -270,22 +302,7 @@ async function generateForRoute(routePath: string, _appDir: string) {
     })
 
     if (!selected || selected.length === 0) return
-    finalComponents = allComponents.filter(c => selected.includes(c.name))
-  } else {
-    // No components found — ask for manual input
-    warn(`No components found in ${relative('.', pageFile)}`)
-    const { manual } = await prompts({
-      type: 'text',
-      name: 'manual',
-      message: 'Enter component name to wrap:',
-    })
-
-    if (!manual) return
-    finalComponents = [{
-      name: manual.trim(),
-      path: `@/components/${manual.trim().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`,
-      isList: false,
-    }]
+    finalComponents = safeComponents.filter(c => selected.includes(c.name))
   }
 
   if (finalComponents.length === 0) return
