@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.6] - 2026-04-06
+
+### Fixed
+
+- **CLI `add loading` rewrite** -- Complete rewrite of component analysis:
+  - Auto-detects the main component from `return <Component />` pattern
+  - Filters out non-renderable imports (Link, Skeleton, Button, constants, hooks, utilities, services, configs, SEO components)
+  - Skips `*Skeleton` and `*Stream` components (already loading-related)
+  - Generates ONE `<Ghostly>` wrapper instead of one per component
+  - Smarter import path filtering (skips `/lib/`, `/hooks/`, `/store/`, `/ui/`, etc.)
+
+## [0.2.5] - 2026-04-05
+
+### Fixed
+
+- **Input placeholders hidden** -- Added `opacity: 0` to `::placeholder` pseudo-element during skeleton. Prevents placeholder text from showing through the skeleton background.
+- **CLI ESM compatibility** -- Fixed `Dynamic require of "fs"` error in `doctor` command by replacing `require()` with ESM imports.
+- Published `@ghostly-ui/core@0.2.5`, `@ghostly-ui/cli@0.2.5`
+
 ## [0.2.4] - 2026-04-05
 
 ### Added
