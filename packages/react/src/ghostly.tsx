@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react'
-import { forwardRef, useContext, useMemo } from 'react'
+import { forwardRef, useContext, useEffect, useMemo, useRef } from 'react'
 import { RADIUS_MAP, SPEED_MAP, validateGhostlyProps, type GhostlyConfig } from '@ghostly-ui/core'
 import { GhostlyContext } from './context'
 
@@ -30,6 +30,31 @@ export const Ghostly = forwardRef<HTMLElement, GhostlyProps>(function Ghostly(
   ref: Ref<HTMLElement>,
 ) {
   validateGhostlyProps('Ghostly', { animation, radius, speed })
+
+  const cssChecked = useRef(false)
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production' || cssChecked.current) return
+    cssChecked.current = true
+    try {
+      let found = false
+      for (let i = 0; i < document.styleSheets.length; i++) {
+        try {
+          const rules = document.styleSheets[i].cssRules
+          for (let j = 0; j < rules.length; j++) {
+            if (rules[j].cssText.includes('--ghostly-color')) { found = true; break }
+          }
+        } catch { /* cross-origin sheets throw */ }
+        if (found) break
+      }
+      if (!found) {
+        console.warn(
+          '[Ghostly] CSS not detected. Did you forget to import it?\n' +
+          "Add to your global CSS: @import '@ghostly-ui/core/css';\n" +
+          'Or in JS: import "@ghostly-ui/core/css";',
+        )
+      }
+    } catch { /* SSR or no document */ }
+  }, [])
 
   const parent = useContext(GhostlyContext)
 

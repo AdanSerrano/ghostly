@@ -23,6 +23,7 @@ export const CSS_VARS = {
   shine: '--ghostly-shine',
   radius: '--ghostly-radius',
   speed: '--ghostly-speed',
+  stagger: '--ghostly-stagger',
 } as const
 
 /** Maps radius prop to CSS value */

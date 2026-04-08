@@ -66,8 +66,8 @@ describe('CSS_VARS', () => {
     expect(CSS_VARS.speed).toBe('--ghostly-speed')
   })
 
-  it('has exactly 4 properties', () => {
-    expect(Object.keys(CSS_VARS)).toHaveLength(4)
+  it('has exactly 5 properties', () => {
+    expect(Object.keys(CSS_VARS)).toHaveLength(5)
   })
 
   it('all values start with --ghostly-', () => {

@@ -16,6 +16,7 @@
   --ghostly-radius: 4px;
   --ghostly-speed: 1.5s;
   --ghostly-transition: 0.3s;
+  --ghostly-stagger: 50ms;
 }
 
 /* --- Dark mode (automatic) --- */
@@ -98,13 +99,22 @@
 /* Inline text: shorter content */
 [data-ghostly] :where(span, a, em, strong, small, label, time, code)::before { content: '\00a0\00a0\00a0\00a0\00a0\00a0'; }
 
+/* Table cells: prevent collapse */
+[data-ghostly] :where(td, th)::before { content: '\00a0\00a0\00a0\00a0\00a0\00a0'; }
+
 /* Interactive: reasonable widths */
 [data-ghostly] :where(button)::before { content: '\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0'; }
 [data-ghostly] :where(input, textarea, select) { min-width: 6rem; }
 
+/* Select: hide native dropdown arrow */
+[data-ghostly] :where(select) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+
 /* All pseudo-content inherits transparent color so it's invisible */
 [data-ghostly] :where(h1, h2, h3, h4, h5, h6, p, span, a, li,
-  em, strong, small, mark, code, label, time, button)::before {
+  em, strong, small, mark, code, label, time, button, td, th)::before {
   color: transparent !important;
   visibility: hidden;
   display: inline;
@@ -182,6 +192,23 @@
 }
 
 /* ============================================================
+   6b. TABLE LAYOUT — Preserve structure while loading
+   ============================================================ */
+
+[data-ghostly] :where(table) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+[data-ghostly] :where(thead, tbody, tfoot, tr) {
+  border-color: transparent !important;
+}
+
+[data-ghostly] :where(td, th) {
+  min-width: 4rem;
+}
+
+/* ============================================================
    7. BORDER RADIUS — Lowest specificity, component CSS wins
    ============================================================ */
 
@@ -201,16 +228,30 @@
 
 /* ============================================================
    8. CUSTOM LINE COUNT — data-ghostly-lines="N"
+   Uses repeating-linear-gradient to show visible line separations.
+   Each "line" is 0.8em tall with a 0.4em transparent gap.
    ============================================================ */
 
-[data-ghostly] :where([data-ghostly-lines="1"]) { min-height: 1em; }
+[data-ghostly] :where([data-ghostly-lines]) {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--ghostly-color) 0,
+    var(--ghostly-color) 0.8em,
+    transparent 0.8em,
+    transparent 1.2em
+  ) !important;
+  background-color: transparent !important;
+  background-size: 100% 1.2em !important;
+}
+
+[data-ghostly] :where([data-ghostly-lines="1"]) { min-height: 0.8em; }
 [data-ghostly] :where([data-ghostly-lines="2"]) { min-height: 2em; }
-[data-ghostly] :where([data-ghostly-lines="3"]) { min-height: 3em; }
-[data-ghostly] :where([data-ghostly-lines="4"]) { min-height: 4em; }
-[data-ghostly] :where([data-ghostly-lines="5"]) { min-height: 5em; }
-[data-ghostly] :where([data-ghostly-lines="6"]) { min-height: 6em; }
-[data-ghostly] :where([data-ghostly-lines="7"]) { min-height: 7em; }
-[data-ghostly] :where([data-ghostly-lines="8"]) { min-height: 8em; }
+[data-ghostly] :where([data-ghostly-lines="3"]) { min-height: 3.2em; }
+[data-ghostly] :where([data-ghostly-lines="4"]) { min-height: 4.4em; }
+[data-ghostly] :where([data-ghostly-lines="5"]) { min-height: 5.6em; }
+[data-ghostly] :where([data-ghostly-lines="6"]) { min-height: 6.8em; }
+[data-ghostly] :where([data-ghostly-lines="7"]) { min-height: 8em; }
+[data-ghostly] :where([data-ghostly-lines="8"]) { min-height: 9.2em; }
 
 /* ============================================================
    9. CUSTOM ASPECT RATIO — data-ghostly-ratio
@@ -368,7 +409,23 @@
 }
 
 /* ============================================================
-   14. ACCESSIBILITY
+   14. STAGGERED REVEAL — Sequential child appearance
+   Active when smooth is enabled and loading has ended.
+   Selector: smooth present + data-ghostly absent = reveal moment.
+   ============================================================ */
+
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(1) { transition-delay: 0ms; }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(2) { transition-delay: var(--ghostly-stagger); }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(3) { transition-delay: calc(var(--ghostly-stagger) * 2); }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(4) { transition-delay: calc(var(--ghostly-stagger) * 3); }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(5) { transition-delay: calc(var(--ghostly-stagger) * 4); }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(6) { transition-delay: calc(var(--ghostly-stagger) * 5); }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(7) { transition-delay: calc(var(--ghostly-stagger) * 6); }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(8) { transition-delay: calc(var(--ghostly-stagger) * 7); }
+[data-ghostly-smooth]:not([data-ghostly]) > :nth-child(n+9) { transition-delay: calc(var(--ghostly-stagger) * 8); }
+
+/* ============================================================
+   15. ACCESSIBILITY
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {

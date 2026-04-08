@@ -1,6 +1,6 @@
 {
   "name": "@ghostly-ui/cli",
-  "version": "0.2.8",
+  "version": "1.0.0",
   "description": "CLI for Ghostly — init, generate loading.tsx, diagnose issues",
   "license": "MIT",
   "type": "module",

@@ -1,7 +1,7 @@
 {
-  "name": "@ghostly-ui/core",
+  "name": "@ghostly-ui/vue",
   "version": "1.0.0",
-  "description": "Zero-config skeleton loaders. Wrap your component, done.",
+  "description": "Vue 3 components for Ghostly skeleton loaders",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -17,53 +17,37 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
-    },
-    "./css": "./dist/ghostly.css",
-    "./tailwind": {
-      "import": {
-        "types": "./dist/tailwind.d.ts",
-        "default": "./dist/tailwind.js"
-      },
-      "require": {
-        "types": "./dist/tailwind.d.cts",
-        "default": "./dist/tailwind.cjs"
-      }
     }
   },
   "files": ["dist", "README.md", "LICENSE"],
-  "sideEffects": ["*.css"],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
   "peerDependencies": {
-    "tailwindcss": ">=3.0.0"
-  },
-  "peerDependenciesMeta": {
-    "tailwindcss": {
-      "optional": true
-    }
+    "@ghostly-ui/core": ">=1.0.0",
+    "vue": ">=3.3.0"
   },
   "devDependencies": {
-    "tailwindcss": "^4.0.0",
+    "vue": "^3.5.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3"
   },
   "keywords": [
     "skeleton",
     "loading",
-    "placeholder",
+    "vue",
     "shimmer",
-    "css",
     "zero-config"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/AdanSerrano/ghostly",
-    "directory": "packages/core"
+    "directory": "packages/vue"
   },
   "bugs": {
     "url": "https://github.com/AdanSerrano/ghostly/issues"
   },
-  "homepage": "https://github.com/AdanSerrano/ghostly#readme"
+  "homepage": "https://github.com/AdanSerrano/ghostly#readme",
+  "sideEffects": false
 }

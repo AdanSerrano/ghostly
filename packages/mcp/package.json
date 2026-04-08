@@ -1,6 +1,6 @@
 {
   "name": "@ghostly-ui/mcp",
-  "version": "0.2.4",
+  "version": "1.0.0",
   "description": "MCP server for Ghostly skeleton loaders — gives AI assistants access to docs, components, and API reference",
   "license": "MIT",
   "type": "module",

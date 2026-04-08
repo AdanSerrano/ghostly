@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-04-08
+
+### Added
+
+- **`useGhostlyState()` hook** (`@ghostly-ui/react`) -- Debounces loading state to prevent skeleton flash on fast loads. Features:
+  - `minimumMs` (default: 300) -- Minimum time the skeleton stays visible once shown
+  - `delayMs` (default: 0) -- Delay before showing skeleton; if data arrives before, skeleton is skipped entirely
+  - `onTransitionEnd` callback -- Fires when skeleton transitions from visible to hidden
+- **CSS table skeleton support** -- `<table>`, `<thead>`, `<tbody>`, `<tfoot>`, `<tr>` now handled properly with transparent borders, `<td>`/`<th>` get min-width and pseudo-content to prevent collapse
+- **CSS staggered reveal** -- When `smooth` prop is active and loading ends, children animate in sequentially with `--ghostly-stagger: 50ms` delay per child (up to 8, capped at 400ms). Pure CSS, respects `prefers-reduced-motion`
+- **CSS import detection** (dev only) -- `<Ghostly>` now warns in the console if `ghostly.css` is not loaded, with clear import instructions. Tree-shaken in production.
+- **`@ghostly-ui/vue`** -- Vue 3 adapter with:
+  - `<Ghostly>`, `<GhostlyList>`, `<GhostlyProvider>` components
+  - `useGhostly()` and `useGhostlyState()` composables
+  - `provide`/`inject` context inheritance
+- **`@ghostly-ui/svelte`** -- Svelte adapter with:
+  - `ghostly` action (`use:ghostly={{ loading, animation: 'shimmer' }}`)
+  - `createGhostlyState()` store with minimum display time
+  - Framework-idiomatic API using actions and stores
+- **`--ghostly-stagger` CSS custom property** -- Controls delay between staggered child reveals (default: 50ms)
+
+### Changed
+
+- **All packages bumped to v1.0.0** -- Signals API stability. `@ghostly-ui/core`, `@ghostly-ui/react`, `@ghostly-ui/cli`, `@ghostly-ui/mcp` all at 1.0.0
+- **Peer dependency for core** -- React, Vue, and Svelte adapters now require `@ghostly-ui/core >=1.0.0`
+
 ## [0.2.8] - 2026-04-06
 
 ### Fixed
